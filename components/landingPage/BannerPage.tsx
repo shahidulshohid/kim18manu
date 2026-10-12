@@ -135,12 +135,9 @@ export default function BannerPage() {
               </a>
               <a
                 href="#ai-assistant"
-                className="text-slate-600 hover:text-[#2f80ed] transition-colors flex items-center gap-1.5"
+                className="text-slate-600 hover:text-[#2f80ed] transition-colors"
               >
-                <span>AI Assistant</span>
-                <span className="bg-blue-100 text-[#2f80ed] text-[10px] px-1.5 py-0.5 rounded-full font-semibold">
-                  New
-                </span>
+                AI Assistant
               </a>
             </div>
           </nav>
@@ -193,12 +190,9 @@ export default function BannerPage() {
             <a
               href="#ai-assistant"
               onClick={() => setMobileMenuOpen(false)}
-              className="text-slate-700 font-medium text-base py-1 flex items-center justify-between"
+              className="text-slate-700 font-medium text-base py-1"
             >
-              <span>AI Assistant</span>
-              <span className="bg-blue-100 text-[#2f80ed] text-xs px-2 py-0.5 rounded-full font-semibold">
-                New
-              </span>
+              AI Assistant
             </a>
             <hr className="border-slate-100 my-1" />
             <div className="flex flex-col gap-2.5">
