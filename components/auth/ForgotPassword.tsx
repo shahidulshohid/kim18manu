@@ -34,8 +34,8 @@ export default function ForgotPassword() {
     setIsSuccess(true);
     reset();
     setTimeout(() => {
-      router.push("/reset-password");
-    }, 1200);
+      router.push("/verify-otp");
+    }, 1000);
   };
 
   return (
