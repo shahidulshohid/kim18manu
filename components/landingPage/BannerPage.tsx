@@ -304,76 +304,65 @@ export default function BannerPage() {
               </div>
             </div>
 
-            {/* Glassmorphic AI Prompt Search Input */}
-            <div className="w-full max-w-[530px] pt-1">
+            {/* Glassmorphic Liquid Chrome / Metallic AI Prompt Search Input */}
+            <div className="w-full max-w-full sm:max-w-[620px] lg:max-w-[650px] pt-1">
               <form
                 onSubmit={handleSearchSubmit}
-                className="relative group bg-white/45 hover:bg-white/55 focus-within:bg-white/70 backdrop-blur-xl border border-white/80 hover:border-white rounded-2xl p-1.5 sm:p-2 flex items-center gap-2 shadow-[0_10px_35px_rgba(0,0,0,0.08)] transition-all duration-300"
+                className="relative group rounded-[20px] sm:rounded-[22px] p-2 sm:p-[9px] backdrop-blur-xl border border-white/50 transition-all duration-300 shadow-[0_16px_40px_rgba(0,0,0,0.22),0_4px_12px_rgba(0,0,0,0.12),inset_0_1.5px_2px_rgba(255,255,255,0.9),inset_0_-1.5px_2px_rgba(255,255,255,0.25)]"
+                style={{
+                  background:
+                    "linear-gradient(180deg, rgba(255, 255, 255, 0.45) 0%, rgba(230, 242, 255, 0.16) 24%, rgba(20, 35, 55, 0.32) 65%, rgba(10, 25, 45, 0.48) 100%)",
+                }}
               >
-                <input
-                  id="ai-search-box"
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Ask anything in natural language..."
-                  className="w-full bg-transparent text-slate-900 placeholder:text-slate-500 text-xs sm:text-[13.5px] font-normal px-3 py-1.5 outline-none leading-snug"
-                />
+                {/* Specular metallic highlight on top rim */}
+                <div className="absolute top-0 inset-x-0 h-[2px] rounded-t-[20px] sm:rounded-t-[22px] bg-gradient-to-r from-white/30 via-white to-white/30 pointer-events-none" />
 
-                {/* Voice / Mic Button */}
-                <button
-                  type="button"
-                  onClick={handleVoiceToggle}
-                  title="Voice Search"
-                  className={`p-2 rounded-full transition-all duration-200 shrink-0 cursor-pointer ${
-                    isListening
-                      ? "bg-red-500 text-white animate-pulse"
-                      : "text-slate-600 hover:text-[#2f80ed] hover:bg-white/60"
-                  }`}
-                >
-                  <Mic size={17} className={isListening ? "animate-bounce" : ""} />
-                </button>
+                {/* Ambient top-down glass reflection */}
+                <div className="absolute inset-0 rounded-[20px] sm:rounded-[22px] bg-gradient-to-b from-white/35 via-white/5 to-transparent pointer-events-none opacity-80" />
 
-                {/* Submit Search Button */}
-                <button
-                  type="submit"
-                  title="Submit AI Search"
-                  className="bg-[#2f80ed] hover:bg-[#1d6cd8] active:scale-95 text-white p-2 sm:p-2.5 rounded-full flex items-center justify-center shrink-0 shadow-md shadow-blue-500/30 transition-all duration-200 cursor-pointer"
-                >
-                  <ArrowRight size={16} className="stroke-[2.5]" />
-                </button>
-              </form>
+                {/* Bottom subtle edge sheen */}
+                <div className="absolute bottom-0 inset-x-0 h-[1px] rounded-b-[20px] sm:rounded-b-[22px] bg-gradient-to-r from-transparent via-white/35 to-transparent pointer-events-none" />
 
-              {/* Quick Prompt Suggestions helper */}
-              <div className="flex items-center gap-2 mt-2 px-1 text-[11px] text-slate-600 font-medium">
-                <Sparkles size={12} className="text-[#2f80ed] shrink-0" />
-                <span className="shrink-0">Try:</span>
-                <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setSearchQuery(
-                        "Find luxury 4-bedroom villa with private pool in Bali under $800k"
-                      )
-                    }
-                    className="hover:text-[#2f80ed] underline underline-offset-2 truncate cursor-pointer"
-                  >
-                    Bali Luxury Villa
-                  </button>
-                  <span>•</span>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setSearchQuery(
-                        "Residential complex in Alanya with modern Scandinavian interior design"
-                      )
-                    }
-                    className="hover:text-[#2f80ed] underline underline-offset-2 truncate cursor-pointer"
-                  >
-                    Alanya Interior Design
-                  </button>
+                {/* Inner White / Ice-Blue Pill Input Container */}
+                <div className="relative z-10 w-full flex items-center justify-between bg-[#edf5fd] hover:bg-[#f2f7fe] focus-within:bg-[#f6faff] rounded-[13px] sm:rounded-[14px] px-3.5 sm:px-4 py-2 sm:py-2.5 shadow-[inset_0_1px_2px_rgba(0,0,0,0.03),0_1px_2px_rgba(0,0,0,0.05)] border border-[#dce8f5]/80 transition-colors duration-200">
+                  <input
+                    id="ai-search-box"
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Find Me A Villa In Bali Near Seminyak Under 4B IDR, Preferably Suitable For Rental."
+                    className="w-full bg-transparent text-[#8ea3b8] placeholder:text-[#8ea3b8] text-[12.5px] sm:text-[13.5px] lg:text-[14px] font-normal outline-none pr-3 leading-normal selection:bg-blue-200 selection:text-slate-800"
+                  />
+
+                  {/* Right Action Icons */}
+                  <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
+                    {/* Voice / Mic Button */}
+                    <button
+                      type="button"
+                      onClick={handleVoiceToggle}
+                      title={isListening ? "Listening..." : "Voice Search"}
+                      aria-label="Voice Search"
+                      className={`p-1 transition-all duration-200 cursor-pointer flex items-center justify-center ${
+                        isListening
+                          ? "text-red-500 animate-pulse scale-110"
+                          : "text-[#2f80ed] hover:text-[#1d6cd8] hover:scale-110 active:scale-95"
+                      }`}
+                    >
+                      <Mic size={18} className="stroke-[2.2]" />
+                    </button>
+
+                    {/* Submit Circular Arrow Button */}
+                    <button
+                      type="submit"
+                      title="Submit AI Search"
+                      aria-label="Submit AI Search"
+                      className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#2f80ed] hover:bg-[#1d6cd8] active:scale-95 text-white flex items-center justify-center shrink-0 shadow-sm shadow-blue-500/20 transition-all duration-200 cursor-pointer"
+                    >
+                      <ArrowRight size={15} className="stroke-[2.8]" />
+                    </button>
+                  </div>
                 </div>
-              </div>
-
+              </form>
               {/* Feedback Alert toast on search */}
               {submittedQuery && (
                 <div className="mt-2.5 p-3 rounded-xl bg-slate-900/90 backdrop-blur-md text-white text-xs flex items-center justify-between gap-3 shadow-xl animate-in fade-in slide-in-from-bottom-2">
