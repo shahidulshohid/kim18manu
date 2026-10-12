@@ -145,13 +145,13 @@ export default function BannerPage() {
           {/* Right: Auth Action Buttons */}
           <div className="hidden sm:flex items-center gap-5">
             <a
-              href="#login"
+              href="/auth"
               className="text-[14px] font-medium text-slate-800 hover:text-[#2f80ed] transition-colors px-2 py-1"
             >
               Log In
             </a>
             <a
-              href="#get-started"
+              href="/auth"
               className="bg-[#2f80ed] hover:bg-[#1f70dd] text-white text-[14px] font-medium px-6 py-2.5 rounded-full shadow-[0_4px_14px_rgba(47,128,237,0.35)] transition-all duration-200 hover:scale-[1.03] active:scale-[0.98] flex items-center gap-1.5"
             >
               <span>Get Started</span>
@@ -197,14 +197,14 @@ export default function BannerPage() {
             <hr className="border-slate-100 my-1" />
             <div className="flex flex-col gap-2.5">
               <a
-                href="#login"
+                href="/auth"
                 onClick={() => setMobileMenuOpen(false)}
                 className="text-center py-2.5 text-slate-800 font-medium text-sm border border-slate-200 rounded-full"
               >
                 Log In
               </a>
               <a
-                href="#get-started"
+                href="/auth"
                 onClick={() => setMobileMenuOpen(false)}
                 className="text-center py-2.5 bg-[#2f80ed] text-white font-medium text-sm rounded-full shadow-md"
               >
