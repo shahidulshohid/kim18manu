@@ -1,10 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import {
-  MessageSquareText,
-  ScanSearch,
-  Handshake,
   Mic,
   Sparkles,
   Bot,
@@ -58,7 +56,7 @@ export default function HowItWorks() {
   const steps = [
     {
       step: "01",
-      icon: MessageSquareText,
+      image: "/images/howItWork/howItWorkImg1.png",
       title: "Tell AI What You Need",
       description:
         "Speak in any language or type your exact lifestyle, capital requirement, or commercial yield parameters. No rigid dropdown menus.",
@@ -66,7 +64,7 @@ export default function HowItWorks() {
     },
     {
       step: "02",
-      icon: ScanSearch,
+      image: "/images/howItWork/howItWorkImg2.png",
       title: "Discover the Right Properties",
       description:
         "Deep neural matching cross-references public and off-market inventory, zoning constraints, legal validity, and empirical yield profiles.",
@@ -74,7 +72,7 @@ export default function HowItWorks() {
     },
     {
       step: "03",
-      icon: Handshake,
+      image: "/images/howItWork/howItWorkImg3.png",
       title: "Connect & Take Action",
       description:
         "Instant agent collaboration, automated site visit appointments, notary PPAT compliance review, and sovereign banking handoffs.",
@@ -112,7 +110,6 @@ export default function HowItWorks() {
           {/* 3 Step Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
             {steps.map((item, idx) => {
-              const Icon = item.icon;
               return (
                 <div
                   key={item.step}
@@ -129,8 +126,14 @@ export default function HowItWorks() {
                       <span className="text-2xl sm:text-3xl font-extrabold text-slate-300 group-hover:text-[#2f80ed] transition-colors">
                         {item.step}
                       </span>
-                      <div className="w-10 h-10 rounded-full bg-sky-50 text-[#2f80ed] flex items-center justify-center border border-sky-100 group-hover:bg-[#2f80ed] group-hover:text-white group-hover:rotate-6 transition-all duration-300">
-                        <Icon size={19} className="stroke-[2.2]" />
+                      <div className="w-12 h-12 rounded-full bg-sky-50/70 border border-sky-100 flex items-center justify-center p-1.5 shadow-sm group-hover:bg-[#2f80ed]/10 group-hover:scale-110 group-hover:shadow-md transition-all duration-300">
+                        <Image
+                          src={item.image}
+                          alt={item.title}
+                          width={40}
+                          height={40}
+                          className="w-8 h-8 sm:w-9 sm:h-9 object-contain"
+                        />
                       </div>
                     </div>
 
