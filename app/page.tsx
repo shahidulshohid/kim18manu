@@ -2,6 +2,8 @@ import BannerPage from "@/components/landingPage/BannerPage";
 import HowItWorks from "@/components/landingPage/HowItWorks";
 import CuratedPortfolio from "@/components/landingPage/CuratedPortfolio";
 import AutonomousCalendar from "@/components/landingPage/AutonomousCalendar";
+import InstitutionalNetwork from "@/components/landingPage/InstitutionalNetwork";
+import HarmonizedOperations from "@/components/landingPage/HarmonizedOperations";
 
 export default function Home() {
   return (
@@ -10,6 +12,8 @@ export default function Home() {
       <HowItWorks />
       <CuratedPortfolio />
       <AutonomousCalendar />
+      <InstitutionalNetwork />
+      <HarmonizedOperations />
     </main>
   );
 }
