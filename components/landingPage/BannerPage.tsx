@@ -29,15 +29,59 @@ export default function BannerPage() {
   const [isListening, setIsListening] = useState(false);
   const [submittedQuery, setSubmittedQuery] = useState<string | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState<"home" | "how-it-works" | "ai-assistant">("home");
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      const scrollY = window.scrollY;
+      setIsScrolled(scrollY > 20);
+
+      if (scrollY < 120) {
+        setActiveSection("home");
+        return;
+      }
+
+      const howItWorksEl = document.getElementById("how-it-works");
+      const aiAssistantEl = document.getElementById("ai-assistant");
+      const offset = 220;
+
+      if (aiAssistantEl && aiAssistantEl.getBoundingClientRect().top <= offset) {
+        setActiveSection("ai-assistant");
+      } else if (howItWorksEl && howItWorksEl.getBoundingClientRect().top <= offset) {
+        setActiveSection("how-it-works");
+      } else {
+        setActiveSection("home");
+      }
     };
+
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const handleNavClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    sectionId: "home" | "how-it-works" | "ai-assistant"
+  ) => {
+    e.preventDefault();
+    setActiveSection(sectionId);
+    if (sectionId === "home") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      const el = document.getElementById(sectionId);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  };
+
+  const handleMobileNavClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    sectionId: "home" | "how-it-works" | "ai-assistant"
+  ) => {
+    setMobileMenuOpen(false);
+    handleNavClick(e, sectionId);
+  };
 
   const filters = [
     { name: "Construction", icon: Building2 },
@@ -86,7 +130,10 @@ export default function BannerPage() {
   };
 
   return (
-    <section className="relative min-h-screen w-full overflow-x-hidden bg-[#c3e3fc] flex flex-col font-sans selection:bg-[#2f80ed] selection:text-white">
+    <section
+      id="home"
+      className="relative min-h-screen w-full overflow-x-hidden bg-[#c3e3fc] flex flex-col font-sans selection:bg-[#2f80ed] selection:text-white"
+    >
       {/* Dynamic Sky Background */}
       <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-[#8fc7f7] via-[#bfe2fc] to-[#e1f0fc] z-0" />
       <div className="absolute top-0 left-1/4 w-[600px] h-[350px] bg-white/30 rounded-full blur-3xl pointer-events-none z-0" />
@@ -138,20 +185,35 @@ export default function BannerPage() {
           <nav className="hidden md:flex items-center bg-white/80 backdrop-blur-md px-6 py-2.5 rounded-full border border-white/80 shadow-[0_4px_20px_rgba(0,0,0,0.04)]">
             <div className="flex items-center space-x-8 text-[14px] font-medium text-slate-700">
               <a
-                href="#"
-                className="text-slate-900 font-semibold hover:text-[#2f80ed] transition-colors relative py-0.5 after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-4 after:h-0.5 after:bg-[#2f80ed] after:rounded-full"
+                href="#home"
+                onClick={(e) => handleNavClick(e, "home")}
+                className={`transition-all duration-200 relative py-0.5 cursor-pointer ${
+                  activeSection === "home"
+                    ? "text-slate-900 font-semibold after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-4 after:h-0.5 after:bg-[#2f80ed] after:rounded-full"
+                    : "text-slate-600 hover:text-[#2f80ed]"
+                }`}
               >
                 Home
               </a>
               <a
                 href="#how-it-works"
-                className="text-slate-600 hover:text-[#2f80ed] transition-colors"
+                onClick={(e) => handleNavClick(e, "how-it-works")}
+                className={`transition-all duration-200 relative py-0.5 cursor-pointer ${
+                  activeSection === "how-it-works"
+                    ? "text-slate-900 font-semibold after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-4 after:h-0.5 after:bg-[#2f80ed] after:rounded-full"
+                    : "text-slate-600 hover:text-[#2f80ed]"
+                }`}
               >
                 How It Works
               </a>
               <a
                 href="#ai-assistant"
-                className="text-slate-600 hover:text-[#2f80ed] transition-colors"
+                onClick={(e) => handleNavClick(e, "ai-assistant")}
+                className={`transition-all duration-200 relative py-0.5 cursor-pointer ${
+                  activeSection === "ai-assistant"
+                    ? "text-slate-900 font-semibold after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-4 after:h-0.5 after:bg-[#2f80ed] after:rounded-full"
+                    : "text-slate-600 hover:text-[#2f80ed]"
+                }`}
               >
                 AI Assistant
               </a>
@@ -191,23 +253,35 @@ export default function BannerPage() {
           <div className="max-w-[1440px] mx-auto px-4 sm:px-8">
             <div className="sm:hidden mt-3 bg-white/95 backdrop-blur-xl border border-white/80 rounded-2xl p-5 shadow-xl flex flex-col gap-4 animate-in fade-in slide-in-from-top-2 duration-200">
               <a
-                href="#"
-                onClick={() => setMobileMenuOpen(false)}
-                className="text-slate-900 font-semibold text-base py-1"
+                href="#home"
+                onClick={(e) => handleMobileNavClick(e, "home")}
+                className={`text-base py-1 transition-colors ${
+                  activeSection === "home"
+                    ? "text-[#2f80ed] font-bold"
+                    : "text-slate-700 font-medium hover:text-[#2f80ed]"
+                }`}
               >
                 Home
               </a>
               <a
                 href="#how-it-works"
-                onClick={() => setMobileMenuOpen(false)}
-                className="text-slate-700 font-medium text-base py-1"
+                onClick={(e) => handleMobileNavClick(e, "how-it-works")}
+                className={`text-base py-1 transition-colors ${
+                  activeSection === "how-it-works"
+                    ? "text-[#2f80ed] font-bold"
+                    : "text-slate-700 font-medium hover:text-[#2f80ed]"
+                }`}
               >
                 How It Works
               </a>
               <a
                 href="#ai-assistant"
-                onClick={() => setMobileMenuOpen(false)}
-                className="text-slate-700 font-medium text-base py-1"
+                onClick={(e) => handleMobileNavClick(e, "ai-assistant")}
+                className={`text-base py-1 transition-colors ${
+                  activeSection === "ai-assistant"
+                    ? "text-[#2f80ed] font-bold"
+                    : "text-slate-700 font-medium hover:text-[#2f80ed]"
+                }`}
               >
                 AI Assistant
               </a>

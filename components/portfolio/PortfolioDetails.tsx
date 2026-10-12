@@ -28,20 +28,13 @@ export default function PortfolioDetails() {
     <div className="min-h-screen w-full bg-white font-sans text-slate-800 antialiased flex flex-col">
       {/* Top Floating Navigation Header */}
       <nav className="fixed top-0 inset-x-0 z-50 bg-black/30 backdrop-blur-md border-b border-white/10 transition-all">
-        <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 h-16 flex items-center justify-between">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 h-16 flex items-center">
           <Link
             href="/#portfolio"
             className="inline-flex items-center gap-2 text-white/90 hover:text-white bg-white/10 hover:bg-white/20 backdrop-blur-md px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-medium border border-white/20 transition-all duration-200"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Back to Portfolio</span>
-          </Link>
-
-          <Link href="/" className="flex items-center gap-2">
-            <span className="font-extrabold text-[18px] sm:text-[20px] tracking-tight leading-none text-white">
-              Properti<span className="text-[#e53935]">QU</span>
-              <span className="text-[#d97706]">.AI</span>
-            </span>
           </Link>
         </div>
       </nav>
@@ -208,9 +201,6 @@ export default function PortfolioDetails() {
           </div>
         </div>
       </section>
-
-      {/* Footer */}
-      <Footer />
     </div>
   );
 }
