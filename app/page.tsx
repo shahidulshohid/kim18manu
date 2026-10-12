@@ -4,6 +4,7 @@ import CuratedPortfolio from "@/components/landingPage/CuratedPortfolio";
 import AutonomousCalendar from "@/components/landingPage/AutonomousCalendar";
 import InstitutionalNetwork from "@/components/landingPage/InstitutionalNetwork";
 import HarmonizedOperations from "@/components/landingPage/HarmonizedOperations";
+import ComplianceStandards from "@/components/landingPage/ComplianceStandards";
 
 export default function Home() {
   return (
@@ -14,6 +15,7 @@ export default function Home() {
       <AutonomousCalendar />
       <InstitutionalNetwork />
       <HarmonizedOperations />
+      <ComplianceStandards />
     </main>
   );
 }

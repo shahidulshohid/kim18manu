@@ -5,4 +5,5 @@ export { default as CuratedPortfolio } from "./CuratedPortfolio";
 export { default as AutonomousCalendar } from "./AutonomousCalendar";
 export { default as InstitutionalNetwork } from "./InstitutionalNetwork";
 export { default as HarmonizedOperations } from "./HarmonizedOperations";
+export { default as ComplianceStandards } from "./ComplianceStandards";
 export { default } from "./BannerPage";
