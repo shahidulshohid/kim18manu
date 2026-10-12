@@ -76,7 +76,7 @@ export default function AutonomousCalendar() {
 
   return (
     <section
-      id="autonomous-calendar"
+      id="ai-assistant"
       className="relative w-full bg-[#f8fbff] py-16 sm:py-20 lg:py-28 overflow-hidden font-sans border-t border-sky-100/60"
     >
       {/* Ambient background glows */}

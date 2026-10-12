@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import {
   ArrowUpRight,
@@ -28,6 +28,16 @@ export default function BannerPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [submittedQuery, setSubmittedQuery] = useState<string | null>(null);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const filters = [
     { name: "Construction", icon: Building2 },
@@ -101,9 +111,15 @@ export default function BannerPage() {
         </div>
       </div>
 
-      {/* Navigation Header */}
-      <header className="relative z-30 w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 pt-5 pb-3">
-        <div className="flex items-center justify-between">
+      {/* Navigation Header (Fixed across the page on scroll) */}
+      <header
+        className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
+          isScrolled
+            ? "bg-white/90 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.04)] py-3"
+            : "bg-transparent py-4 sm:py-5"
+        }`}
+      >
+        <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 flex items-center justify-between">
           {/* Left: Brand Logo */}
           <div className="flex items-center gap-2 shrink-0">
             <a href="#" className="flex items-center gap-2 group transition-transform duration-200 hover:scale-[1.02]">
@@ -172,51 +188,53 @@ export default function BannerPage() {
 
         {/* Mobile Dropdown Menu */}
         {mobileMenuOpen && (
-          <div className="sm:hidden mt-3 bg-white/95 backdrop-blur-xl border border-white/80 rounded-2xl p-5 shadow-xl flex flex-col gap-4 animate-in fade-in slide-in-from-top-2 duration-200">
-            <a
-              href="#"
-              onClick={() => setMobileMenuOpen(false)}
-              className="text-slate-900 font-semibold text-base py-1"
-            >
-              Home
-            </a>
-            <a
-              href="#how-it-works"
-              onClick={() => setMobileMenuOpen(false)}
-              className="text-slate-700 font-medium text-base py-1"
-            >
-              How It Works
-            </a>
-            <a
-              href="#ai-assistant"
-              onClick={() => setMobileMenuOpen(false)}
-              className="text-slate-700 font-medium text-base py-1"
-            >
-              AI Assistant
-            </a>
-            <hr className="border-slate-100 my-1" />
-            <div className="flex flex-col gap-2.5">
+          <div className="max-w-[1440px] mx-auto px-4 sm:px-8">
+            <div className="sm:hidden mt-3 bg-white/95 backdrop-blur-xl border border-white/80 rounded-2xl p-5 shadow-xl flex flex-col gap-4 animate-in fade-in slide-in-from-top-2 duration-200">
               <a
-                href="/signin"
+                href="#"
                 onClick={() => setMobileMenuOpen(false)}
-                className="text-center py-2.5 text-slate-800 font-medium text-sm border border-slate-200 rounded-full"
+                className="text-slate-900 font-semibold text-base py-1"
               >
-                Log In
+                Home
               </a>
               <a
-                href="/signup"
+                href="#how-it-works"
                 onClick={() => setMobileMenuOpen(false)}
-                className="text-center py-2.5 bg-[#2f80ed] text-white font-medium text-sm rounded-full shadow-md"
+                className="text-slate-700 font-medium text-base py-1"
               >
-                Get Started
+                How It Works
               </a>
+              <a
+                href="#ai-assistant"
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-slate-700 font-medium text-base py-1"
+              >
+                AI Assistant
+              </a>
+              <hr className="border-slate-100 my-1" />
+              <div className="flex flex-col gap-2.5">
+                <a
+                  href="/signin"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-center py-2.5 text-slate-800 font-medium text-sm border border-slate-200 rounded-full"
+                >
+                  Log In
+                </a>
+                <a
+                  href="/signup"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-center py-2.5 bg-[#2f80ed] text-white font-medium text-sm rounded-full shadow-md"
+                >
+                  Get Started
+                </a>
+              </div>
             </div>
           </div>
         )}
       </header>
 
       {/* Main Hero Content Area */}
-      <main className="relative z-20 flex-1 w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 flex flex-col justify-between pt-6 sm:pt-10 pb-8 lg:pb-12 min-h-[calc(100vh-80px)]">
+      <main className="relative z-20 flex-1 w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 flex flex-col justify-between pt-24 sm:pt-28 lg:pt-32 pb-8 lg:pb-12 min-h-[calc(100vh-80px)]">
         {/* Top Hero Section: Title, Subtitle, CTA Button */}
         <div className="max-w-2xl mt-2 sm:mt-4 lg:mt-6">
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[66px] font-extrabold tracking-tight text-[#0f172a] leading-[1.08] drop-shadow-sm">
