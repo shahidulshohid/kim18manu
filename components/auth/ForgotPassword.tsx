@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Mail, CheckCircle2 } from "lucide-react";
 import AuthHero from "./AuthHero";
@@ -11,6 +12,7 @@ export interface ForgotPasswordFormValues {
 }
 
 export default function ForgotPassword() {
+  const router = useRouter();
   const [isSuccess, setIsSuccess] = useState(false);
 
   const {
@@ -26,12 +28,14 @@ export default function ForgotPassword() {
   });
 
   const onSubmit: SubmitHandler<ForgotPasswordFormValues> = async (data) => {
-    // Simulated send reset link
+    // Simulated send OTP
     await new Promise((resolve) => setTimeout(resolve, 800));
-    console.log("Password reset link sent to:", data.email);
+    console.log("OTP sent to:", data.email);
     setIsSuccess(true);
     reset();
-    setTimeout(() => setIsSuccess(false), 5000);
+    setTimeout(() => {
+      router.push("/reset-password");
+    }, 1200);
   };
 
   return (
@@ -96,7 +100,7 @@ export default function ForgotPassword() {
             {isSuccess && (
               <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-xl text-xs flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600" />
-                <span>Reset link sent! Please check your email inbox.</span>
+                <span>Reset Password sent! Please check your email inbox.</span>
               </div>
             )}
 
