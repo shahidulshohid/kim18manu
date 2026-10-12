@@ -1,1 +1,5 @@
-export { default } from "../login/page";
+import SignIn from "@/components/auth/SignIn";
+
+export default function SignInPage() {
+  return <SignIn />;
+}
