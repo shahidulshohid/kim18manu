@@ -7,4 +7,5 @@ export { default as InstitutionalNetwork } from "./InstitutionalNetwork";
 export { default as HarmonizedOperations } from "./HarmonizedOperations";
 export { default as ComplianceStandards } from "./ComplianceStandards";
 export { default as CallToAction } from "./CallToAction";
+export { default as Footer } from "./Footer";
 export { default } from "./BannerPage";
