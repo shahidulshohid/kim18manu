@@ -6,4 +6,5 @@ export { default as AutonomousCalendar } from "./AutonomousCalendar";
 export { default as InstitutionalNetwork } from "./InstitutionalNetwork";
 export { default as HarmonizedOperations } from "./HarmonizedOperations";
 export { default as ComplianceStandards } from "./ComplianceStandards";
+export { default as CallToAction } from "./CallToAction";
 export { default } from "./BannerPage";
