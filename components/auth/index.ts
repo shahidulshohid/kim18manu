@@ -1,2 +1,3 @@
 export { default as AuthHero } from "./AuthHero";
 export { default as AuthForm } from "./AuthForm";
+export { default as LoginForm } from "./LoginForm";

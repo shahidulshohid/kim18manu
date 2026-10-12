@@ -242,6 +242,17 @@ export default function AuthForm() {
             </svg>
             <span>Continue with Google</span>
           </button>
+
+          {/* Switch to Log In */}
+          <p className="text-center text-xs text-slate-500 pt-3">
+            Already have an account?{" "}
+            <Link
+              href="/login"
+              className="font-semibold text-[#1d61f2] hover:underline"
+            >
+              Sign In
+            </Link>
+          </p>
         </form>
       </div>
     </section>
