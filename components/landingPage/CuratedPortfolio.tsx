@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { MapPin, Check, ArrowRight, Sparkles } from "lucide-react";
 
 export interface PropertyItem {
@@ -174,9 +175,9 @@ export default function CuratedPortfolio() {
         {/* 6 Property Cards Grid (3 Columns x 2 Rows) */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7 lg:gap-8">
           {properties.map((property) => (
-            <div
+            <Link
+              href={`/portfolio/${property.id}`}
               key={property.id}
-              onClick={() => setSelectedProperty(property.id)}
               className="group bg-white rounded-3xl border border-slate-100/90 shadow-[0_4px_24px_rgba(0,0,0,0.04)] hover:shadow-[0_16px_36px_rgba(0,0,0,0.08)] hover:-translate-y-1.5 transition-all duration-300 flex flex-col overflow-hidden cursor-pointer"
             >
               {/* Card Image Area with Gradient & Overlaid Title */}
@@ -298,12 +299,12 @@ export default function CuratedPortfolio() {
 
                 {/* View Property Dossier Button */}
                 <div className="mt-5">
-                  <button className="w-full py-2.5 sm:py-3 rounded-xl bg-[#f0f6fd] hover:bg-[#2f80ed] text-slate-700 hover:text-white border border-[#e2eefa]/80 font-semibold text-xs sm:text-[13px] transition-all duration-200 cursor-pointer shadow-xs active:scale-[0.99]">
+                  <div className="w-full py-2.5 sm:py-3 rounded-xl bg-[#f0f6fd] group-hover:bg-[#2f80ed] text-slate-700 group-hover:text-white border border-[#e2eefa]/80 font-semibold text-xs sm:text-[13px] transition-all duration-200 text-center shadow-xs active:scale-[0.99]">
                     View Property Dossier
-                  </button>
+                  </div>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
