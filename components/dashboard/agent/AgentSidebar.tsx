@@ -68,6 +68,21 @@ export default function AgentSidebar({
         pathname === "/dashboard/agent/lead-crm"
       );
     }
+    if (href === "/dashboard/agent/ai") {
+      return (
+        pathname === "/dashboard/agent/ai" ||
+        pathname === "/dashboard/agent/ai-system" ||
+        pathname === "/dashboard/agent/ai/system" ||
+        pathname.startsWith("/dashboard/agent/ai/")
+      );
+    }
+    if (href === "/dashboard/agent/site-visits") {
+      return (
+        pathname === "/dashboard/agent/site-visits" ||
+        pathname === "/dashboard/agent/site-visit" ||
+        pathname === "/dashboard/agent/visits"
+      );
+    }
     return pathname.startsWith(href);
   };
 
