@@ -562,56 +562,121 @@ export default function LeadManagementView() {
         </div>
       )}
 
-      {/* TAB 3: CALL HISTORY */}
+      {/* TAB 3: CALL HISTORY strictly matching screenshot */}
       {activeTab === "calls" && (
-        <div className="bg-white rounded-2xl border border-slate-100 p-5 space-y-4 animate-in fade-in duration-150">
-          <h3 className="text-sm font-bold text-slate-800">
-            Recent Voice Inbound & Outbound AI Records
-          </h3>
-          <div className="divide-y divide-slate-100 text-xs">
-            {[
-              {
-                caller: "Ahmad Fauzi",
-                type: "Inbound Call",
-                time: "Today, 09:32",
-                duration: "3m 42s",
-                status: "Extracted into CRM",
-                sentiment: "High Positive",
-              },
-              {
-                caller: "James Kwon",
-                type: "Outbound Followup",
-                time: "Yesterday, 16:45",
-                duration: "2m 10s",
-                status: "Deal Finalized",
-                sentiment: "Closed Won",
-              },
-            ].map((call, i) => (
-              <div key={i} className="py-3 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="h-8 w-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
-                    <Phone className="h-4 w-4" />
-                  </div>
-                  <div>
-                    <span className="font-semibold text-slate-800">{call.caller}</span>
-                    <span className="text-slate-400 ml-2">({call.type})</span>
-                    <p className="text-[11px] text-slate-400 mt-0.5">{call.time} · Duration: {call.duration}</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <span className="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-[11px] font-semibold border border-emerald-200/60">
-                    {call.sentiment}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => showToast("Audio playback stream connected.")}
-                    className="px-3 py-1 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 text-xs font-medium cursor-pointer"
+        <div className="bg-white rounded-2xl border border-slate-100 shadow-2xs p-5 sm:p-6 animate-in fade-in duration-150">
+          <h2 className="text-base sm:text-lg font-bold text-slate-900 mb-4">
+            Call History
+          </h2>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="border-b border-slate-100 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                  <th className="py-3 px-3 font-semibold">LEAD</th>
+                  <th className="py-3 px-3 font-semibold">DIRECTION</th>
+                  <th className="py-3 px-3 font-semibold">AGENT</th>
+                  <th className="py-3 px-3 font-semibold">DURATION</th>
+                  <th className="py-3 px-3 font-semibold">TIMESTAMP</th>
+                  <th className="py-3 px-3 font-semibold">RECORDING</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 text-xs sm:text-sm">
+                {[
+                  {
+                    lead: "Ahmad Fauzi",
+                    direction: "Inbound" as const,
+                    agent: "Budi Santoso",
+                    duration: "4m 32s",
+                    timestamp: "2026-10-01 09:28",
+                    hasRecording: true,
+                  },
+                  {
+                    lead: "Rina Wulandari",
+                    direction: "Outbound" as const,
+                    agent: "Rizki Pratama",
+                    duration: "2m 15s",
+                    timestamp: "2026-09-30 11:00",
+                    hasRecording: true,
+                  },
+                  {
+                    lead: "Lina Kusuma",
+                    direction: "Inbound" as const,
+                    agent: "Sari Dewi",
+                    duration: "7m 48s",
+                    timestamp: "2026-09-29 14:20",
+                    hasRecording: true,
+                  },
+                  {
+                    lead: "James Kwon",
+                    direction: "Outbound" as const,
+                    agent: "Dewi Hartati",
+                    duration: "1m 05s",
+                    timestamp: "2026-09-28 16:40",
+                    hasRecording: false,
+                  },
+                ].map((call, idx) => (
+                  <tr
+                    key={idx}
+                    className="hover:bg-slate-50/70 transition-colors"
                   >
-                    Play Recording
-                  </button>
-                </div>
-              </div>
-            ))}
+                    {/* LEAD */}
+                    <td className="py-3.5 px-3 font-semibold text-slate-800 text-xs sm:text-[13px]">
+                      {call.lead}
+                    </td>
+
+                    {/* DIRECTION */}
+                    <td className="py-3.5 px-3 whitespace-nowrap">
+                      {call.direction === "Inbound" ? (
+                        <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#e0f2fe] text-[#0284c7]">
+                          Inbound
+                        </span>
+                      ) : (
+                        <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#ede9fe] text-[#7c3aed]">
+                          Outbound
+                        </span>
+                      )}
+                    </td>
+
+                    {/* AGENT */}
+                    <td className="py-3.5 px-3 text-slate-600 text-xs sm:text-[13px]">
+                      {call.agent}
+                    </td>
+
+                    {/* DURATION */}
+                    <td className="py-3.5 px-3 text-slate-600 text-xs sm:text-[13px]">
+                      {call.duration}
+                    </td>
+
+                    {/* TIMESTAMP */}
+                    <td className="py-3.5 px-3 text-slate-500 text-xs sm:text-[13px] whitespace-nowrap">
+                      {call.timestamp}
+                    </td>
+
+                    {/* RECORDING */}
+                    <td className="py-3.5 px-3 whitespace-nowrap">
+                      {call.hasRecording ? (
+                        <button
+                          type="button"
+                          onClick={() =>
+                            showToast(
+                              `Playing audio recording for ${call.lead} (${call.duration})...`
+                            )
+                          }
+                          className="text-xs sm:text-[13px] font-medium text-blue-600 hover:text-blue-700 hover:underline cursor-pointer"
+                        >
+                          Play
+                        </button>
+                      ) : (
+                        <span className="text-xs sm:text-[13px] text-slate-300 font-normal">
+                          No recording
+                        </span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       )}
