@@ -155,24 +155,8 @@ export default function AgentSidebar({
         )}
       </div>
 
-      {/* Admin | Agent Toggle Switch matching reference screenshot */}
-      <div className="flex items-center p-1 bg-slate-100/80 rounded-xl mb-1 mx-1 select-none">
-        <button
-          type="button"
-          className="flex-1 py-1 text-xs font-bold rounded-lg bg-white text-blue-600 shadow-xs text-center transition-all cursor-pointer"
-        >
-          Admin
-        </button>
-        <button
-          type="button"
-          className="flex-1 py-1 text-xs font-medium rounded-lg text-slate-400 hover:text-slate-600 text-center transition-all cursor-pointer"
-        >
-          Agent
-        </button>
-      </div>
-
       {/* Navigation List */}
-      <nav className="space-y-1 flex-1 min-h-0 overflow-y-auto pr-0.5 custom-scrollbar mt-2">
+      <nav className="space-y-1 flex-1 min-h-0 overflow-y-auto pr-0.5 custom-scrollbar mt-1">
         {agentNavItems.map((item) => {
           const Icon = iconMap[item.iconName] || Home;
           const active = isLinkActive(item.href);
