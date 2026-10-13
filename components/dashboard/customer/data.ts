@@ -25,7 +25,7 @@ export const customerNavItems: NavItem[] = [
   {
     id: "ai-assistant",
     label: "AI Assistant",
-    iconName: "Sparkles",
+    iconName: "Bot",
     href: "/dashboard/customer/ai-assistant",
   },
   {
