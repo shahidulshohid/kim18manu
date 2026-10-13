@@ -51,14 +51,13 @@ interface BookkeepingEntry {
 }
 
 interface InvoiceItem {
-  id: string;
   invoiceNo: string;
+  customer: string;
   property: string;
-  billedTo: string;
   amount: string;
-  issueDate: string;
-  dueDate: string;
-  status: "Paid" | "Unpaid" | "Overdue";
+  date: string;
+  method: string;
+  status: "Completed" | "Active" | "Pending Payment";
 }
 
 const initialTransactions: TransactionItem[] = [
@@ -160,34 +159,40 @@ const initialBookkeeping: BookkeepingEntry[] = [
 
 const initialInvoices: InvoiceItem[] = [
   {
-    id: "INV-01",
-    invoiceNo: "INV-2026-0091",
-    property: "Modern Villa — Jimbaran",
-    billedTo: "Ahmad Fauzi",
-    amount: "IDR 450.0M",
-    issueDate: "2026-09-28",
-    dueDate: "2026-10-12",
-    status: "Paid",
-  },
-  {
-    id: "INV-02",
-    invoiceNo: "INV-2026-0092",
-    property: "SCBD Apartment 2BR",
-    billedTo: "Lina Kusuma",
-    amount: "IDR 85.0M",
-    issueDate: "2026-09-20",
-    dueDate: "2026-10-04",
-    status: "Unpaid",
-  },
-  {
-    id: "INV-03",
-    invoiceNo: "INV-2026-0088",
+    invoiceNo: "INV-001",
+    customer: "Bimo Santoso",
     property: "Family House — Dago",
-    billedTo: "Bimo Santoso",
-    amount: "IDR 14.4M",
-    issueDate: "2026-09-15",
-    dueDate: "2026-09-30",
-    status: "Paid",
+    amount: "IDR 144M",
+    date: "2026-10-01",
+    method: "Bank Transfer",
+    status: "Completed",
+  },
+  {
+    invoiceNo: "INV-002",
+    customer: "Ahmad Fauzi",
+    property: "Modern Villa — Jimbaran",
+    amount: "IDR 4.5B",
+    date: "2026-09-28",
+    method: "Bank Transfer",
+    status: "Active",
+  },
+  {
+    invoiceNo: "INV-003",
+    customer: "Lina Kusuma",
+    property: "SCBD Apartment 2BR",
+    amount: "IDR 850M",
+    date: "2026-09-20",
+    method: "Credit Card",
+    status: "Pending Payment",
+  },
+  {
+    invoiceNo: "INV-004",
+    customer: "PT Logistik Jaya",
+    property: "MM2100 Warehouse",
+    amount: "IDR 7.2B",
+    date: "2026-09-10",
+    method: "Bank Transfer",
+    status: "Completed",
   },
 ];
 
@@ -687,85 +692,114 @@ export default function TransactionsView() {
         </div>
       )}
 
-      {/* TAB 4: INVOICES & RECEIPTS */}
+      {/* TAB 4: INVOICES & RECEIPTS (Matches Screenshot 100%) */}
       {activeTab === "Invoices & Receipts" && (
         <div className="space-y-6">
           <div className="bg-white rounded-2xl border border-slate-100 shadow-2xs overflow-hidden">
+            {/* Card Header */}
             <div className="p-4 sm:px-6 sm:py-5 flex items-center justify-between border-b border-slate-100">
               <h2 className="text-base sm:text-lg font-bold text-slate-900">
-                Official Invoices & Tax Receipts
+                Invoices & Receipts
               </h2>
               <button
-                onClick={() => showToast("Preparing new invoice drafting wizard...")}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-600 text-white text-xs sm:text-sm font-semibold hover:bg-blue-700 transition-colors cursor-pointer"
+                onClick={() => showToast("Exporting all invoices...")}
+                className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors cursor-pointer"
               >
-                <Plus className="h-3.5 w-3.5" />
-                Create Invoice
+                <Download className="h-3.5 w-3.5" />
+                Export All
               </button>
             </div>
 
+            {/* Table */}
             <div className="overflow-x-auto custom-scrollbar">
               <table className="w-full text-left border-collapse min-w-[760px]">
                 <thead>
                   <tr className="border-b border-slate-100 bg-white">
                     <th className="py-3.5 px-6 text-[11px] font-bold tracking-wider text-slate-400 uppercase">
-                      INVOICE NO
+                      INVOICE #
                     </th>
                     <th className="py-3.5 px-6 text-[11px] font-bold tracking-wider text-slate-400 uppercase">
-                      PROPERTY / CLIENT
+                      CUSTOMER
+                    </th>
+                    <th className="py-3.5 px-6 text-[11px] font-bold tracking-wider text-slate-400 uppercase">
+                      PROPERTY
                     </th>
                     <th className="py-3.5 px-6 text-[11px] font-bold tracking-wider text-slate-400 uppercase">
                       AMOUNT
                     </th>
                     <th className="py-3.5 px-6 text-[11px] font-bold tracking-wider text-slate-400 uppercase">
-                      ISSUE DATE
+                      DATE
                     </th>
                     <th className="py-3.5 px-6 text-[11px] font-bold tracking-wider text-slate-400 uppercase">
-                      DUE DATE
+                      METHOD
                     </th>
                     <th className="py-3.5 px-6 text-[11px] font-bold tracking-wider text-slate-400 uppercase">
                       STATUS
                     </th>
-                    <th className="py-3.5 px-6 text-[11px] font-bold tracking-wider text-slate-400 uppercase text-right">
-                      ACTIONS
+                    <th className="py-3.5 px-6 text-[11px] font-bold tracking-wider text-slate-400 uppercase">
+                      DOWNLOAD
                     </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
                   {invoices.map((inv) => (
-                    <tr key={inv.id} className="hover:bg-slate-50/70 transition-colors">
-                      <td className="py-4 px-6 text-xs font-mono font-bold text-blue-600">
+                    <tr
+                      key={inv.invoiceNo}
+                      className="hover:bg-slate-50/70 transition-colors"
+                    >
+                      {/* INVOICE # */}
+                      <td className="py-4 px-6 text-xs font-mono text-slate-300">
                         {inv.invoiceNo}
                       </td>
-                      <td className="py-4 px-6">
-                        <div className="text-xs sm:text-sm font-semibold text-slate-900">
-                          {inv.property}
-                        </div>
-                        <div className="text-[11px] text-slate-400">{inv.billedTo}</div>
+
+                      {/* CUSTOMER */}
+                      <td className="py-4 px-6 text-xs sm:text-sm text-slate-600">
+                        {inv.customer}
                       </td>
-                      <td className="py-4 px-6 text-xs sm:text-sm font-bold text-amber-500">
+
+                      {/* PROPERTY */}
+                      <td className="py-4 px-6 text-xs sm:text-sm font-semibold text-slate-900">
+                        {inv.property}
+                      </td>
+
+                      {/* AMOUNT */}
+                      <td className="py-4 px-6 text-xs sm:text-sm font-bold text-slate-900">
                         {inv.amount}
                       </td>
+
+                      {/* DATE */}
                       <td className="py-4 px-6 text-xs sm:text-sm text-slate-400 font-mono">
-                        {inv.issueDate}
+                        {inv.date}
                       </td>
-                      <td className="py-4 px-6 text-xs sm:text-sm text-slate-400 font-mono">
-                        {inv.dueDate}
+
+                      {/* METHOD */}
+                      <td className="py-4 px-6 text-xs sm:text-sm text-slate-600">
+                        {inv.method}
                       </td>
+
+                      {/* STATUS */}
                       <td className="py-4 px-6">
-                        <span
-                          className={cn(
-                            "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold",
-                            inv.status === "Paid"
-                              ? "bg-emerald-50 text-emerald-600 border border-emerald-200/60"
-                              : "bg-amber-50 text-amber-600 border border-amber-200/60"
-                          )}
-                        >
-                          {inv.status}
-                        </span>
+                        {inv.status === "Completed" && (
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-600 border border-emerald-200/60">
+                            Completed
+                          </span>
+                        )}
+                        {inv.status === "Active" && (
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-600 border border-emerald-200/60">
+                            Active
+                          </span>
+                        )}
+                        {inv.status === "Pending Payment" && (
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-600 border border-amber-200/60">
+                            Pending Payment
+                          </span>
+                        )}
                       </td>
-                      <td className="py-4 px-6 text-right">
+
+                      {/* DOWNLOAD */}
+                      <td className="py-4 px-6">
                         <button
+                          type="button"
                           onClick={() => showToast(`Downloading ${inv.invoiceNo}.pdf...`)}
                           className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700 cursor-pointer"
                         >
