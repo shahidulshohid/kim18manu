@@ -1,0 +1,18 @@
+export { default as CustomerLayout } from "./CustomerLayout";
+export { default as CustomerSidebar } from "./CustomerSidebar";
+export { default as CustomerHeader } from "./CustomerHeader";
+export { default as CustomerHomeView } from "./CustomerHomeView";
+export { default as AiSearchCard } from "./AiSearchCard";
+export { default as QuickAccessGrid } from "./QuickAccessGrid";
+export { default as RecommendedProperties } from "./RecommendedProperties";
+export { default as DiscoverView } from "./views/DiscoverView";
+export { default as AiAssistantView } from "./views/AiAssistantView";
+export { default as SavedView } from "./views/SavedView";
+export { default as SiteVisitsView } from "./views/SiteVisitsView";
+export { default as MessagesView } from "./views/MessagesView";
+export { default as TransactionsView } from "./views/TransactionsView";
+export { default as ServicesView } from "./views/ServicesView";
+export { default as NotificationsView } from "./views/NotificationsView";
+export { default as SettingsView } from "./views/SettingsView";
+export * from "./types";
+export * from "./data";

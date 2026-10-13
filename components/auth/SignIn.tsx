@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Mail, Lock, Eye, EyeOff, CheckCircle2 } from "lucide-react";
 import AuthHero from "./AuthHero";
@@ -12,6 +13,7 @@ export interface SignInFormValues {
 }
 
 export default function SignIn() {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
@@ -34,7 +36,10 @@ export default function SignIn() {
     console.log("Signed in with:", data);
     setIsSuccess(true);
     reset();
-    setTimeout(() => setIsSuccess(false), 4000);
+    setTimeout(() => {
+      setIsSuccess(false);
+      router.push("/dashboard/customer");
+    }, 1200);
   };
 
   return (

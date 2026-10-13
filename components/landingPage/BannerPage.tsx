@@ -6,7 +6,6 @@ import {
   ArrowUpRight,
   Mic,
   ArrowRight,
-  Sparkles,
   Menu,
   X,
   ChevronRight,
@@ -160,11 +159,10 @@ export default function BannerPage() {
 
       {/* Navigation Header (Fixed across the page on scroll) */}
       <header
-        className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
-          isScrolled
+        className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${isScrolled
             ? "bg-white/90 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.04)] py-3"
             : "bg-transparent py-4 sm:py-5"
-        }`}
+          }`}
       >
         <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 flex items-center justify-between">
           {/* Left: Brand Logo */}
@@ -187,33 +185,30 @@ export default function BannerPage() {
               <a
                 href="#home"
                 onClick={(e) => handleNavClick(e, "home")}
-                className={`transition-all duration-200 relative py-0.5 cursor-pointer ${
-                  activeSection === "home"
+                className={`transition-all duration-200 relative py-0.5 cursor-pointer ${activeSection === "home"
                     ? "text-slate-900 font-semibold after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-4 after:h-0.5 after:bg-[#2f80ed] after:rounded-full"
                     : "text-slate-600 hover:text-[#2f80ed]"
-                }`}
+                  }`}
               >
                 Home
               </a>
               <a
                 href="#how-it-works"
                 onClick={(e) => handleNavClick(e, "how-it-works")}
-                className={`transition-all duration-200 relative py-0.5 cursor-pointer ${
-                  activeSection === "how-it-works"
+                className={`transition-all duration-200 relative py-0.5 cursor-pointer ${activeSection === "how-it-works"
                     ? "text-slate-900 font-semibold after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-4 after:h-0.5 after:bg-[#2f80ed] after:rounded-full"
                     : "text-slate-600 hover:text-[#2f80ed]"
-                }`}
+                  }`}
               >
                 How It Works
               </a>
               <a
                 href="#ai-assistant"
                 onClick={(e) => handleNavClick(e, "ai-assistant")}
-                className={`transition-all duration-200 relative py-0.5 cursor-pointer ${
-                  activeSection === "ai-assistant"
+                className={`transition-all duration-200 relative py-0.5 cursor-pointer ${activeSection === "ai-assistant"
                     ? "text-slate-900 font-semibold after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-4 after:h-0.5 after:bg-[#2f80ed] after:rounded-full"
                     : "text-slate-600 hover:text-[#2f80ed]"
-                }`}
+                  }`}
               >
                 AI Assistant
               </a>
@@ -221,7 +216,13 @@ export default function BannerPage() {
           </nav>
 
           {/* Right: Auth Action Buttons */}
-          <div className="hidden sm:flex items-center gap-5">
+          <div className="hidden sm:flex items-center gap-4">
+            <a
+              href="/dashboard/customer"
+              className="text-[13px] font-semibold text-blue-600 bg-blue-50 hover:bg-blue-100 border border-blue-200/60 transition-colors px-3.5 py-1.5 rounded-full flex items-center gap-1.5"
+            >
+              <span>Customer Portal</span>
+            </a>
             <a
               href="/signin"
               className="text-[14px] font-medium text-slate-800 hover:text-[#2f80ed] transition-colors px-2 py-1"
@@ -230,7 +231,7 @@ export default function BannerPage() {
             </a>
             <a
               href="/signup"
-              className="bg-[#2f80ed] hover:bg-[#1f70dd] text-white text-[14px] font-medium px-6 py-2.5 rounded-full shadow-[0_4px_14px_rgba(47,128,237,0.35)] transition-all duration-200 hover:scale-[1.03] active:scale-[0.98] flex items-center gap-1.5"
+              className="bg-[#2f80ed] hover:bg-[#1f70dd] text-white text-[14px] font-medium px-5 py-2 rounded-full shadow-[0_4px_14px_rgba(47,128,237,0.35)] transition-all duration-200 hover:scale-[1.03] active:scale-[0.98] flex items-center gap-1.5"
             >
               <span>Get Started</span>
             </a>
@@ -255,38 +256,42 @@ export default function BannerPage() {
               <a
                 href="#home"
                 onClick={(e) => handleMobileNavClick(e, "home")}
-                className={`text-base py-1 transition-colors ${
-                  activeSection === "home"
+                className={`text-base py-1 transition-colors ${activeSection === "home"
                     ? "text-[#2f80ed] font-bold"
                     : "text-slate-700 font-medium hover:text-[#2f80ed]"
-                }`}
+                  }`}
               >
                 Home
               </a>
               <a
                 href="#how-it-works"
                 onClick={(e) => handleMobileNavClick(e, "how-it-works")}
-                className={`text-base py-1 transition-colors ${
-                  activeSection === "how-it-works"
+                className={`text-base py-1 transition-colors ${activeSection === "how-it-works"
                     ? "text-[#2f80ed] font-bold"
                     : "text-slate-700 font-medium hover:text-[#2f80ed]"
-                }`}
+                  }`}
               >
                 How It Works
               </a>
               <a
                 href="#ai-assistant"
                 onClick={(e) => handleMobileNavClick(e, "ai-assistant")}
-                className={`text-base py-1 transition-colors ${
-                  activeSection === "ai-assistant"
+                className={`text-base py-1 transition-colors ${activeSection === "ai-assistant"
                     ? "text-[#2f80ed] font-bold"
                     : "text-slate-700 font-medium hover:text-[#2f80ed]"
-                }`}
+                  }`}
               >
                 AI Assistant
               </a>
               <hr className="border-slate-100 my-1" />
               <div className="flex flex-col gap-2.5">
+                <a
+                  href="/dashboard/customer"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-center py-2.5 text-blue-600 font-semibold text-sm bg-blue-50 border border-blue-200 rounded-full"
+                >
+                  Customer Portal
+                </a>
                 <a
                   href="/signin"
                   onClick={() => setMobileMenuOpen(false)}
@@ -355,11 +360,10 @@ export default function BannerPage() {
                       onClick={() =>
                         setActiveFilter(isSelected ? null : item.name)
                       }
-                      className={`px-5 py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-200 flex items-center gap-2 cursor-pointer shadow-[0_2px_10px_rgba(0,0,0,0.04)] ${
-                        isSelected
+                      className={`px-5 py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-200 flex items-center gap-2 cursor-pointer shadow-[0_2px_10px_rgba(0,0,0,0.04)] ${isSelected
                           ? "bg-[#2f80ed] text-white shadow-md shadow-blue-500/30 scale-105"
                           : "bg-white/90 hover:bg-white text-slate-800 backdrop-blur-md border border-white/80 hover:shadow-md hover:-translate-y-0.5"
-                      }`}
+                        }`}
                     >
                       <span>{item.name}</span>
                     </button>
@@ -377,11 +381,10 @@ export default function BannerPage() {
                       onClick={() =>
                         setActiveFilter(isSelected ? null : item.name)
                       }
-                      className={`px-5 py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-200 flex items-center gap-2 cursor-pointer shadow-[0_2px_10px_rgba(0,0,0,0.04)] ${
-                        isSelected
+                      className={`px-5 py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-200 flex items-center gap-2 cursor-pointer shadow-[0_2px_10px_rgba(0,0,0,0.04)] ${isSelected
                           ? "bg-[#2f80ed] text-white shadow-md shadow-blue-500/30 scale-105"
                           : "bg-white/90 hover:bg-white text-slate-800 backdrop-blur-md border border-white/80 hover:shadow-md hover:-translate-y-0.5"
-                      }`}
+                        }`}
                     >
                       <span>{item.name}</span>
                     </button>
@@ -428,11 +431,10 @@ export default function BannerPage() {
                       onClick={handleVoiceToggle}
                       title={isListening ? "Listening..." : "Voice Search"}
                       aria-label="Voice Search"
-                      className={`p-1 transition-all duration-200 cursor-pointer flex items-center justify-center ${
-                        isListening
+                      className={`p-1 transition-all duration-200 cursor-pointer flex items-center justify-center ${isListening
                           ? "text-red-500 animate-pulse scale-110"
                           : "text-[#2f80ed] hover:text-[#1d6cd8] hover:scale-110 active:scale-95"
-                      }`}
+                        }`}
                     >
                       <Mic size={18} className="stroke-[2.2]" />
                     </button>
@@ -515,11 +517,10 @@ export default function BannerPage() {
               {/* Card 1 (Primary Active Card) */}
               <div
                 onClick={() => setActiveSlide(0)}
-                className={`group cursor-pointer transition-all duration-300 transform rounded-2xl p-2.5 sm:p-3 flex items-center gap-3.5 min-w-[280px] sm:min-w-[310px] ${
-                  activeSlide === 0
+                className={`group cursor-pointer transition-all duration-300 transform rounded-2xl p-2.5 sm:p-3 flex items-center gap-3.5 min-w-[280px] sm:min-w-[310px] ${activeSlide === 0
                     ? "bg-[#eaf4fc]/95 backdrop-blur-xl border border-white/90 shadow-[0_8px_30px_rgba(0,0,0,0.08)] scale-100 ring-2 ring-[#2f80ed]/30"
                     : "bg-white/80 backdrop-blur-md border border-white/60 shadow-sm opacity-85 hover:opacity-100 hover:scale-[1.02]"
-                }`}
+                  }`}
               >
                 <div className="relative w-20 h-16 sm:w-24 sm:h-18 rounded-xl overflow-hidden shrink-0 shadow-inner bg-slate-100">
                   <Image
@@ -548,11 +549,10 @@ export default function BannerPage() {
               {/* Card 2 (Secondary Card) */}
               <div
                 onClick={() => setActiveSlide(1)}
-                className={`group cursor-pointer transition-all duration-300 transform rounded-2xl p-2.5 sm:p-3 flex items-center gap-3.5 min-w-[280px] sm:min-w-[310px] ${
-                  activeSlide === 1
+                className={`group cursor-pointer transition-all duration-300 transform rounded-2xl p-2.5 sm:p-3 flex items-center gap-3.5 min-w-[280px] sm:min-w-[310px] ${activeSlide === 1
                     ? "bg-[#eaf4fc]/95 backdrop-blur-xl border border-white/90 shadow-[0_8px_30px_rgba(0,0,0,0.08)] scale-100 ring-2 ring-[#2f80ed]/30"
                     : "bg-white/80 backdrop-blur-md border border-white/60 shadow-sm opacity-85 hover:opacity-100 hover:scale-[1.02]"
-                }`}
+                  }`}
               >
                 <div className="relative w-20 h-16 sm:w-24 sm:h-18 rounded-xl overflow-hidden shrink-0 shadow-inner bg-slate-100">
                   <Image
