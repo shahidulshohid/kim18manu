@@ -23,6 +23,13 @@ import {
   Upload,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 
 interface ListingItem {
   id: string;
@@ -307,36 +314,36 @@ export default function PropertyManagementView() {
 
         {/* Filter Dropdowns & Export Button */}
         <div className="flex items-center gap-2.5 flex-wrap">
-          {/* Status Dropdown */}
-          <div className="relative">
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="h-10.5 pl-3.5 pr-8 rounded-xl bg-white border border-slate-200 text-xs sm:text-sm text-slate-700 font-medium focus:outline-none focus:border-blue-600 appearance-none cursor-pointer shadow-2xs"
-            >
-              <option value="All">All Statuses</option>
-              <option value="Active">Active</option>
-              <option value="Pending Review">Pending Review</option>
-              <option value="Under Offer">Under Offer</option>
-              <option value="Draft">Draft</option>
-              <option value="Closed">Closed</option>
-            </select>
-            <ChevronDown className="h-4 w-4 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+          {/* Status Dropdown (Shadcn UI) */}
+          <div className="w-38 sm:w-40">
+            <Select value={statusFilter} onValueChange={(val) => setStatusFilter(val)}>
+              <SelectTrigger className="h-10.5 rounded-xl border-slate-200">
+                <SelectValue placeholder="All Statuses" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="All">All Statuses</SelectItem>
+                <SelectItem value="Active">Active</SelectItem>
+                <SelectItem value="Pending Review">Pending Review</SelectItem>
+                <SelectItem value="Under Offer">Under Offer</SelectItem>
+                <SelectItem value="Draft">Draft</SelectItem>
+                <SelectItem value="Closed">Closed</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
-          {/* Class Dropdown */}
-          <div className="relative">
-            <select
-              value={classFilter}
-              onChange={(e) => setClassFilter(e.target.value)}
-              className="h-10.5 pl-3.5 pr-8 rounded-xl bg-white border border-slate-200 text-xs sm:text-sm text-slate-700 font-medium focus:outline-none focus:border-blue-600 appearance-none cursor-pointer shadow-2xs"
-            >
-              <option value="All">All Classes</option>
-              <option value="Residential">Residential</option>
-              <option value="Commercial">Commercial</option>
-              <option value="Industrial">Industrial</option>
-            </select>
-            <ChevronDown className="h-4 w-4 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+          {/* Class Dropdown (Shadcn UI) */}
+          <div className="w-38 sm:w-40">
+            <Select value={classFilter} onValueChange={(val) => setClassFilter(val)}>
+              <SelectTrigger className="h-10.5 rounded-xl border-slate-200">
+                <SelectValue placeholder="All Classes" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="All">All Classes</SelectItem>
+                <SelectItem value="Residential">Residential</SelectItem>
+                <SelectItem value="Commercial">Commercial</SelectItem>
+                <SelectItem value="Industrial">Industrial</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Export Button */}
@@ -724,48 +731,50 @@ export default function PropertyManagementView() {
                     <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
                       LISTING TYPE <span className="text-red-500">*</span>
                     </label>
-                    <div className="relative">
-                      <select
-                        value={formData.listingType}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            listingType: e.target.value as "sale" | "rent",
-                          })
-                        }
-                        className="w-full h-11 px-3.5 pr-8 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 bg-white focus:outline-none focus:border-blue-600 appearance-none cursor-pointer"
-                      >
-                        <option value="sale">sale</option>
-                        <option value="rent">rent</option>
-                      </select>
-                      <ChevronDown className="h-4 w-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-                    </div>
+                    <Select
+                      value={formData.listingType}
+                      onValueChange={(val) =>
+                        setFormData({
+                          ...formData,
+                          listingType: val as "sale" | "rent",
+                        })
+                      }
+                    >
+                      <SelectTrigger className="h-11 rounded-xl">
+                        <SelectValue placeholder="Select type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="sale">sale</SelectItem>
+                        <SelectItem value="rent">rent</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
 
                   <div>
                     <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
                       PROPERTY CLASS <span className="text-red-500">*</span>
                     </label>
-                    <div className="relative">
-                      <select
-                        value={formData.propertyClass}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            propertyClass: e.target.value as
-                              | "residential"
-                              | "commercial"
-                              | "industrial",
-                          })
-                        }
-                        className="w-full h-11 px-3.5 pr-8 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 bg-white focus:outline-none focus:border-blue-600 appearance-none cursor-pointer"
-                      >
-                        <option value="residential">residential</option>
-                        <option value="commercial">commercial</option>
-                        <option value="industrial">industrial</option>
-                      </select>
-                      <ChevronDown className="h-4 w-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-                    </div>
+                    <Select
+                      value={formData.propertyClass}
+                      onValueChange={(val) =>
+                        setFormData({
+                          ...formData,
+                          propertyClass: val as
+                            | "residential"
+                            | "commercial"
+                            | "industrial",
+                        })
+                      }
+                    >
+                      <SelectTrigger className="h-11 rounded-xl">
+                        <SelectValue placeholder="Select class" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="residential">residential</SelectItem>
+                        <SelectItem value="commercial">commercial</SelectItem>
+                        <SelectItem value="industrial">industrial</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
 
@@ -775,29 +784,30 @@ export default function PropertyManagementView() {
                     <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
                       PROPERTY TYPE <span className="text-red-500">*</span>
                     </label>
-                    <div className="relative">
-                      <select
-                        value={formData.propertyType}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            propertyType: e.target.value,
-                          })
-                        }
-                        className="w-full h-11 px-3.5 pr-8 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 bg-white focus:outline-none focus:border-blue-600 appearance-none cursor-pointer"
-                      >
-                        <option value="House">House</option>
-                        <option value="Apartment">Apartment</option>
-                        <option value="Villa">Villa</option>
-                        <option value="Ruko">Ruko</option>
-                        <option value="Rukan">Rukan</option>
-                        <option value="Retail">Retail</option>
-                        <option value="Warehouse">Warehouse</option>
-                        <option value="Land">Land</option>
-                        <option value="Factory">Factory</option>
-                      </select>
-                      <ChevronDown className="h-4 w-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-                    </div>
+                    <Select
+                      value={formData.propertyType}
+                      onValueChange={(val) =>
+                        setFormData({
+                          ...formData,
+                          propertyType: val,
+                        })
+                      }
+                    >
+                      <SelectTrigger className="h-11 rounded-xl">
+                        <SelectValue placeholder="Select property type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="House">House</SelectItem>
+                        <SelectItem value="Apartment">Apartment</SelectItem>
+                        <SelectItem value="Villa">Villa</SelectItem>
+                        <SelectItem value="Ruko">Ruko</SelectItem>
+                        <SelectItem value="Rukan">Rukan</SelectItem>
+                        <SelectItem value="Retail">Retail</SelectItem>
+                        <SelectItem value="Warehouse">Warehouse</SelectItem>
+                        <SelectItem value="Land">Land</SelectItem>
+                        <SelectItem value="Factory">Factory</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
 
                   <div>
@@ -963,50 +973,52 @@ export default function PropertyManagementView() {
                     <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
                       ASSIGNED AGENT <span className="text-red-500">*</span>
                     </label>
-                    <div className="relative">
-                      <select
-                        value={formData.assignedAgent}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            assignedAgent: e.target.value,
-                          })
-                        }
-                        className="w-full h-11 px-3.5 pr-8 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 bg-white focus:outline-none focus:border-blue-600 appearance-none cursor-pointer"
-                      >
-                        <option value="Budi Santoso">Budi Santoso</option>
-                        <option value="Sari Dewi">Sari Dewi</option>
-                        <option value="Rizki Pratama">Rizki Pratama</option>
-                        <option value="Dewi Hartati">Dewi Hartati</option>
-                      </select>
-                      <ChevronDown className="h-4 w-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-                    </div>
+                    <Select
+                      value={formData.assignedAgent}
+                      onValueChange={(val) =>
+                        setFormData({
+                          ...formData,
+                          assignedAgent: val,
+                        })
+                      }
+                    >
+                      <SelectTrigger className="h-11 rounded-xl">
+                        <SelectValue placeholder="Select agent" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Budi Santoso">Budi Santoso</SelectItem>
+                        <SelectItem value="Sari Dewi">Sari Dewi</SelectItem>
+                        <SelectItem value="Rizki Pratama">Rizki Pratama</SelectItem>
+                        <SelectItem value="Dewi Hartati">Dewi Hartati</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
 
                   <div>
                     <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
                       LISTING STATUS
                     </label>
-                    <div className="relative">
-                      <select
-                        value={formData.listingStatus}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            listingStatus: e.target.value as
-                              | "Draft"
-                              | "Pending Review"
-                              | "Active",
-                          })
-                        }
-                        className="w-full h-11 px-3.5 pr-8 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 bg-white focus:outline-none focus:border-blue-600 appearance-none cursor-pointer"
-                      >
-                        <option value="Draft">Draft</option>
-                        <option value="Pending Review">Pending Review</option>
-                        <option value="Active">Active</option>
-                      </select>
-                      <ChevronDown className="h-4 w-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-                    </div>
+                    <Select
+                      value={formData.listingStatus}
+                      onValueChange={(val) =>
+                        setFormData({
+                          ...formData,
+                          listingStatus: val as
+                            | "Draft"
+                            | "Pending Review"
+                            | "Active",
+                        })
+                      }
+                    >
+                      <SelectTrigger className="h-11 rounded-xl">
+                        <SelectValue placeholder="Select status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Draft">Draft</SelectItem>
+                        <SelectItem value="Pending Review">Pending Review</SelectItem>
+                        <SelectItem value="Active">Active</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
 
@@ -1015,28 +1027,29 @@ export default function PropertyManagementView() {
                   <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
                     LISTING INPUT SOURCE
                   </label>
-                  <div className="relative">
-                    <select
-                      value={formData.inputSource}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          inputSource: e.target.value,
-                        })
-                      }
-                      className="w-full h-11 px-3.5 pr-8 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 bg-white focus:outline-none focus:border-blue-600 appearance-none cursor-pointer"
-                    >
-                      <option value="Manual">Manual</option>
-                      <option value="Voice Inbound">Voice Inbound</option>
-                      <option value="AI Extraction">AI Extraction</option>
-                      <option value="Partner Portal">Partner Portal</option>
-                    </select>
-                    <ChevronDown className="h-4 w-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-                  </div>
+                  <Select
+                    value={formData.inputSource}
+                    onValueChange={(val) =>
+                      setFormData({
+                        ...formData,
+                        inputSource: val,
+                      })
+                    }
+                  >
+                    <SelectTrigger className="h-11 rounded-xl">
+                      <SelectValue placeholder="Select input source" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Manual">Manual</SelectItem>
+                      <SelectItem value="Voice Inbound">Voice Inbound</SelectItem>
+                      <SelectItem value="AI Extraction">AI Extraction</SelectItem>
+                      <SelectItem value="Partner Portal">Partner Portal</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
 
                 {/* Footer Buttons strictly matching screenshot */}
-                <div className="flex items-center justify-between gap-3 pt-4 border-t border-slate-100">
+                <div className="sticky -bottom-4 bg-white/95 backdrop-blur-xs flex items-center justify-between gap-3 pt-3.5 pb-2 border-t border-slate-100 mt-6 z-20">
                   <button
                     type="button"
                     onClick={handleSaveDraft}
