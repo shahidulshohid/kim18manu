@@ -10,7 +10,7 @@ import {
   LogOut,
   CheckCircle2,
   AlertCircle,
-  Camera,
+  ChevronDown,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -32,13 +32,13 @@ export default function SettingsView() {
     dob: "",
   });
 
-  // Property Preferences state
+  // Property Preferences state strictly matching screenshot
   const [preferences, setPreferences] = useState({
-    locations: "Jimbaran (Bali), SCBD (Jakarta), Dago (Bandung)",
-    propertyTypes: "Villa, Residential, Luxury Apartment",
-    budgetMin: "IDR 800,000,000",
-    budgetMax: "IDR 5,000,000,000",
-    beds: "3+ Beds",
+    lookingTo: "Buy" as "Buy" | "Rent" | "Both",
+    province: "Bali",
+    propertyType: "Villa",
+    budgetMin: "2000000000",
+    budgetMax: "6000000000",
   });
 
   // UI Language state
@@ -241,7 +241,7 @@ export default function SettingsView() {
 
         {/* Right Column: Settings Panel */}
         <div className="flex-1 w-full bg-white rounded-2xl sm:rounded-3xl border border-slate-100 shadow-[0_2px_12px_rgba(0,0,0,0.03)] p-6 sm:p-8 min-w-0">
-          {/* Tab 1: Personal Information (matches screenshot) */}
+          {/* Tab 1: Personal Information */}
           {activeTab === "personal" && (
             <form onSubmit={handleSavePersonal}>
               <h2 className="text-base sm:text-lg font-bold text-slate-900 mb-6">
@@ -322,72 +322,146 @@ export default function SettingsView() {
             </form>
           )}
 
-          {/* Tab 2: Property Preferences */}
+          {/* Tab 2: Property Preferences strictly matching screenshot media_1791872205189.png */}
           {activeTab === "preferences" && (
             <form onSubmit={handleSavePreferences}>
               <h2 className="text-base sm:text-lg font-bold text-slate-900 mb-6">
                 Property Preferences
               </h2>
 
-              <div className="space-y-4 mb-6">
-                <div>
-                  <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
-                    Target Search Locations
-                  </label>
-                  <input
-                    type="text"
-                    value={preferences.locations}
-                    onChange={(e) =>
-                      setPreferences({ ...preferences, locations: e.target.value })
-                    }
-                    className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 bg-white focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
-                    Preferred Types
-                  </label>
-                  <input
-                    type="text"
-                    value={preferences.propertyTypes}
-                    onChange={(e) =>
-                      setPreferences({ ...preferences, propertyTypes: e.target.value })
-                    }
-                    className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 bg-white focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
-                      Budget Min
-                    </label>
+              {/* I'M LOOKING TO */}
+              <div className="mb-5">
+                <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2.5">
+                  I&apos;M LOOKING TO
+                </label>
+                <div className="flex flex-wrap items-center gap-5 sm:gap-6 text-xs sm:text-sm text-slate-700 font-medium">
+                  <label className="flex items-center gap-2 cursor-pointer select-none">
                     <input
-                      type="text"
-                      value={preferences.budgetMin}
-                      onChange={(e) =>
-                        setPreferences({ ...preferences, budgetMin: e.target.value })
+                      type="radio"
+                      name="lookingTo"
+                      value="Buy"
+                      checked={preferences.lookingTo === "Buy"}
+                      onChange={() =>
+                        setPreferences({ ...preferences, lookingTo: "Buy" })
                       }
-                      className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 bg-white focus:outline-none focus:border-blue-600"
+                      className="h-4 w-4 text-blue-600 focus:ring-blue-500 accent-blue-600 cursor-pointer"
                     />
+                    <span>Buy</span>
+                  </label>
+
+                  <label className="flex items-center gap-2 cursor-pointer select-none">
+                    <input
+                      type="radio"
+                      name="lookingTo"
+                      value="Rent"
+                      checked={preferences.lookingTo === "Rent"}
+                      onChange={() =>
+                        setPreferences({ ...preferences, lookingTo: "Rent" })
+                      }
+                      className="h-4 w-4 text-blue-600 focus:ring-blue-500 accent-blue-600 cursor-pointer"
+                    />
+                    <span>Rent</span>
+                  </label>
+
+                  <label className="flex items-center gap-2 cursor-pointer select-none">
+                    <input
+                      type="radio"
+                      name="lookingTo"
+                      value="Both"
+                      checked={preferences.lookingTo === "Both"}
+                      onChange={() =>
+                        setPreferences({ ...preferences, lookingTo: "Both" })
+                      }
+                      className="h-4 w-4 text-blue-600 focus:ring-blue-500 accent-blue-600 cursor-pointer"
+                    />
+                    <span>Both</span>
+                  </label>
+                </div>
+              </div>
+
+              {/* Row 2: PREFERRED PROVINCE & PROPERTY TYPE */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-5">
+                {/* PREFERRED PROVINCE */}
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
+                    PREFERRED PROVINCE
+                  </label>
+                  <div className="relative">
+                    <select
+                      value={preferences.province}
+                      onChange={(e) =>
+                        setPreferences({ ...preferences, province: e.target.value })
+                      }
+                      className="w-full h-11 px-3.5 pr-9 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 bg-white focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 appearance-none cursor-pointer"
+                    >
+                      <option value="Bali">Bali</option>
+                      <option value="DKI Jakarta">DKI Jakarta</option>
+                      <option value="Jawa Barat">Jawa Barat (Bandung)</option>
+                      <option value="Banten">Banten (Tangerang / BSD)</option>
+                      <option value="DI Yogyakarta">DI Yogyakarta</option>
+                    </select>
+                    <ChevronDown className="h-4 w-4 text-slate-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                   </div>
-                  <div>
-                    <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
-                      Budget Max
-                    </label>
-                    <input
-                      type="text"
-                      value={preferences.budgetMax}
+                </div>
+
+                {/* PROPERTY TYPE */}
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
+                    PROPERTY TYPE
+                  </label>
+                  <div className="relative">
+                    <select
+                      value={preferences.propertyType}
                       onChange={(e) =>
-                        setPreferences({ ...preferences, budgetMax: e.target.value })
+                        setPreferences({ ...preferences, propertyType: e.target.value })
                       }
-                      className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 bg-white focus:outline-none focus:border-blue-600"
-                    />
+                      className="w-full h-11 px-3.5 pr-9 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 bg-white focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 appearance-none cursor-pointer"
+                    >
+                      <option value="Villa">Villa</option>
+                      <option value="Apartment">Apartment</option>
+                      <option value="House">House</option>
+                      <option value="Commercial">Commercial</option>
+                      <option value="Land">Land</option>
+                    </select>
+                    <ChevronDown className="h-4 w-4 text-slate-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                   </div>
                 </div>
               </div>
 
+              {/* Row 3: BUDGET MIN (IDR) & BUDGET MAX (IDR) */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-6">
+                {/* BUDGET MIN (IDR) */}
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
+                    BUDGET MIN (IDR)
+                  </label>
+                  <input
+                    type="text"
+                    value={preferences.budgetMin}
+                    onChange={(e) =>
+                      setPreferences({ ...preferences, budgetMin: e.target.value })
+                    }
+                    className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 bg-white focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
+                  />
+                </div>
+
+                {/* BUDGET MAX (IDR) */}
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
+                    BUDGET MAX (IDR)
+                  </label>
+                  <input
+                    type="text"
+                    value={preferences.budgetMax}
+                    onChange={(e) =>
+                      setPreferences({ ...preferences, budgetMax: e.target.value })
+                    }
+                    className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 bg-white focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
+                  />
+                </div>
+              </div>
+
+              {/* Save Preferences Button */}
               <button
                 type="submit"
                 className="h-11 px-6 rounded-xl bg-[#2563eb] hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm shadow-sm transition-all cursor-pointer active:scale-95"
