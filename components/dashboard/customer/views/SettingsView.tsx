@@ -45,12 +45,15 @@ export default function SettingsView() {
   const [language, setLanguage] = useState("en");
   const [currency, setCurrency] = useState("IDR");
 
-  // Notification Settings state
+  // Notification Settings state strictly matching screenshot
   const [notifSettings, setNotifSettings] = useState({
-    emailPriceDrops: true,
-    emailNewMatches: true,
-    whatsappVisits: true,
-    marketingUpdates: false,
+    propertyMatches: true,
+    messages: true,
+    siteVisits: true,
+    transactions: true,
+    serviceRequests: true,
+    reviewReminders: true,
+    systemNotifications: true,
   });
 
   // Security state
@@ -553,88 +556,101 @@ export default function SettingsView() {
             </div>
           )}
 
-          {/* Tab 4: Notification Settings */}
+          {/* Tab 4: Notification Settings strictly matching screenshot */}
           {activeTab === "notifications" && (
-            <form onSubmit={handleSaveNotifications}>
-              <h2 className="text-base sm:text-lg font-bold text-slate-900 mb-6">
-                Notification Channels & Alerts
+            <div>
+              <h2 className="text-base sm:text-lg font-bold text-slate-900 leading-tight mb-5">
+                Notification Settings
               </h2>
 
-              <div className="space-y-4 mb-6">
-                <label className="flex items-center justify-between p-3.5 rounded-xl border border-slate-100 hover:bg-slate-50 cursor-pointer transition-colors">
-                  <div>
-                    <span className="text-xs sm:text-sm font-bold text-slate-800 block">
-                      Price Drop Alerts
-                    </span>
-                    <span className="text-xs text-slate-400">
-                      Receive email when saved properties drop in price.
-                    </span>
-                  </div>
-                  <input
-                    type="checkbox"
-                    checked={notifSettings.emailPriceDrops}
-                    onChange={(e) =>
-                      setNotifSettings({
-                        ...notifSettings,
-                        emailPriceDrops: e.target.checked,
-                      })
-                    }
-                    className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 accent-blue-600 cursor-pointer"
-                  />
-                </label>
+              <div className="space-y-3">
+                {[
+                  {
+                    key: "propertyMatches" as const,
+                    title: "Property Matches",
+                    description: "When new listings match your saved searches",
+                  },
+                  {
+                    key: "messages" as const,
+                    title: "Messages",
+                    description: "From agents and service partners",
+                  },
+                  {
+                    key: "siteVisits" as const,
+                    title: "Site Visits",
+                    description: "Confirmations, reminders, and changes",
+                  },
+                  {
+                    key: "transactions" as const,
+                    title: "Transactions",
+                    description: "Payment confirmations and updates",
+                  },
+                  {
+                    key: "serviceRequests" as const,
+                    title: "Service Requests",
+                    description: "Status updates on your service requests",
+                  },
+                  {
+                    key: "reviewReminders" as const,
+                    title: "Review Reminders",
+                    description: "Prompts to review agents and partners",
+                  },
+                  {
+                    key: "systemNotifications" as const,
+                    title: "System Notifications",
+                    description: "Platform updates and account alerts",
+                  },
+                ].map((item) => {
+                  const isChecked = notifSettings[item.key];
+                  return (
+                    <div
+                      key={item.key}
+                      onClick={() => {
+                        setNotifSettings((prev) => ({
+                          ...prev,
+                          [item.key]: !prev[item.key],
+                        }));
+                      }}
+                      className="rounded-2xl border border-slate-200/90 hover:border-slate-300/80 bg-white p-4 sm:p-5 flex items-center justify-between gap-4 cursor-pointer transition-all shadow-[0_1px_4px_rgba(0,0,0,0.01)]"
+                    >
+                      <div className="min-w-0 pr-2">
+                        <h3 className="text-sm font-bold text-slate-900 leading-tight">
+                          {item.title}
+                        </h3>
+                        <p className="text-xs text-slate-400 mt-1 leading-normal">
+                          {item.description}
+                        </p>
+                      </div>
 
-                <label className="flex items-center justify-between p-3.5 rounded-xl border border-slate-100 hover:bg-slate-50 cursor-pointer transition-colors">
-                  <div>
-                    <span className="text-xs sm:text-sm font-bold text-slate-800 block">
-                      New Matching Listings
-                    </span>
-                    <span className="text-xs text-slate-400">
-                      Instant notifications when new villas/apartments match your saved searches.
-                    </span>
-                  </div>
-                  <input
-                    type="checkbox"
-                    checked={notifSettings.emailNewMatches}
-                    onChange={(e) =>
-                      setNotifSettings({
-                        ...notifSettings,
-                        emailNewMatches: e.target.checked,
-                      })
-                    }
-                    className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 accent-blue-600 cursor-pointer"
-                  />
-                </label>
-
-                <label className="flex items-center justify-between p-3.5 rounded-xl border border-slate-100 hover:bg-slate-50 cursor-pointer transition-colors">
-                  <div>
-                    <span className="text-xs sm:text-sm font-bold text-slate-800 block">
-                      WhatsApp Site Visit Reminders
-                    </span>
-                    <span className="text-xs text-slate-400">
-                      Receive WhatsApp confirmations 2 hours prior to scheduled tours.
-                    </span>
-                  </div>
-                  <input
-                    type="checkbox"
-                    checked={notifSettings.whatsappVisits}
-                    onChange={(e) =>
-                      setNotifSettings({
-                        ...notifSettings,
-                        whatsappVisits: e.target.checked,
-                      })
-                    }
-                    className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 accent-blue-600 cursor-pointer"
-                  />
-                </label>
+                      <button
+                        type="button"
+                        role="switch"
+                        aria-checked={isChecked}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setNotifSettings((prev) => ({
+                            ...prev,
+                            [item.key]: !prev[item.key],
+                          }));
+                        }}
+                        className={cn(
+                          "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none",
+                          isChecked ? "bg-[#2563eb]" : "bg-slate-200"
+                        )}
+                      >
+                        <span
+                          aria-hidden="true"
+                          className={cn(
+                            "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-sm ring-0 transition duration-200 ease-in-out",
+                            isChecked ? "translate-x-5" : "translate-x-0"
+                          )}
+                        />
+                      </button>
+                    </div>
+                  );
+                })}
               </div>
-
-              <button
-                type="submit"
-                className="h-11 px-6 rounded-xl bg-[#2563eb] hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm shadow-sm transition-all cursor-pointer active:scale-95"
-              >
-                Save Notification Settings
-              </button>
-            </form>
+            </div>
           )}
 
           {/* Tab 5: Privacy & Security */}
