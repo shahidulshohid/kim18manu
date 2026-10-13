@@ -98,6 +98,19 @@ export default function AgentSidebar({
         pathname === "/dashboard/agent/notification"
       );
     }
+    if (href === "/dashboard/agent/reports") {
+      return (
+        pathname === "/dashboard/agent/reports" ||
+        pathname === "/dashboard/agent/analytics"
+      );
+    }
+    if (href === "/dashboard/agent/team") {
+      return (
+        pathname === "/dashboard/agent/team" ||
+        pathname === "/dashboard/agent/users" ||
+        pathname === "/dashboard/agent/team-and-users"
+      );
+    }
     return pathname.startsWith(href);
   };
 
