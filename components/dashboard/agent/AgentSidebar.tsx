@@ -11,6 +11,7 @@ import {
   Handshake,
   Calendar,
   Receipt,
+  Shield,
   Bell,
   BarChart3,
   UserCog,
@@ -35,6 +36,7 @@ const iconMap: Record<string, React.ElementType> = {
   Handshake,
   Calendar,
   Receipt,
+  Shield,
   Bell,
   BarChart3,
   UserCog,
@@ -81,6 +83,13 @@ export default function AgentSidebar({
         pathname === "/dashboard/agent/site-visits" ||
         pathname === "/dashboard/agent/site-visit" ||
         pathname === "/dashboard/agent/visits"
+      );
+    }
+    if (href === "/dashboard/agent/transactions") {
+      return (
+        pathname === "/dashboard/agent/transactions" ||
+        pathname === "/dashboard/agent/transaction" ||
+        pathname === "/dashboard/agent/accounting"
       );
     }
     return pathname.startsWith(href);

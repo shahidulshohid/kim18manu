@@ -50,7 +50,7 @@ export const agentNavItems: AgentNavItem[] = [
     id: "transactions",
     label: "Transactions",
     href: "/dashboard/agent/transactions",
-    iconName: "Receipt",
+    iconName: "Shield",
   },
   {
     id: "notifications",
