@@ -3,7 +3,7 @@ import PartnerEcosystemView from "@/components/dashboard/agent/views/PartnerEcos
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Partner Ecosystem | PropertyAI Admin Portal",
+  title: "Partner Ecosystem | PropertyAI Agent Portal",
   description: "Collaborate with mortgage banks, notaries, and valuation firms.",
 };
 

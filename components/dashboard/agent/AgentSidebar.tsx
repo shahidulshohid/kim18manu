@@ -138,7 +138,7 @@ export default function AgentSidebar({
               PropertyAI
             </span>
             <span className="text-[11px] text-slate-400 font-medium">
-              Admin Portal
+              Agent Portal
             </span>
           </div>
         </Link>
@@ -211,14 +211,14 @@ export default function AgentSidebar({
         <div className="flex items-center justify-between rounded-xl p-2 hover:bg-slate-50 transition-colors">
           <div className="flex items-center gap-2.5 min-w-0">
             <div className="h-9 w-9 rounded-full bg-blue-600 text-white font-bold text-xs flex items-center justify-center shrink-0 shadow-sm">
-              AD
+              AR
             </div>
             <div className="min-w-0 flex flex-col">
               <span className="text-xs sm:text-sm font-bold text-slate-900 truncate leading-tight">
-                Admin User
+                Anisa Rahma
               </span>
               <span className="text-[11px] text-slate-400 truncate">
-                Admin
+                Agent
               </span>
             </div>
           </div>

@@ -3,7 +3,7 @@ import TeamManagementView from "@/components/dashboard/agent/views/TeamManagemen
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Team & User Management | PropertyAI Admin Portal",
+  title: "Team & User Management | PropertyAI Agent Portal",
   description: "Manage staff accounts, roles, permissions, and activity logs.",
 };
 
