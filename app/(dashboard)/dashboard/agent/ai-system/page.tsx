@@ -1,12 +1,12 @@
 import React from "react";
-import SiteVisitManagementView from "@/components/dashboard/agent/views/SiteVisitManagementView";
+import AISystemView from "@/components/dashboard/agent/views/AISystemView";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "AI System | PropertyAI Admin Portal",
-  description: "AI-powered property and site visit management system.",
+  title: "AI System Studio | PropertyAI Admin Portal",
+  description: "AI-powered property extraction, media enhancement, and predictive analytics.",
 };
 
 export default function AISystemAliasPage() {
-  return <SiteVisitManagementView />;
+  return <AISystemView />;
 }
