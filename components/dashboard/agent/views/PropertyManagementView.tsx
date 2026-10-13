@@ -21,6 +21,9 @@ import {
   FileEdit,
   Mic,
   Upload,
+  Sparkles,
+  Square,
+  Loader2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -162,11 +165,97 @@ export default function PropertyManagementView() {
     inputSource: "Manual",
   });
 
+  // Voice Recording & AI Extraction States
+  const [isRecording, setIsRecording] = useState(false);
+  const [recordingSeconds, setRecordingSeconds] = useState(0);
+  const [isExtractingVoice, setIsExtractingVoice] = useState(false);
+
+  React.useEffect(() => {
+    let interval: NodeJS.Timeout | null = null;
+    if (isRecording) {
+      interval = setInterval(() => {
+        setRecordingSeconds((prev) => prev + 1);
+      }, 1000);
+    } else {
+      setRecordingSeconds(0);
+    }
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [isRecording]);
+
   const showToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => {
       setToastMessage(null);
     }, 3000);
+  };
+
+  const handleVoiceRecordClick = () => {
+    if (isRecording) {
+      setIsRecording(false);
+      setIsExtractingVoice(true);
+      showToast("Voice recorded! AI is extracting listing fields...");
+      setTimeout(() => {
+        setIsExtractingVoice(false);
+        setFormData((prev) => ({
+          ...prev,
+          title: "Modern Villa with Ocean View",
+          listingType: "sale",
+          propertyClass: "residential",
+          propertyType: "Villa",
+          price: "4500000000",
+          province: "Bali",
+          city: "Badung",
+          regency: "Kuta Selatan",
+          district: "Jimbaran",
+          area: "Bukit Peninsula",
+          bedrooms: "4",
+          bathrooms: "3",
+          size: "350",
+          assignedAgent: "Budi Santoso",
+          listingStatus: "Pending Review",
+          inputSource: "Voice Inbound",
+        }));
+        setAddMode("manual");
+        showToast("Voice details extracted! Review canonical fields below.");
+      }, 1400);
+    } else {
+      setIsRecording(true);
+      showToast("Recording started... Speak listing details.");
+    }
+  };
+
+  const handleSimulateExtract = (
+    source: "Voice Inbound" | "AI Extraction" = "Voice Inbound"
+  ) => {
+    setIsExtractingVoice(true);
+    showToast("AI analyzing & extracting listing fields...");
+    setTimeout(() => {
+      setIsExtractingVoice(false);
+      setIsRecording(false);
+      setFormData((prev) => ({
+        ...prev,
+        title: "Modern Villa with Ocean View",
+        listingType: "sale",
+        propertyClass: "residential",
+        propertyType: "Villa",
+        price: "4500000000",
+        province: "Bali",
+        city: "Badung",
+        regency: "Kuta Selatan",
+        district: "Jimbaran",
+        area: "Bukit Peninsula",
+        bedrooms: "4",
+        bathrooms: "3",
+        size: "350",
+        assignedAgent: "Budi Santoso",
+        listingStatus: "Pending Review",
+        inputSource: source,
+      }));
+      setAddMode("manual");
+      showToast("AI extraction completed! Review fields below.");
+    }, 1200);
   };
 
   const handleSaveDraft = () => {
@@ -637,10 +726,7 @@ export default function PropertyManagementView() {
 
                 <button
                   type="button"
-                  onClick={() => {
-                    setAddMode("voice");
-                    showToast("Listening for Voice Inbound... Speak listing details.");
-                  }}
+                  onClick={() => setAddMode("voice")}
                   className={cn(
                     "flex-1 h-9 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer",
                     addMode === "voice"
@@ -654,10 +740,7 @@ export default function PropertyManagementView() {
 
                 <button
                   type="button"
-                  onClick={() => {
-                    setAddMode("media");
-                    showToast("Select images or video to extract property details.");
-                  }}
+                  onClick={() => setAddMode("media")}
                   className={cn(
                     "flex-1 h-9 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer",
                     addMode === "media"
@@ -670,8 +753,134 @@ export default function PropertyManagementView() {
                 </button>
               </div>
 
-              {/* Form Content */}
-              <form onSubmit={handleSubmitForReview} className="space-y-4">
+              {/* VOICE → AI EXTRACTION Mode strictly matching screenshot */}
+              {addMode === "voice" && (
+                <div className="space-y-4 pt-1 animate-in fade-in duration-150">
+                  {/* Info Box */}
+                  <div className="rounded-2xl border border-blue-200/80 bg-blue-50/50 p-4 sm:p-5 text-left">
+                    <div className="flex items-center gap-2">
+                      <Sparkles className="h-4 w-4 text-[#2563eb]" />
+                      <span className="text-[11px] sm:text-xs font-bold text-[#2563eb] tracking-wide uppercase">
+                        VOICE → AI EXTRACTION
+                      </span>
+                    </div>
+                    <p className="text-xs sm:text-[13px] text-slate-500 mt-1.5 leading-relaxed font-normal">
+                      Describe the property by voice. AI will extract structured listing information into canonical fields for your review.
+                    </p>
+                  </div>
+
+                  {/* Centered Microphone Recording Section */}
+                  <div className="py-12 sm:py-16 flex flex-col items-center justify-center text-center">
+                    <div className="relative flex items-center justify-center">
+                      {isRecording && (
+                        <>
+                          <span className="absolute -inset-2.5 rounded-full bg-indigo-500/20 animate-ping" />
+                          <span className="absolute -inset-5 rounded-full bg-indigo-500/10 animate-pulse" />
+                        </>
+                      )}
+
+                      <button
+                        type="button"
+                        onClick={handleVoiceRecordClick}
+                        className={cn(
+                          "relative h-20 w-20 rounded-full bg-white border-2 flex items-center justify-center transition-all cursor-pointer shadow-sm hover:scale-105 active:scale-95",
+                          isRecording
+                            ? "border-red-500 text-red-500 shadow-red-100"
+                            : isExtractingVoice
+                            ? "border-blue-500 text-blue-500 shadow-blue-100"
+                            : "border-indigo-400 text-indigo-500 hover:border-indigo-500 shadow-indigo-100"
+                        )}
+                      >
+                        {isExtractingVoice ? (
+                          <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+                        ) : isRecording ? (
+                          <Square className="h-7 w-7 text-red-600 fill-red-600" />
+                        ) : (
+                          <Mic className="h-8 w-8 text-indigo-500" />
+                        )}
+                      </button>
+                    </div>
+
+                    <p className="text-xs sm:text-[13px] text-slate-400 font-normal mt-4">
+                      {isExtractingVoice
+                        ? "AI is extracting canonical listing fields..."
+                        : isRecording
+                        ? `Recording (${String(Math.floor(recordingSeconds / 60)).padStart(2, "0")}:${String(recordingSeconds % 60).padStart(2, "0")}) · Click to stop & extract`
+                        : "Press to start recording"}
+                    </p>
+
+                    {/* Visualizer bars when recording */}
+                    {isRecording && (
+                      <div className="flex items-center gap-1 mt-4">
+                        {[35, 65, 45, 90, 55, 80, 40, 95, 60, 75, 50].map((h, i) => (
+                          <span
+                            key={i}
+                            style={{ height: `${h * 0.22}px` }}
+                            className="w-1 bg-indigo-500 rounded-full animate-pulse"
+                          />
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Demo Extract Helper */}
+                    <div className="mt-8 pt-4 border-t border-slate-100/80 w-full flex items-center justify-center">
+                      <button
+                        type="button"
+                        onClick={() => handleSimulateExtract("Voice Inbound")}
+                        className="text-xs font-semibold text-blue-600 hover:text-blue-700 hover:underline flex items-center gap-1.5 cursor-pointer"
+                      >
+                        <Sparkles className="h-3.5 w-3.5" />
+                        <span>Demo: Extract Sample Listing From Voice</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* PHOTO / VIDEO → AI EXTRACTION Mode */}
+              {addMode === "media" && (
+                <div className="space-y-4 pt-1 animate-in fade-in duration-150">
+                  <div className="rounded-2xl border border-blue-200/80 bg-blue-50/50 p-4 sm:p-5 text-left">
+                    <div className="flex items-center gap-2">
+                      <Sparkles className="h-4 w-4 text-[#2563eb]" />
+                      <span className="text-[11px] sm:text-xs font-bold text-[#2563eb] tracking-wide uppercase">
+                        PHOTO / VIDEO → AI EXTRACTION
+                      </span>
+                    </div>
+                    <p className="text-xs sm:text-[13px] text-slate-500 mt-1.5 leading-relaxed font-normal">
+                      Upload property images or video walkthroughs. AI vision models will detect rooms, amenities, and condition into canonical listing fields.
+                    </p>
+                  </div>
+
+                  <div className="py-10 sm:py-14 border-2 border-dashed border-slate-200 hover:border-blue-400 rounded-2xl flex flex-col items-center justify-center text-center p-6 bg-slate-50/40 transition-colors">
+                    <div className="h-16 w-16 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center mb-3.5 shadow-xs">
+                      <Upload className="h-7 w-7" />
+                    </div>
+                    <p className="text-xs sm:text-sm font-semibold text-slate-800">
+                      Drag & drop property media here, or{" "}
+                      <span className="text-blue-600 underline cursor-pointer">
+                        browse
+                      </span>
+                    </p>
+                    <p className="text-xs text-slate-400 mt-1">
+                      Supports JPG, PNG, MP4, MOV up to 100MB
+                    </p>
+
+                    <button
+                      type="button"
+                      onClick={() => handleSimulateExtract("AI Extraction")}
+                      className="mt-5 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold shadow-xs flex items-center gap-1.5 transition-all cursor-pointer active:scale-95"
+                    >
+                      <Sparkles className="h-3.5 w-3.5" />
+                      <span>Extract from Sample Media</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* MANUAL INPUT Form Content */}
+              {addMode === "manual" && (
+                <form onSubmit={handleSubmitForReview} className="space-y-4 animate-in fade-in duration-150">
                 {/* 1. PROPERTY TITLE * */}
                 <div className="relative">
                   <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
@@ -1065,6 +1274,7 @@ export default function PropertyManagementView() {
                   </button>
                 </div>
               </form>
+            )}
             </div>
           </div>
         </div>
