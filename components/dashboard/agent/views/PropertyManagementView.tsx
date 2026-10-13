@@ -18,6 +18,9 @@ import {
   Calendar,
   User,
   Filter,
+  FileEdit,
+  Mic,
+  Upload,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -130,11 +133,84 @@ export default function PropertyManagementView() {
   const [deleteTarget, setDeleteTarget] = useState<ListingItem | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
+  // Add Listing Modal Form State strictly matching screenshot
+  const [addMode, setAddMode] = useState<"manual" | "voice" | "media">("manual");
+  const [titleSuggestionsOpen, setTitleSuggestionsOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    title: "",
+    listingType: "sale" as "sale" | "rent",
+    propertyClass: "residential" as "residential" | "commercial" | "industrial",
+    propertyType: "House",
+    price: "",
+    province: "",
+    city: "",
+    regency: "",
+    district: "",
+    area: "",
+    bedrooms: "0",
+    bathrooms: "0",
+    size: "0",
+    assignedAgent: "Budi Santoso",
+    listingStatus: "Draft" as "Draft" | "Pending Review" | "Active",
+    inputSource: "Manual",
+  });
+
   const showToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => {
       setToastMessage(null);
     }, 3000);
+  };
+
+  const handleSaveDraft = () => {
+    const newId = `L00${listings.length + 1}`;
+    const newListing: ListingItem = {
+      id: newId,
+      name: formData.title || "Untitled Property Listing",
+      isFeatured: false,
+      type: `${formData.propertyType} · ${formData.propertyClass === "residential" ? "Residential" : formData.propertyClass === "commercial" ? "Commercial" : "Industrial"}`,
+      category:
+        formData.propertyClass === "residential"
+          ? "Residential"
+          : formData.propertyClass === "commercial"
+          ? "Commercial"
+          : "Industrial",
+      listingType: formData.listingType === "sale" ? "Sale" : "Rent",
+      location: formData.city ? `${formData.city}, ${formData.province}` : formData.province || "Indonesia",
+      price: formData.price ? (formData.price.startsWith("IDR") ? formData.price : `IDR ${formData.price}`) : "IDR 1.2B",
+      agent: formData.assignedAgent,
+      status: "Draft",
+      updated: new Date().toISOString().split("T")[0],
+    };
+    setListings([newListing, ...listings]);
+    setShowAddModal(false);
+    showToast(`Listing ${newId} saved as Draft.`);
+  };
+
+  const handleSubmitForReview = (e: React.FormEvent) => {
+    e.preventDefault();
+    const newId = `L00${listings.length + 1}`;
+    const newListing: ListingItem = {
+      id: newId,
+      name: formData.title || "Modern Villa with Ocean View",
+      isFeatured: false,
+      type: `${formData.propertyType} · ${formData.propertyClass === "residential" ? "Residential" : formData.propertyClass === "commercial" ? "Commercial" : "Industrial"}`,
+      category:
+        formData.propertyClass === "residential"
+          ? "Residential"
+          : formData.propertyClass === "commercial"
+          ? "Commercial"
+          : "Industrial",
+      listingType: formData.listingType === "sale" ? "Sale" : "Rent",
+      location: formData.city ? `${formData.city}, ${formData.province}` : formData.province || "Bali",
+      price: formData.price ? (formData.price.startsWith("IDR") ? formData.price : `IDR ${formData.price}`) : "IDR 4.5B",
+      agent: formData.assignedAgent,
+      status: formData.listingStatus === "Draft" ? "Pending Review" : formData.listingStatus,
+      updated: new Date().toISOString().split("T")[0],
+    };
+    setListings([newListing, ...listings]);
+    setShowAddModal(false);
+    showToast(`Listing ${newId} submitted for review successfully!`);
   };
 
   // Status Counts
@@ -510,145 +586,473 @@ export default function PropertyManagementView() {
         </div>
       </div>
 
-      {/* 5. Add Listing Modal */}
+      {/* 5. Add Listing Modal strictly matching screenshot */}
       {showAddModal && (
         <div
           onClick={() => setShowAddModal(false)}
-          className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-200"
+          className="fixed inset-0 z-50 bg-black/45 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 animate-in fade-in duration-200"
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-lg bg-white rounded-3xl shadow-2xl border border-slate-100 p-6 sm:p-7 animate-in zoom-in-95 duration-200"
+            className="relative w-full max-w-[620px] bg-white rounded-3xl shadow-2xl border border-slate-100 p-6 sm:p-7 animate-in zoom-in-95 duration-200 max-h-[92vh] flex flex-col"
           >
-            <div className="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
-              <h3 className="text-lg font-bold text-slate-900">
-                + Add New Property Listing
+            {/* Header */}
+            <div className="flex items-center justify-between pb-3.5 border-b border-slate-100 shrink-0">
+              <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-tight">
+                Add New Listing
               </h3>
               <button
+                type="button"
                 onClick={() => setShowAddModal(false)}
                 className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
               >
-                <X className="h-5 w-5" />
+                <X className="h-4.5 w-4.5" />
               </button>
             </div>
 
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                const form = e.target as HTMLFormElement;
-                const title = (form.elements.namedItem("title") as HTMLInputElement).value;
-                const price = (form.elements.namedItem("price") as HTMLInputElement).value;
-                const location = (form.elements.namedItem("location") as HTMLInputElement).value;
-                const propType = (form.elements.namedItem("propType") as HTMLSelectElement).value;
-                const listingType = (form.elements.namedItem("listingType") as HTMLSelectElement).value as "Sale" | "Rent";
-
-                const newId = `L00${listings.length + 1}`;
-                const newListing: ListingItem = {
-                  id: newId,
-                  name: title,
-                  isFeatured: false,
-                  type: `${propType} · Residential`,
-                  category: "Residential",
-                  listingType: listingType,
-                  location: location,
-                  price: price,
-                  agent: "Admin User",
-                  status: "Active",
-                  updated: new Date().toISOString().split("T")[0],
-                };
-
-                setListings([newListing, ...listings]);
-                setShowAddModal(false);
-                showToast(`Listing ${newId} published successfully!`);
-              }}
-              className="space-y-4"
-            >
-              <div>
-                <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">
-                  Property Title
-                </label>
-                <input
-                  name="title"
-                  type="text"
-                  placeholder="e.g. Canggu Modern Luxury Villa"
-                  required
-                  className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 bg-white focus:outline-none focus:border-blue-600"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">
-                    Price
-                  </label>
-                  <input
-                    name="price"
-                    type="text"
-                    placeholder="IDR 3.5B"
-                    required
-                    className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 bg-white focus:outline-none focus:border-blue-600"
-                  />
-                </div>
-                <div>
-                  <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">
-                    Listing Type
-                  </label>
-                  <select
-                    name="listingType"
-                    className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 bg-white focus:outline-none focus:border-blue-600"
-                  >
-                    <option value="Sale">Sale</option>
-                    <option value="Rent">Rent</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">
-                    Property Type
-                  </label>
-                  <select
-                    name="propType"
-                    className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 bg-white focus:outline-none focus:border-blue-600"
-                  >
-                    <option value="Villa">Villa</option>
-                    <option value="Apartment">Apartment</option>
-                    <option value="House">House</option>
-                    <option value="Ruko">Ruko</option>
-                    <option value="Warehouse">Warehouse</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">
-                    Location
-                  </label>
-                  <input
-                    name="location"
-                    type="text"
-                    placeholder="Canggu, Bali"
-                    required
-                    className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 bg-white focus:outline-none focus:border-blue-600"
-                  />
-                </div>
-              </div>
-
-              <div className="flex items-center justify-end gap-2.5 pt-3">
+            {/* Modal Body (Scrollable) */}
+            <div className="overflow-y-auto py-4 px-0.5 space-y-4 custom-scrollbar flex-1">
+              {/* 3 Mode Tabs */}
+              <div className="bg-slate-100/80 p-1 rounded-2xl flex items-center gap-1">
                 <button
                   type="button"
-                  onClick={() => setShowAddModal(false)}
-                  className="h-10 px-4 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-colors cursor-pointer"
+                  onClick={() => setAddMode("manual")}
+                  className={cn(
+                    "flex-1 h-9 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer",
+                    addMode === "manual"
+                      ? "bg-white text-blue-600 shadow-xs border border-slate-200/50"
+                      : "text-slate-600 hover:text-slate-900"
+                  )}
                 >
-                  Cancel
+                  <FileEdit className="h-3.5 w-3.5" />
+                  <span>Manual Input</span>
                 </button>
+
                 <button
-                  type="submit"
-                  className="h-10 px-5 rounded-xl bg-[#2563eb] hover:bg-blue-700 text-xs font-semibold text-white shadow-sm transition-colors cursor-pointer active:scale-95"
+                  type="button"
+                  onClick={() => {
+                    setAddMode("voice");
+                    showToast("Listening for Voice Inbound... Speak listing details.");
+                  }}
+                  className={cn(
+                    "flex-1 h-9 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer",
+                    addMode === "voice"
+                      ? "bg-white text-blue-600 shadow-xs border border-slate-200/50"
+                      : "text-slate-600 hover:text-slate-900"
+                  )}
                 >
-                  Publish Listing
+                  <Mic className="h-3.5 w-3.5" />
+                  <span>Voice → AI Extract</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setAddMode("media");
+                    showToast("Select images or video to extract property details.");
+                  }}
+                  className={cn(
+                    "flex-1 h-9 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer",
+                    addMode === "media"
+                      ? "bg-white text-blue-600 shadow-xs border border-slate-200/50"
+                      : "text-slate-600 hover:text-slate-900"
+                  )}
+                >
+                  <Upload className="h-3.5 w-3.5" />
+                  <span>Photo / Video AI</span>
                 </button>
               </div>
-            </form>
+
+              {/* Form Content */}
+              <form onSubmit={handleSubmitForReview} className="space-y-4">
+                {/* 1. PROPERTY TITLE * */}
+                <div className="relative">
+                  <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
+                    PROPERTY TITLE <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. Modern Villa with Ocean View"
+                    value={formData.title}
+                    onChange={(e) =>
+                      setFormData({ ...formData, title: e.target.value })
+                    }
+                    onFocus={() => setTitleSuggestionsOpen(true)}
+                    className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 bg-white"
+                  />
+
+                  {/* Suggestions Popover matching snippet */}
+                  {titleSuggestionsOpen && (
+                    <div className="absolute left-0 right-0 top-full mt-1 bg-white border border-slate-200 rounded-xl shadow-xl z-30 py-1 text-xs animate-in fade-in duration-150">
+                      <div className="px-3 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider bg-slate-50 border-b border-slate-100 flex items-center justify-between">
+                        <span>Select a property</span>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setTitleSuggestionsOpen(false);
+                          }}
+                          className="text-slate-400 hover:text-slate-600 cursor-pointer"
+                        >
+                          ✕
+                        </button>
+                      </div>
+                      {[
+                        "Modern Villa with Ocean View",
+                        "Spacious Family House with Garden",
+                        "Cozy Apartment in Business District",
+                      ].map((item) => (
+                        <div
+                          key={item}
+                          onClick={() => {
+                            setFormData({ ...formData, title: item });
+                            setTitleSuggestionsOpen(false);
+                          }}
+                          className="px-3.5 py-2 hover:bg-blue-50 hover:text-blue-600 cursor-pointer text-slate-700 transition-colors"
+                        >
+                          {item}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* 2. LISTING TYPE * & PROPERTY CLASS * (2 cols) */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
+                      LISTING TYPE <span className="text-red-500">*</span>
+                    </label>
+                    <div className="relative">
+                      <select
+                        value={formData.listingType}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            listingType: e.target.value as "sale" | "rent",
+                          })
+                        }
+                        className="w-full h-11 px-3.5 pr-8 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 bg-white focus:outline-none focus:border-blue-600 appearance-none cursor-pointer"
+                      >
+                        <option value="sale">sale</option>
+                        <option value="rent">rent</option>
+                      </select>
+                      <ChevronDown className="h-4 w-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
+                      PROPERTY CLASS <span className="text-red-500">*</span>
+                    </label>
+                    <div className="relative">
+                      <select
+                        value={formData.propertyClass}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            propertyClass: e.target.value as
+                              | "residential"
+                              | "commercial"
+                              | "industrial",
+                          })
+                        }
+                        className="w-full h-11 px-3.5 pr-8 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 bg-white focus:outline-none focus:border-blue-600 appearance-none cursor-pointer"
+                      >
+                        <option value="residential">residential</option>
+                        <option value="commercial">commercial</option>
+                        <option value="industrial">industrial</option>
+                      </select>
+                      <ChevronDown className="h-4 w-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* 3. PROPERTY TYPE * & PRICE (IDR) * (2 cols) */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
+                      PROPERTY TYPE <span className="text-red-500">*</span>
+                    </label>
+                    <div className="relative">
+                      <select
+                        value={formData.propertyType}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            propertyType: e.target.value,
+                          })
+                        }
+                        className="w-full h-11 px-3.5 pr-8 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 bg-white focus:outline-none focus:border-blue-600 appearance-none cursor-pointer"
+                      >
+                        <option value="House">House</option>
+                        <option value="Apartment">Apartment</option>
+                        <option value="Villa">Villa</option>
+                        <option value="Ruko">Ruko</option>
+                        <option value="Rukan">Rukan</option>
+                        <option value="Retail">Retail</option>
+                        <option value="Warehouse">Warehouse</option>
+                        <option value="Land">Land</option>
+                        <option value="Factory">Factory</option>
+                      </select>
+                      <ChevronDown className="h-4 w-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
+                      PRICE (IDR) <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. 4500000000"
+                      value={formData.price}
+                      onChange={(e) =>
+                        setFormData({ ...formData, price: e.target.value })
+                      }
+                      className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-blue-600 bg-white"
+                    />
+                  </div>
+                </div>
+
+                {/* Section Header: LOCATION HIERARCHY */}
+                <div className="pt-2">
+                  <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">
+                    LOCATION HIERARCHY
+                  </span>
+                </div>
+
+                {/* 4. PROVINCE * & CITY * (2 cols) */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
+                      PROVINCE <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="Enter Province"
+                      value={formData.province}
+                      onChange={(e) =>
+                        setFormData({ ...formData, province: e.target.value })
+                      }
+                      className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-blue-600 bg-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
+                      CITY <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="Enter City"
+                      value={formData.city}
+                      onChange={(e) =>
+                        setFormData({ ...formData, city: e.target.value })
+                      }
+                      className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-blue-600 bg-white"
+                    />
+                  </div>
+                </div>
+
+                {/* 5. REGENCY * & DISTRICT * (2 cols) */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
+                      REGENCY <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="Enter Regency"
+                      value={formData.regency}
+                      onChange={(e) =>
+                        setFormData({ ...formData, regency: e.target.value })
+                      }
+                      className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-blue-600 bg-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
+                      DISTRICT <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="Enter District"
+                      value={formData.district}
+                      onChange={(e) =>
+                        setFormData({ ...formData, district: e.target.value })
+                      }
+                      className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-blue-600 bg-white"
+                    />
+                  </div>
+                </div>
+
+                {/* 6. AREA */}
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
+                    AREA
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Enter Area"
+                    value={formData.area}
+                    onChange={(e) =>
+                      setFormData({ ...formData, area: e.target.value })
+                    }
+                    className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-blue-600 bg-white"
+                  />
+                </div>
+
+                {/* 7. BEDROOMS, BATHROOMS, SIZE (M²) (3 cols) */}
+                <div className="grid grid-cols-3 gap-3">
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
+                      BEDROOMS
+                    </label>
+                    <input
+                      type="number"
+                      min="0"
+                      placeholder="0"
+                      value={formData.bedrooms}
+                      onChange={(e) =>
+                        setFormData({ ...formData, bedrooms: e.target.value })
+                      }
+                      className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 bg-white focus:outline-none focus:border-blue-600"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
+                      BATHROOMS
+                    </label>
+                    <input
+                      type="number"
+                      min="0"
+                      placeholder="0"
+                      value={formData.bathrooms}
+                      onChange={(e) =>
+                        setFormData({ ...formData, bathrooms: e.target.value })
+                      }
+                      className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 bg-white focus:outline-none focus:border-blue-600"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
+                      SIZE (M²)
+                    </label>
+                    <input
+                      type="number"
+                      min="0"
+                      placeholder="0"
+                      value={formData.size}
+                      onChange={(e) =>
+                        setFormData({ ...formData, size: e.target.value })
+                      }
+                      className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 bg-white focus:outline-none focus:border-blue-600"
+                    />
+                  </div>
+                </div>
+
+                {/* 8. ASSIGNED AGENT * & LISTING STATUS (2 cols) */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
+                      ASSIGNED AGENT <span className="text-red-500">*</span>
+                    </label>
+                    <div className="relative">
+                      <select
+                        value={formData.assignedAgent}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            assignedAgent: e.target.value,
+                          })
+                        }
+                        className="w-full h-11 px-3.5 pr-8 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 bg-white focus:outline-none focus:border-blue-600 appearance-none cursor-pointer"
+                      >
+                        <option value="Budi Santoso">Budi Santoso</option>
+                        <option value="Sari Dewi">Sari Dewi</option>
+                        <option value="Rizki Pratama">Rizki Pratama</option>
+                        <option value="Dewi Hartati">Dewi Hartati</option>
+                      </select>
+                      <ChevronDown className="h-4 w-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
+                      LISTING STATUS
+                    </label>
+                    <div className="relative">
+                      <select
+                        value={formData.listingStatus}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            listingStatus: e.target.value as
+                              | "Draft"
+                              | "Pending Review"
+                              | "Active",
+                          })
+                        }
+                        className="w-full h-11 px-3.5 pr-8 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 bg-white focus:outline-none focus:border-blue-600 appearance-none cursor-pointer"
+                      >
+                        <option value="Draft">Draft</option>
+                        <option value="Pending Review">Pending Review</option>
+                        <option value="Active">Active</option>
+                      </select>
+                      <ChevronDown className="h-4 w-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* 9. LISTING INPUT SOURCE */}
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
+                    LISTING INPUT SOURCE
+                  </label>
+                  <div className="relative">
+                    <select
+                      value={formData.inputSource}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          inputSource: e.target.value,
+                        })
+                      }
+                      className="w-full h-11 px-3.5 pr-8 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 bg-white focus:outline-none focus:border-blue-600 appearance-none cursor-pointer"
+                    >
+                      <option value="Manual">Manual</option>
+                      <option value="Voice Inbound">Voice Inbound</option>
+                      <option value="AI Extraction">AI Extraction</option>
+                      <option value="Partner Portal">Partner Portal</option>
+                    </select>
+                    <ChevronDown className="h-4 w-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  </div>
+                </div>
+
+                {/* Footer Buttons strictly matching screenshot */}
+                <div className="flex items-center justify-between gap-3 pt-4 border-t border-slate-100">
+                  <button
+                    type="button"
+                    onClick={handleSaveDraft}
+                    className="flex-1 h-11 rounded-xl border border-slate-200 text-slate-700 font-semibold text-xs sm:text-sm hover:bg-slate-50 transition-colors cursor-pointer"
+                  >
+                    Save as Draft
+                  </button>
+                  <button
+                    type="submit"
+                    className="flex-1 h-11 rounded-xl bg-[#2563eb] hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm shadow-sm transition-all cursor-pointer active:scale-95"
+                  >
+                    Submit for Review
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       )}
