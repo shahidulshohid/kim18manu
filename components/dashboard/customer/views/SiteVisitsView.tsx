@@ -1,197 +1,542 @@
 "use client";
 
 import React, { useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
 import {
+  MapPin,
   Calendar,
   Clock,
-  MapPin,
-  Phone,
-  MessageSquare,
+  User,
+  X,
   CheckCircle2,
   AlertCircle,
-  Plus,
+  RotateCcw,
+  ChevronDown,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
-interface SiteVisitItem {
+export interface SiteVisit {
   id: string;
-  propertyTitle: string;
+  title: string;
+  status: "Confirmed" | "Pending Confirmation" | "Completed" | "Cancelled";
   location: string;
-  image: string;
   date: string;
   time: string;
-  agentName: string;
-  agentPhone: string;
-  agentAvatar: string;
-  status: "confirmed" | "pending" | "completed";
+  agent: string;
+  note?: string;
+  rawDate?: string;
 }
 
+const INITIAL_VISITS: SiteVisit[] = [
+  {
+    id: "sv-1",
+    title: "Modern Villa with Ocean View",
+    status: "Confirmed",
+    location: "Jimbaran, Bali",
+    date: "5 October 2026",
+    time: "10:00 WIB",
+    agent: "Budi Santoso",
+    note: "Please bring your ID and arrive 5 minutes early.",
+  },
+  {
+    id: "sv-2",
+    title: "Cozy Apartment in Business District",
+    status: "Pending Confirmation",
+    location: "SCBD, Jakarta Selatan",
+    date: "12 October 2026",
+    time: "14:00 WIB",
+    agent: "Sari Dewi",
+  },
+  {
+    id: "sv-3",
+    title: "Spacious Family House with Garden",
+    status: "Completed",
+    location: "Dago, Bandung",
+    date: "20 September 2026",
+    time: "09:00 WIB",
+    agent: "Rizki Pratama",
+    note: "Great visit! Property as described.",
+  },
+  {
+    id: "sv-4",
+    title: "Minimalist Studio — BSD City",
+    status: "Cancelled",
+    location: "BSD City, Tangerang Selatan",
+    date: "15 September 2026",
+    time: "11:00 WIB",
+    agent: "Dewi Hartati",
+  },
+];
+
 export default function SiteVisitsView() {
-  const [visits] = useState<SiteVisitItem[]>([
-    {
-      id: "sv-1",
-      propertyTitle: "Modern Villa with Ocean View",
-      location: "Jl. Karang Mas No. 12, Jimbaran, Denpasar, Bali",
-      image: "/images/dashboard/customer/home/homeImg1.png",
-      date: "Tomorrow, Oct 14",
-      time: "10:00 AM - 11:30 AM",
-      agentName: "Budi Santoso",
-      agentPhone: "+62 811-987-6543",
-      agentAvatar: "B",
-      status: "confirmed",
-    },
-    {
-      id: "sv-2",
-      propertyTitle: "Cozy Apartment in Business District",
-      location: "Tower 2, Fl 18, SCBD Lot 11, Jakarta Selatan",
-      image: "/images/dashboard/customer/home/homeImg2.png",
-      date: "Friday, Oct 16",
-      time: "02:30 PM - 03:30 PM",
-      agentName: "Siti Rahayu",
-      agentPhone: "+62 813-234-5678",
-      agentAvatar: "S",
-      status: "confirmed",
-    },
-    {
-      id: "sv-3",
-      propertyTitle: "Spacious Family House with Garden",
-      location: "Jl. Dago Pakar Permai 4B, Bandung, Jawa Barat",
-      image: "/images/dashboard/customer/home/homeImg3.png",
-      date: "Monday, Oct 19",
-      time: "11:00 AM - 12:00 PM",
-      agentName: "Dimas Pratama",
-      agentPhone: "+62 818-765-4321",
-      agentAvatar: "D",
-      status: "pending",
-    },
-  ]);
+  const [visits, setVisits] = useState<SiteVisit[]>(INITIAL_VISITS);
+  const [selectedFilter, setSelectedFilter] = useState<
+    "all" | "upcoming" | "completed" | "cancelled"
+  >("all");
+
+  // Reschedule Modal State
+  const [rescheduleItem, setRescheduleItem] = useState<SiteVisit | null>(null);
+  const [newDate, setNewDate] = useState("");
+  const [newTime, setNewTime] = useState("");
+
+  // Cancel Confirmation Modal State
+  const [cancelTarget, setCancelTarget] = useState<SiteVisit | null>(null);
+
+  // Toast feedback state
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  const showToast = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => {
+      setToastMessage(null);
+    }, 3000);
+  };
+
+  // Helper to format ISO date (YYYY-MM-DD) to "D MMMM YYYY"
+  const formatDateDisplay = (dateStr: string) => {
+    if (!dateStr) return "";
+    try {
+      const parts = dateStr.split("-");
+      if (parts.length === 3) {
+        const year = parts[0];
+        const monthIdx = parseInt(parts[1], 10) - 1;
+        const day = parseInt(parts[2], 10);
+        const months = [
+          "January",
+          "February",
+          "March",
+          "April",
+          "May",
+          "June",
+          "July",
+          "August",
+          "September",
+          "October",
+          "November",
+          "December",
+        ];
+        if (months[monthIdx]) {
+          return `${day} ${months[monthIdx]} ${year}`;
+        }
+      }
+    } catch {}
+    return dateStr;
+  };
+
+  // Calculate counts based on status
+  const upcomingCount = visits.filter(
+    (v) => v.status === "Confirmed" || v.status === "Pending Confirmation"
+  ).length;
+  const completedCount = visits.filter((v) => v.status === "Completed").length;
+  const cancelledCount = visits.filter((v) => v.status === "Cancelled").length;
+
+  // Filtered visits
+  const filteredVisits = visits.filter((visit) => {
+    if (selectedFilter === "upcoming") {
+      return visit.status === "Confirmed" || visit.status === "Pending Confirmation";
+    }
+    if (selectedFilter === "completed") {
+      return visit.status === "Completed";
+    }
+    if (selectedFilter === "cancelled") {
+      return visit.status === "Cancelled";
+    }
+    return true;
+  });
+
+  // Handle Reschedule submit
+  const handleConfirmReschedule = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!rescheduleItem) return;
+
+    const formattedDate = newDate ? formatDateDisplay(newDate) : rescheduleItem.date;
+    const chosenTime = newTime || rescheduleItem.time;
+
+    setVisits((prev) =>
+      prev.map((v) =>
+        v.id === rescheduleItem.id
+          ? {
+              ...v,
+              date: formattedDate,
+              time: chosenTime,
+              status: "Pending Confirmation",
+              note: "Reschedule request submitted. Agent will confirm shortly.",
+            }
+          : v
+      )
+    );
+
+    showToast(`Visit for "${rescheduleItem.title}" rescheduled successfully!`);
+    setRescheduleItem(null);
+    setNewDate("");
+    setNewTime("");
+  };
+
+  // Handle Cancel confirmation
+  const handleConfirmCancel = () => {
+    if (!cancelTarget) return;
+
+    setVisits((prev) =>
+      prev.map((v) =>
+        v.id === cancelTarget.id
+          ? {
+              ...v,
+              status: "Cancelled",
+              note: undefined,
+            }
+          : v
+      )
+    );
+
+    showToast(`Visit for "${cancelTarget.title}" has been cancelled.`);
+    setCancelTarget(null);
+  };
 
   return (
     <div className="w-full max-w-full overflow-x-hidden min-w-0 py-6 sm:py-8 px-4 sm:px-6 lg:px-[32px]">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-        <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
-              Site Visits
-            </h1>
-            <Badge variant="blue" className="bg-blue-100 text-blue-700">
-              {visits.length} Upcoming
-            </Badge>
-          </div>
-          <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            Manage your on-site physical and virtual property tours
-          </p>
-        </div>
-
-        <Link href="/dashboard/customer/discover">
-          <Button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold flex items-center gap-2">
-            <Plus className="h-4 w-4" />
-            Schedule New Visit
-          </Button>
-        </Link>
+      {/* 1. Header */}
+      <div className="mb-6 sm:mb-8">
+        <h1 className="text-2xl sm:text-[28px] font-bold text-slate-900 tracking-tight">
+          Site Visits
+        </h1>
+        <p className="text-sm text-slate-500 mt-1">
+          Manage your scheduled and past property visits.
+        </p>
       </div>
 
-      {/* Visits List */}
-      <div className="space-y-4">
-        {visits.map((visit) => (
-          <div
-            key={visit.id}
-            className="flex flex-col lg:flex-row rounded-2xl border border-slate-100 bg-white p-4 sm:p-5 shadow-xs hover:shadow-md transition-all gap-5 items-stretch lg:items-center justify-between"
+      {/* 2. Top Summary Stat Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
+        {/* Upcoming Card */}
+        <div
+          onClick={() =>
+            setSelectedFilter((prev) => (prev === "upcoming" ? "all" : "upcoming"))
+          }
+          className={cn(
+            "bg-white rounded-2xl sm:rounded-3xl border p-5 sm:p-6 text-center shadow-[0_2px_12px_rgba(0,0,0,0.03)] flex flex-col items-center justify-center transition-all cursor-pointer active:scale-98 hover:shadow-md",
+            selectedFilter === "upcoming"
+              ? "border-[#2563eb] ring-2 ring-blue-500/20"
+              : "border-slate-100 hover:border-blue-100"
+          )}
+        >
+          <span className="text-2xl sm:text-3xl font-bold text-[#2563eb] leading-tight">
+            {upcomingCount}
+          </span>
+          <span className="text-xs sm:text-sm text-slate-600 font-medium mt-1">
+            Upcoming
+          </span>
+        </div>
+
+        {/* Completed Card */}
+        <div
+          onClick={() =>
+            setSelectedFilter((prev) => (prev === "completed" ? "all" : "completed"))
+          }
+          className={cn(
+            "bg-white rounded-2xl sm:rounded-3xl border p-5 sm:p-6 text-center shadow-[0_2px_12px_rgba(0,0,0,0.03)] flex flex-col items-center justify-center transition-all cursor-pointer active:scale-98 hover:shadow-md",
+            selectedFilter === "completed"
+              ? "border-[#16a34a] ring-2 ring-emerald-500/20"
+              : "border-slate-100 hover:border-emerald-100"
+          )}
+        >
+          <span className="text-2xl sm:text-3xl font-bold text-[#16a34a] leading-tight">
+            {completedCount}
+          </span>
+          <span className="text-xs sm:text-sm text-slate-600 font-medium mt-1">
+            Completed
+          </span>
+        </div>
+
+        {/* Cancelled Card */}
+        <div
+          onClick={() =>
+            setSelectedFilter((prev) => (prev === "cancelled" ? "all" : "cancelled"))
+          }
+          className={cn(
+            "bg-white rounded-2xl sm:rounded-3xl border p-5 sm:p-6 text-center shadow-[0_2px_12px_rgba(0,0,0,0.03)] flex flex-col items-center justify-center transition-all cursor-pointer active:scale-98 hover:shadow-md",
+            selectedFilter === "cancelled"
+              ? "border-slate-400 ring-2 ring-slate-400/20"
+              : "border-slate-100 hover:border-slate-200"
+          )}
+        >
+          <span className="text-2xl sm:text-3xl font-bold text-slate-800 leading-tight">
+            {cancelledCount}
+          </span>
+          <span className="text-xs sm:text-sm text-slate-600 font-medium mt-1">
+            Cancelled
+          </span>
+        </div>
+      </div>
+
+      {/* 3. Filter Reset Indicator (if active) */}
+      {selectedFilter !== "all" && (
+        <div className="flex items-center justify-between mb-4 px-1">
+          <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+            Showing: <strong className="text-slate-800">{selectedFilter}</strong> visits
+          </span>
+          <button
+            type="button"
+            onClick={() => setSelectedFilter("all")}
+            className="text-xs text-[#2563eb] hover:underline font-semibold flex items-center gap-1 cursor-pointer"
           >
-            {/* Left Image & Property Info */}
-            <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center flex-1">
-              <div className="relative h-28 w-full sm:w-44 rounded-xl overflow-hidden shrink-0 bg-slate-100">
-                <Image
-                  src={visit.image}
-                  alt={visit.propertyTitle}
-                  fill
-                  className="object-cover"
+            <RotateCcw className="h-3 w-3" />
+            Show all visits
+          </button>
+        </div>
+      )}
+
+      {/* 4. Visits List */}
+      <div className="space-y-4">
+        {filteredVisits.map((visit) => {
+          const isUpcoming =
+            visit.status === "Confirmed" || visit.status === "Pending Confirmation";
+
+          return (
+            <div
+              key={visit.id}
+              className="bg-white rounded-2xl sm:rounded-3xl border border-slate-100 shadow-[0_2px_12px_rgba(0,0,0,0.03)] p-5 sm:p-6 transition-all hover:shadow-md hover:border-slate-200/80"
+            >
+              {/* Row 1: Title, Status Badge, and Action Buttons */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="flex flex-wrap items-center gap-2.5">
+                  <h3 className="text-base sm:text-[17px] font-bold text-slate-900 leading-snug">
+                    {visit.title}
+                  </h3>
+
+                  {/* Status Badge */}
+                  {visit.status === "Confirmed" && (
+                    <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#dcfce7] text-[#16a34a] border border-[#bbf7d0]">
+                      Confirmed
+                    </span>
+                  )}
+
+                  {visit.status === "Pending Confirmation" && (
+                    <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#fef3c7] text-[#b45309] border border-[#fde68a]">
+                      Pending Confirmation
+                    </span>
+                  )}
+
+                  {visit.status === "Completed" && (
+                    <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#dcfce7] text-[#16a34a] border border-[#bbf7d0]">
+                      Completed
+                    </span>
+                  )}
+
+                  {visit.status === "Cancelled" && (
+                    <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#f1f5f9] text-slate-500 border border-slate-200">
+                      Cancelled
+                    </span>
+                  )}
+                </div>
+
+                {/* Action Buttons: Only show for upcoming visits */}
+                {isUpcoming && (
+                  <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setRescheduleItem(visit);
+                        setNewDate("");
+                        setNewTime("");
+                      }}
+                      className="border border-[#2563eb] text-[#2563eb] hover:bg-blue-50 text-xs font-semibold px-3.5 py-1.5 rounded-xl transition-colors cursor-pointer active:scale-95"
+                    >
+                      Reschedule
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setCancelTarget(visit)}
+                      className="border border-slate-200 text-slate-600 hover:bg-slate-50 text-xs font-semibold px-3.5 py-1.5 rounded-xl transition-colors cursor-pointer active:scale-95"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Row 2: Location with Pin Icon */}
+              <div className="flex items-center gap-1.5 text-xs sm:text-sm text-slate-500 mt-2 truncate">
+                <MapPin className="h-3.5 w-3.5 text-slate-400 shrink-0" />
+                <span>{visit.location}</span>
+              </div>
+
+              {/* Row 3: Date, Time, Agent Row */}
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-1.5 text-xs text-slate-500 mt-2.5 font-medium">
+                <div className="flex items-center gap-1.5">
+                  <Calendar className="h-3.5 w-3.5 text-slate-400 shrink-0" />
+                  <span>{visit.date}</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <Clock className="h-3.5 w-3.5 text-slate-400 shrink-0" />
+                  <span>{visit.time}</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <User className="h-3.5 w-3.5 text-slate-400 shrink-0" />
+                  <span>{visit.agent}</span>
+                </div>
+              </div>
+
+              {/* Row 4: Note Box (if present) */}
+              {visit.note && (
+                <div className="bg-[#f8fafc] rounded-xl sm:rounded-2xl px-4 py-2.5 text-xs text-slate-500 mt-4 leading-relaxed">
+                  {visit.note}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* 5. Toast Feedback Notification */}
+      {toastMessage && (
+        <div className="fixed bottom-6 right-6 z-50 bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-xl flex items-center gap-3 text-xs sm:text-sm animate-in slide-in-from-bottom-3 duration-200">
+          <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
+          <span>{toastMessage}</span>
+        </div>
+      )}
+
+      {/* 6. Reschedule Modal Exactly Matching Screenshot media_1791869693608.png */}
+      {rescheduleItem && (
+        <div
+          onClick={() => setRescheduleItem(null)}
+          className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-200"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-full max-w-[460px] bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-slate-100 p-6 sm:p-7 animate-in zoom-in-95 duration-200"
+          >
+            {/* Top Close Button (Clean X Icon) */}
+            <button
+              type="button"
+              onClick={() => setRescheduleItem(null)}
+              className="absolute top-5 right-5 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer p-1"
+              aria-label="Close modal"
+            >
+              <X className="h-4 w-4" />
+            </button>
+
+            {/* Title & Property Subtitle */}
+            <h3 className="text-base sm:text-[17px] font-bold text-slate-900 leading-tight">
+              Reschedule Visit
+            </h3>
+            <p className="text-xs text-slate-400 mt-1">
+              {rescheduleItem.title}
+            </p>
+
+            {/* Current schedule info box */}
+            <div className="bg-[#f8fafc] rounded-xl px-4 py-3 text-xs text-slate-600 font-medium my-5">
+              Current schedule: {rescheduleItem.date} at {rescheduleItem.time}
+            </div>
+
+            <form onSubmit={handleConfirmReschedule} className="space-y-4">
+              {/* NEW DATE field */}
+              <div>
+                <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
+                  NEW DATE
+                </label>
+                <input
+                  type="date"
+                  required
+                  value={newDate}
+                  onChange={(e) => setNewDate(e.target.value)}
+                  className="w-full h-10 px-3.5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 bg-white"
                 />
               </div>
 
-              <div className="space-y-1.5 flex-1 min-w-0">
-                <div className="flex items-center gap-2">
-                  <Badge
-                    variant="blue"
-                    className={
-                      visit.status === "confirmed"
-                        ? "bg-emerald-50 text-emerald-700 border-emerald-200"
-                        : "bg-amber-50 text-amber-700 border-amber-200"
-                    }
+              {/* NEW TIME field */}
+              <div>
+                <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
+                  NEW TIME
+                </label>
+                <div className="relative">
+                  <select
+                    required
+                    value={newTime}
+                    onChange={(e) => setNewTime(e.target.value)}
+                    className="w-full h-10 px-3.5 pr-9 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-700 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 bg-white appearance-none cursor-pointer"
                   >
-                    {visit.status === "confirmed" ? (
-                      <span className="flex items-center gap-1">
-                        <CheckCircle2 className="h-3 w-3 text-emerald-600" />
-                        Confirmed Tour
-                      </span>
-                    ) : (
-                      <span className="flex items-center gap-1">
-                        <AlertCircle className="h-3 w-3 text-amber-600" />
-                        Awaiting Confirmation
-                      </span>
-                    )}
-                  </Badge>
-                </div>
-
-                <h3 className="font-bold text-base text-slate-900 line-clamp-1">
-                  {visit.propertyTitle}
-                </h3>
-
-                <p className="text-xs text-slate-400 flex items-center gap-1">
-                  <MapPin className="h-3.5 w-3.5 shrink-0 text-slate-400" />
-                  <span className="truncate">{visit.location}</span>
-                </p>
-
-                {/* Date & Time pill */}
-                <div className="flex flex-wrap items-center gap-3 pt-1 text-xs font-semibold text-slate-700">
-                  <span className="flex items-center gap-1 text-blue-600 bg-blue-50 px-2.5 py-1 rounded-lg">
-                    <Calendar className="h-3.5 w-3.5" />
-                    {visit.date}
-                  </span>
-                  <span className="flex items-center gap-1 text-slate-600 bg-slate-50 px-2.5 py-1 rounded-lg">
-                    <Clock className="h-3.5 w-3.5" />
-                    {visit.time}
-                  </span>
+                    <option value="" disabled className="text-slate-400">
+                      Select time
+                    </option>
+                    <option value="09:00 WIB">09:00 WIB</option>
+                    <option value="10:00 WIB">10:00 WIB</option>
+                    <option value="11:00 WIB">11:00 WIB</option>
+                    <option value="13:30 WIB">13:30 WIB</option>
+                    <option value="14:00 WIB">14:00 WIB</option>
+                    <option value="15:30 WIB">15:30 WIB</option>
+                    <option value="16:30 WIB">16:30 WIB</option>
+                  </select>
+                  <ChevronDown className="h-4 w-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
                 </div>
               </div>
+
+              {/* Bottom Action Buttons: Keep Current & Confirm Reschedule */}
+              <div className="pt-3 flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => setRescheduleItem(null)}
+                  className="flex-1 h-10 rounded-xl border border-slate-200 text-xs sm:text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
+                >
+                  Keep Current
+                </button>
+                <button
+                  type="submit"
+                  className={cn(
+                    "flex-1 h-10 rounded-xl text-xs sm:text-sm font-medium text-white shadow-xs transition-all cursor-pointer active:scale-98",
+                    newDate && newTime
+                      ? "bg-[#2563eb] hover:bg-blue-700"
+                      : "bg-[#93b4fd] hover:bg-blue-500"
+                  )}
+                >
+                  Confirm Reschedule
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* 7. Cancel Confirmation Modal */}
+      {cancelTarget && (
+        <div
+          onClick={() => setCancelTarget(null)}
+          className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 animate-in fade-in duration-200"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-full max-w-sm bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-slate-100 p-6 text-center animate-in zoom-in-95 duration-200"
+          >
+            <div className="h-12 w-12 rounded-full bg-red-50 text-red-600 flex items-center justify-center mx-auto mb-3">
+              <AlertCircle className="h-6 w-6" />
             </div>
 
-            {/* Right: Assigned Agent & Action buttons */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-4 lg:pt-0 border-t lg:border-t-0 border-slate-100">
-              <div className="flex items-center gap-2.5 bg-slate-50/80 p-2.5 rounded-xl border border-slate-100">
-                <div className="h-9 w-9 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-xs">
-                  {visit.agentAvatar}
-                </div>
-                <div>
-                  <p className="text-xs font-bold text-slate-800">{visit.agentName}</p>
-                  <p className="text-[11px] text-slate-400">Assigned Agent</p>
-                </div>
-              </div>
+            <h3 className="text-base font-bold text-slate-900 mb-1">
+              Cancel Site Visit?
+            </h3>
+            <p className="text-xs text-slate-500 mb-5 leading-relaxed">
+              Are you sure you want to cancel your visit for{" "}
+              <strong className="text-slate-800">{cancelTarget.title}</strong>? Agent{" "}
+              <strong className="text-slate-800">{cancelTarget.agent}</strong> will be
+              notified.
+            </p>
 
-              <div className="flex items-center gap-2">
-                <a
-                  href={`tel:${visit.agentPhone}`}
-                  className="flex-1 sm:flex-none h-9 px-3.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors"
-                >
-                  <Phone className="h-3.5 w-3.5" />
-                  Call
-                </a>
-                <Link
-                  href="/dashboard/customer/messages"
-                  className="flex-1 sm:flex-none h-9 px-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors"
-                >
-                  <MessageSquare className="h-3.5 w-3.5" />
-                  Chat
-                </Link>
-              </div>
+            <div className="flex items-center justify-center gap-2.5">
+              <button
+                type="button"
+                onClick={() => setCancelTarget(null)}
+                className="flex-1 h-10 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-colors cursor-pointer"
+              >
+                Keep Visit
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmCancel}
+                className="flex-1 h-10 rounded-xl bg-red-600 hover:bg-red-700 text-xs font-semibold text-white shadow-sm transition-colors cursor-pointer active:scale-95"
+              >
+                Yes, Cancel
+              </button>
             </div>
           </div>
-        ))}
-      </div>
+        </div>
+      )}
     </div>
   );
 }
