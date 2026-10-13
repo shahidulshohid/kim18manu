@@ -92,6 +92,12 @@ export default function AgentSidebar({
         pathname === "/dashboard/agent/accounting"
       );
     }
+    if (href === "/dashboard/agent/notifications") {
+      return (
+        pathname === "/dashboard/agent/notifications" ||
+        pathname === "/dashboard/agent/notification"
+      );
+    }
     return pathname.startsWith(href);
   };
 
