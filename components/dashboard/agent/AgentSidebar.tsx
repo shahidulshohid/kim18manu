@@ -60,6 +60,14 @@ export default function AgentSidebar({
         pathname === "/dashboard/agent/property-management"
       );
     }
+    if (href === "/dashboard/agent/leads") {
+      return (
+        pathname === "/dashboard/agent/leads" ||
+        pathname === "/dashboard/agent/lead-and-crm" ||
+        pathname === "/dashboard/agent/crm" ||
+        pathname === "/dashboard/agent/lead-crm"
+      );
+    }
     return pathname.startsWith(href);
   };
 
