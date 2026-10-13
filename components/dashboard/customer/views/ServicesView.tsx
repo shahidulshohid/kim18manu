@@ -72,7 +72,7 @@ export default function ServicesView() {
   ];
 
   return (
-    <div className="w-full py-6 sm:py-8 px-4 sm:px-6 lg:px-[32px]">
+    <div className="w-full max-w-full overflow-x-hidden min-w-0 py-6 sm:py-8 px-4 sm:px-6 lg:px-[32px]">
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">

@@ -121,12 +121,12 @@ export default function MessagesView() {
   };
 
   return (
-    <div className="w-full py-6 px-4 sm:px-6 lg:px-[32px] h-[calc(100vh-80px)] flex flex-col">
-      <div className="rounded-3xl border border-slate-100 bg-white shadow-sm flex-1 flex overflow-hidden">
+    <div className="w-full max-w-full overflow-x-hidden min-w-0 py-4 sm:py-6 px-3 sm:px-6 lg:px-[32px] h-[calc(100vh-80px)] flex flex-col">
+      <div className="rounded-2xl sm:rounded-3xl border border-slate-100 bg-white shadow-sm flex-1 flex overflow-hidden min-w-0">
         {/* Left: Conversations List */}
         <div
           className={cn(
-            "w-full md:w-80 lg:w-96 border-r border-slate-100 flex flex-col bg-white",
+            "w-full md:w-80 lg:w-96 border-r border-slate-100 flex flex-col bg-white min-w-0",
             selectedId ? "hidden md:flex" : "flex"
           )}
         >
@@ -208,21 +208,21 @@ export default function MessagesView() {
                 {activeConversation.avatar}
               </div>
 
-              <div>
-                <h3 className="font-bold text-sm text-slate-900 leading-snug">
+              <div className="min-w-0 flex-1">
+                <h3 className="font-bold text-sm text-slate-900 leading-snug truncate">
                   {activeConversation.name}
                 </h3>
-                <p className="text-[11px] text-slate-400 font-medium">
+                <p className="text-[11px] text-slate-400 font-medium truncate">
                   {activeConversation.property}
                 </p>
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
-              <button className="p-2 rounded-xl text-slate-500 hover:text-blue-600 hover:bg-slate-50">
+            <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+              <button className="p-2 rounded-xl text-slate-500 hover:text-blue-600 hover:bg-slate-50 cursor-pointer">
                 <Phone className="h-4 w-4" />
               </button>
-              <button className="p-2 rounded-xl text-slate-500 hover:text-blue-600 hover:bg-slate-50">
+              <button className="p-2 rounded-xl text-slate-500 hover:text-blue-600 hover:bg-slate-50 cursor-pointer">
                 <Video className="h-4 w-4" />
               </button>
             </div>
@@ -237,7 +237,7 @@ export default function MessagesView() {
               >
                 <div
                   className={cn(
-                    "max-w-[80%] rounded-2xl px-4 py-2.5 text-xs sm:text-sm leading-relaxed shadow-2xs",
+                    "max-w-[85%] sm:max-w-[80%] rounded-2xl px-4 py-2.5 text-xs sm:text-sm leading-relaxed shadow-2xs break-words",
                     m.sender === "me"
                       ? "bg-blue-600 text-white rounded-br-xs"
                       : "bg-white border border-slate-100 text-slate-800 rounded-bl-xs"
@@ -269,7 +269,7 @@ export default function MessagesView() {
             >
               <button
                 type="button"
-                className="p-2 text-slate-400 hover:text-slate-600 rounded-xl hover:bg-slate-100 transition-colors"
+                className="p-2 text-slate-400 hover:text-slate-600 rounded-xl hover:bg-slate-100 transition-colors shrink-0 cursor-pointer"
               >
                 <Paperclip className="h-4 w-4" />
               </button>
@@ -279,12 +279,12 @@ export default function MessagesView() {
                 value={inputMsg}
                 onChange={(e) => setInputMsg(e.target.value)}
                 placeholder="Type your message to the agent..."
-                className="flex-1 h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-blue-500"
+                className="flex-1 min-w-0 h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-blue-500"
               />
 
               <Button
                 type="submit"
-                className="h-10 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white"
+                className="h-10 px-3.5 sm:px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white shrink-0 cursor-pointer"
               >
                 <Send className="h-4 w-4" />
               </Button>

@@ -70,7 +70,7 @@ export default function SiteVisitsView() {
   ]);
 
   return (
-    <div className="w-full py-6 sm:py-8 px-4 sm:px-6 lg:px-[32px]">
+    <div className="w-full max-w-full overflow-x-hidden min-w-0 py-6 sm:py-8 px-4 sm:px-6 lg:px-[32px]">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>

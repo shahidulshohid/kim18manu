@@ -12,7 +12,7 @@ export default function CustomerLayout({ children }: CustomerLayoutProps) {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-[#fafbfc] text-slate-800 antialiased flex flex-col">
+    <div className="min-h-screen bg-[#fafbfc] text-slate-800 antialiased flex flex-col w-full max-w-full overflow-x-hidden">
       {/* Sidebar (Desktop sticky + Mobile Drawer) */}
       <CustomerSidebar
         isOpen={mobileSidebarOpen}
@@ -20,12 +20,12 @@ export default function CustomerLayout({ children }: CustomerLayoutProps) {
       />
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col lg:pl-64 transition-all duration-200">
+      <div className="flex-1 min-w-0 w-full flex flex-col lg:pl-64 transition-all duration-200 overflow-x-hidden">
         {/* Top Header */}
         <CustomerHeader onMenuClick={() => setMobileSidebarOpen(true)} />
 
         {/* Page Content */}
-        <main className="flex-1 min-h-[calc(100vh-64px)] pb-12">
+        <main className="flex-1 min-w-0 w-full min-h-[calc(100vh-64px)] pb-12 overflow-x-hidden">
           {children}
         </main>
       </div>

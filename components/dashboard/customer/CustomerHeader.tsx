@@ -85,7 +85,7 @@ export default function CustomerHeader({ onMenuClick }: CustomerHeaderProps) {
       {/* Center: Search input matching mockup */}
       <form
         onSubmit={handleSearchSubmit}
-        className="flex-1 max-w-xl mx-4 sm:mx-6"
+        className="flex-1 min-w-0 max-w-xl mx-2 sm:mx-6"
       >
         <div className="relative group">
           <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-600 transition-colors">
@@ -96,7 +96,7 @@ export default function CustomerHeader({ onMenuClick }: CustomerHeaderProps) {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search properties, areas, or ask AI..."
-            className="w-full h-10 pl-10 pr-12 rounded-full border border-slate-200/80 bg-slate-50/70 hover:bg-slate-50 focus:bg-white text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all shadow-2xs"
+            className="w-full h-10 pl-10 pr-12 rounded-full border border-slate-200/80 bg-slate-50/70 hover:bg-slate-50 focus:bg-white text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all shadow-2xs min-w-0"
           />
           <button
             type="submit"
@@ -109,12 +109,12 @@ export default function CustomerHeader({ onMenuClick }: CustomerHeaderProps) {
       </form>
 
       {/* Right: Notifications Bell & Profile Avatar */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2 sm:gap-3 shrink-0">
         {/* Notifications Popover */}
         <div className="relative" ref={notifRef}>
           <button
             onClick={() => setNotificationsOpen(!notificationsOpen)}
-            className="relative p-2 rounded-full text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors"
+            className="relative p-2 rounded-full text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors cursor-pointer"
             aria-label="View notifications"
           >
             <Bell className="h-5 w-5" />
@@ -124,7 +124,7 @@ export default function CustomerHeader({ onMenuClick }: CustomerHeaderProps) {
 
           {/* Notifications Dropdown */}
           {notificationsOpen && (
-            <div className="absolute right-0 mt-2 w-80 sm:w-96 rounded-2xl bg-white p-3 shadow-xl border border-slate-100 z-50 animate-in fade-in-50 zoom-in-95 duration-150">
+            <div className="absolute right-0 mt-2 w-[calc(100vw-1.5rem)] max-w-sm sm:w-96 rounded-2xl bg-white p-3 shadow-xl border border-slate-100 z-50 animate-in fade-in-50 zoom-in-95 duration-150">
               <div className="flex items-center justify-between pb-3 px-2 border-b border-slate-100">
                 <div className="flex items-center gap-2">
                   <h4 className="font-semibold text-sm text-slate-900">

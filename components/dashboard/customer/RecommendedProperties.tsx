@@ -172,10 +172,10 @@ export default function RecommendedProperties() {
 
       {/* Property Quick View Modal */}
       {selectedProperty && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-200">
-          <div className="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden max-h-[90vh] flex flex-col">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-200 overflow-y-auto overscroll-contain">
+          <div className="relative w-full max-w-2xl my-auto bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-slate-100 overflow-hidden max-h-[90vh] flex flex-col">
             {/* Modal Image Header */}
-            <div className="relative h-60 sm:h-72 w-full shrink-0 bg-slate-100">
+            <div className="relative h-52 sm:h-72 w-full shrink-0 bg-slate-100">
               <Image
                 src={selectedProperty.image}
                 alt={selectedProperty.title}
@@ -187,79 +187,79 @@ export default function RecommendedProperties() {
 
               <button
                 onClick={() => setSelectedProperty(null)}
-                className="absolute top-4 right-4 h-9 w-9 bg-black/40 hover:bg-black/60 text-white rounded-full flex items-center justify-center transition-colors backdrop-blur-md"
+                className="absolute top-3.5 right-3.5 h-8 w-8 sm:h-9 sm:w-9 bg-black/40 hover:bg-black/60 text-white rounded-full flex items-center justify-center transition-colors backdrop-blur-md cursor-pointer z-10"
               >
-                <X className="h-5 w-5" />
+                <X className="h-4 w-4 sm:h-5 sm:w-5" />
               </button>
 
-              <div className="absolute bottom-4 left-4 right-4 text-white">
+              <div className="absolute bottom-3.5 left-3.5 right-3.5 sm:bottom-4 sm:left-4 sm:right-4 text-white">
                 <div className="flex items-center gap-2 mb-1">
-                  <Badge variant="blue" className="bg-blue-600 text-white border-none">
+                  <Badge variant="blue" className="bg-blue-600 text-white border-none text-[11px] sm:text-xs">
                     {selectedProperty.tag}
                   </Badge>
                   {selectedProperty.isFeatured && (
-                    <Badge variant="amber" className="bg-amber-500 text-white border-none">
+                    <Badge variant="amber" className="bg-amber-500 text-white border-none text-[11px] sm:text-xs">
                       ★ Featured
                     </Badge>
                   )}
                 </div>
-                <h3 className="text-xl sm:text-2xl font-bold">{selectedProperty.title}</h3>
-                <p className="text-xs sm:text-sm text-slate-200 flex items-center gap-1 mt-0.5">
-                  <MapPin className="h-3.5 w-3.5" />
-                  {selectedProperty.location}
+                <h3 className="text-lg sm:text-2xl font-bold line-clamp-1">{selectedProperty.title}</h3>
+                <p className="text-xs sm:text-sm text-slate-200 flex items-center gap-1 mt-0.5 truncate">
+                  <MapPin className="h-3.5 w-3.5 shrink-0" />
+                  <span className="truncate">{selectedProperty.location}</span>
                 </p>
               </div>
             </div>
 
             {/* Modal Body */}
-            <div className="p-5 sm:p-6 overflow-y-auto space-y-5">
-              <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+            <div className="p-4 sm:p-6 overflow-y-auto overscroll-contain space-y-4 sm:space-y-5">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
                 <div>
-                  <span className="text-xs text-slate-400 font-medium">Price</span>
-                  <p className="text-2xl font-black text-blue-600">{selectedProperty.price}</p>
+                  <span className="text-[11px] sm:text-xs text-slate-400 font-medium">Price</span>
+                  <p className="text-xl sm:text-2xl font-black text-blue-600">{selectedProperty.price}</p>
                 </div>
-                <div className="flex items-center gap-4 text-sm font-semibold text-slate-700">
-                  <span className="flex items-center gap-1.5 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-100">
-                    <Bed className="h-4 w-4 text-blue-600" />
-                    {selectedProperty.beds} Bedrooms
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-sm font-semibold text-slate-700">
+                  <span className="flex items-center gap-1.5 bg-slate-50 px-2.5 sm:px-3 py-1.5 rounded-xl border border-slate-100">
+                    <Bed className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-blue-600 shrink-0" />
+                    <span>{selectedProperty.beds} Beds</span>
                   </span>
-                  <span className="flex items-center gap-1.5 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-100">
-                    <Bath className="h-4 w-4 text-blue-600" />
-                    {selectedProperty.baths} Bathrooms
+                  <span className="flex items-center gap-1.5 bg-slate-50 px-2.5 sm:px-3 py-1.5 rounded-xl border border-slate-100">
+                    <Bath className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-blue-600 shrink-0" />
+                    <span>{selectedProperty.baths} Baths</span>
                   </span>
-                  <span className="flex items-center gap-1.5 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-100">
-                    <Maximize2 className="h-4 w-4 text-blue-600" />
-                    {selectedProperty.area}
+                  <span className="flex items-center gap-1.5 bg-slate-50 px-2.5 sm:px-3 py-1.5 rounded-xl border border-slate-100">
+                    <Maximize2 className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-blue-600 shrink-0" />
+                    <span>{selectedProperty.area}</span>
                   </span>
                 </div>
               </div>
 
               <div>
-                <h4 className="text-sm font-bold text-slate-900 mb-1.5">Overview & AI Insights</h4>
+                <h4 className="text-xs sm:text-sm font-bold text-slate-900 mb-1.5">Overview & AI Insights</h4>
                 <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
                   {selectedProperty.description}
                 </p>
               </div>
 
               {selectedProperty.agent && (
-                <div className="flex items-center justify-between bg-slate-50/80 p-4 rounded-2xl border border-slate-100">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50/80 p-3.5 sm:p-4 rounded-2xl border border-slate-100">
                   <div className="flex items-center gap-3">
-                    <div className="h-10 w-10 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center">
+                    <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center shrink-0">
                       {selectedProperty.agent.avatar}
                     </div>
-                    <div>
+                    <div className="min-w-0">
                       <div className="flex items-center gap-1.5">
-                        <span className="text-sm font-bold text-slate-900">
+                        <span className="text-xs sm:text-sm font-bold text-slate-900 truncate">
                           {selectedProperty.agent.name}
                         </span>
-                        <CheckCircle className="h-3.5 w-3.5 text-blue-600" />
+                        <CheckCircle className="h-3.5 w-3.5 text-blue-600 shrink-0" />
                       </div>
-                      <span className="text-xs text-slate-400">Verified PropertiQU Agent</span>
+                      <span className="text-[11px] sm:text-xs text-slate-400">Verified PropertiQU Agent</span>
                     </div>
                   </div>
                   <a
                     href={`tel:${selectedProperty.agent.phone}`}
-                    className="flex items-center gap-1.5 text-xs font-semibold text-blue-600 hover:text-blue-700 bg-white border border-slate-200 px-3 py-2 rounded-xl"
+                    className="self-start sm:self-auto flex items-center justify-center gap-1.5 text-xs font-semibold text-blue-600 hover:text-blue-700 bg-white border border-slate-200 px-3 py-2 rounded-xl"
                   >
                     <Phone className="h-3.5 w-3.5" />
                     Contact
@@ -268,18 +268,18 @@ export default function RecommendedProperties() {
               )}
 
               {/* Action row */}
-              <div className="pt-2 flex flex-col sm:flex-row gap-3">
+              <div className="pt-2 flex flex-col sm:flex-row gap-2.5 sm:gap-3">
                 <Button
                   onClick={() => setSiteVisitScheduled(true)}
                   disabled={siteVisitScheduled}
-                  className="flex-1 h-11 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold flex items-center justify-center gap-2"
+                  className="flex-1 h-11 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold flex items-center justify-center gap-2 cursor-pointer text-xs sm:text-sm"
                 >
                   <Calendar className="h-4 w-4" />
                   {siteVisitScheduled ? "Site Visit Requested! (Agent Notified)" : "Schedule Site Visit"}
                 </Button>
                 <Link
                   href="/dashboard/customer/messages"
-                  className="h-11 px-5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-sm flex items-center justify-center"
+                  className="h-11 px-5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs sm:text-sm flex items-center justify-center"
                 >
                   Chat with Agent
                 </Link>

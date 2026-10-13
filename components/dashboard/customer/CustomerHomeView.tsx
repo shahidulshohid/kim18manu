@@ -7,7 +7,7 @@ import RecommendedProperties from "./RecommendedProperties";
 
 export default function CustomerHomeView() {
   return (
-    <div className="w-full py-6 sm:py-8 px-4 sm:px-6 lg:px-[32px]">
+    <div className="w-full max-w-full overflow-x-hidden min-w-0 py-6 sm:py-8 px-4 sm:px-6 lg:px-[32px]">
       {/* 1. Greeting Section */}
       <div className="mb-6 sm:mb-8">
         <span className="text-xs sm:text-sm font-medium text-slate-400">
