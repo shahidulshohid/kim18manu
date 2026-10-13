@@ -258,6 +258,76 @@ export default function PropertyManagementView() {
     }, 1200);
   };
 
+  // Photo / Video AI State & Handlers
+  const [mediaInputSource, setMediaInputSource] = useState("photo_video_ai_enhanced");
+  const [mediaSourceDropdownOpen, setMediaSourceDropdownOpen] = useState(false);
+  const [uploadedFiles, setUploadedFiles] = useState<string[]>([]);
+  const [isProcessingMedia, setIsProcessingMedia] = useState(false);
+  const fileInputRef = React.useRef<HTMLInputElement | null>(null);
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const fileNames = Array.from(e.target.files).map((f) => f.name);
+      setUploadedFiles(fileNames);
+      setIsProcessingMedia(true);
+      showToast(`Uploading ${fileNames.length} file(s) to AI Enhancement Queue...`);
+      setTimeout(() => {
+        setIsProcessingMedia(false);
+        setFormData((prev) => ({
+          ...prev,
+          title: "Modern Villa with Ocean View",
+          listingType: "sale",
+          propertyClass: "residential",
+          propertyType: "Villa",
+          price: "4500000000",
+          province: "Bali",
+          city: "Badung",
+          regency: "Kuta Selatan",
+          district: "Jimbaran",
+          area: "Bukit Peninsula",
+          bedrooms: "4",
+          bathrooms: "3",
+          size: "350",
+          assignedAgent: "Budi Santoso",
+          listingStatus: "Pending Review",
+          inputSource: "AI Extraction",
+        }));
+        setAddMode("manual");
+        showToast("AI enhanced images & extracted listing fields! Review below.");
+      }, 1500);
+    }
+  };
+
+  const handleSimulateMediaUpload = () => {
+    setUploadedFiles(["exterior_front.jpg", "interior_living.jpg", "pool_view.mp4"]);
+    setIsProcessingMedia(true);
+    showToast("Processing media in AI Enhancement Queue...");
+    setTimeout(() => {
+      setIsProcessingMedia(false);
+      setFormData((prev) => ({
+        ...prev,
+        title: "Modern Villa with Ocean View",
+        listingType: "sale",
+        propertyClass: "residential",
+        propertyType: "Villa",
+        price: "4500000000",
+        province: "Bali",
+        city: "Badung",
+        regency: "Kuta Selatan",
+        district: "Jimbaran",
+        area: "Bukit Peninsula",
+        bedrooms: "4",
+        bathrooms: "3",
+        size: "350",
+        assignedAgent: "Budi Santoso",
+        listingStatus: "Pending Review",
+        inputSource: "AI Extraction",
+      }));
+      setAddMode("manual");
+      showToast("Media enhanced & property data extracted! Review below.");
+    }, 1500);
+  };
+
   const handleSaveDraft = () => {
     const newId = `L00${listings.length + 1}`;
     const newListing: ListingItem = {
@@ -692,32 +762,32 @@ export default function PropertyManagementView() {
             onClick={(e) => e.stopPropagation()}
             className="relative w-full max-w-[620px] bg-white rounded-3xl shadow-2xl border border-slate-100 p-6 sm:p-7 animate-in zoom-in-95 duration-200 max-h-[92vh] flex flex-col"
           >
-            {/* Header */}
-            <div className="flex items-center justify-between pb-3.5 border-b border-slate-100 shrink-0">
+            {/* Header matching screenshot (no dividing line) */}
+            <div className="flex items-center justify-between pb-1.5 shrink-0">
               <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-tight">
                 Add New Listing
               </h3>
               <button
                 type="button"
                 onClick={() => setShowAddModal(false)}
-                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
+                className="p-1 text-slate-300 hover:text-slate-600 transition-colors cursor-pointer"
               >
-                <X className="h-4.5 w-4.5" />
+                <X className="h-4 w-4" />
               </button>
             </div>
 
-            {/* Modal Body (Scrollable) */}
-            <div className="overflow-y-auto py-4 px-0.5 space-y-4 custom-scrollbar flex-1">
-              {/* 3 Mode Tabs */}
-              <div className="bg-slate-100/80 p-1 rounded-2xl flex items-center gap-1">
+            {/* Modal Body */}
+            <div className="overflow-y-auto pt-2 pb-1 px-0.5 space-y-4 custom-scrollbar flex-1">
+              {/* 3 Mode Tabs matching screenshot */}
+              <div className="bg-[#f8fafc] border border-slate-100 p-1 rounded-2xl flex items-center gap-1">
                 <button
                   type="button"
                   onClick={() => setAddMode("manual")}
                   className={cn(
-                    "flex-1 h-9 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer",
+                    "flex-1 h-9.5 rounded-xl text-xs sm:text-[13px] font-medium flex items-center justify-center gap-1.5 transition-all cursor-pointer",
                     addMode === "manual"
-                      ? "bg-white text-blue-600 shadow-xs border border-slate-200/50"
-                      : "text-slate-600 hover:text-slate-900"
+                      ? "bg-white text-blue-600 shadow-xs border border-slate-200/50 font-semibold"
+                      : "text-slate-500 hover:text-slate-800"
                   )}
                 >
                   <FileEdit className="h-3.5 w-3.5" />
@@ -728,10 +798,10 @@ export default function PropertyManagementView() {
                   type="button"
                   onClick={() => setAddMode("voice")}
                   className={cn(
-                    "flex-1 h-9 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer",
+                    "flex-1 h-9.5 rounded-xl text-xs sm:text-[13px] font-medium flex items-center justify-center gap-1.5 transition-all cursor-pointer",
                     addMode === "voice"
-                      ? "bg-white text-blue-600 shadow-xs border border-slate-200/50"
-                      : "text-slate-600 hover:text-slate-900"
+                      ? "bg-white text-blue-600 shadow-xs border border-slate-200/50 font-semibold"
+                      : "text-slate-500 hover:text-slate-800"
                   )}
                 >
                   <Mic className="h-3.5 w-3.5" />
@@ -742,13 +812,13 @@ export default function PropertyManagementView() {
                   type="button"
                   onClick={() => setAddMode("media")}
                   className={cn(
-                    "flex-1 h-9 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer",
+                    "flex-1 h-9.5 rounded-xl text-xs sm:text-[13px] font-medium flex items-center justify-center gap-1.5 transition-all cursor-pointer",
                     addMode === "media"
-                      ? "bg-white text-blue-600 shadow-xs border border-slate-200/50"
-                      : "text-slate-600 hover:text-slate-900"
+                      ? "bg-white text-[#2563eb] shadow-xs border border-slate-200/50 font-semibold"
+                      : "text-slate-500 hover:text-slate-800"
                   )}
                 >
-                  <Upload className="h-3.5 w-3.5" />
+                  <Upload className="h-3.5 w-3.5 text-[#2563eb]" />
                   <span>Photo / Video AI</span>
                 </button>
               </div>
@@ -821,59 +891,127 @@ export default function PropertyManagementView() {
                         ))}
                       </div>
                     )}
-
-                    {/* Demo Extract Helper */}
-                    <div className="mt-8 pt-4 border-t border-slate-100/80 w-full flex items-center justify-center">
-                      <button
-                        type="button"
-                        onClick={() => handleSimulateExtract("Voice Inbound")}
-                        className="text-xs font-semibold text-blue-600 hover:text-blue-700 hover:underline flex items-center gap-1.5 cursor-pointer"
-                      >
-                        <Sparkles className="h-3.5 w-3.5" />
-                        <span>Demo: Extract Sample Listing From Voice</span>
-                      </button>
-                    </div>
                   </div>
                 </div>
               )}
 
-              {/* PHOTO / VIDEO → AI EXTRACTION Mode */}
+              {/* PHOTO / VIDEO → AI ENHANCEMENT Mode strictly matching screenshot */}
               {addMode === "media" && (
-                <div className="space-y-4 pt-1 animate-in fade-in duration-150">
+                <div className="space-y-4 pt-0.5 animate-in fade-in duration-150">
+                  {/* Hidden file input */}
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleFileUpload}
+                    multiple
+                    accept="image/*,video/*"
+                    className="hidden"
+                  />
+
+                  {/* 1. PHOTO / VIDEO → AI ENHANCEMENT Banner */}
                   <div className="rounded-2xl border border-blue-200/80 bg-blue-50/50 p-4 sm:p-5 text-left">
                     <div className="flex items-center gap-2">
                       <Sparkles className="h-4 w-4 text-[#2563eb]" />
                       <span className="text-[11px] sm:text-xs font-bold text-[#2563eb] tracking-wide uppercase">
-                        PHOTO / VIDEO → AI EXTRACTION
+                        PHOTO / VIDEO → AI ENHANCEMENT
                       </span>
                     </div>
                     <p className="text-xs sm:text-[13px] text-slate-500 mt-1.5 leading-relaxed font-normal">
-                      Upload property images or video walkthroughs. AI vision models will detect rooms, amenities, and condition into canonical listing fields.
+                      Upload property photos or video. AI will enhance images and extract listing context.
                     </p>
                   </div>
 
-                  <div className="py-10 sm:py-14 border-2 border-dashed border-slate-200 hover:border-blue-400 rounded-2xl flex flex-col items-center justify-center text-center p-6 bg-slate-50/40 transition-colors">
-                    <div className="h-16 w-16 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center mb-3.5 shadow-xs">
-                      <Upload className="h-7 w-7" />
-                    </div>
-                    <p className="text-xs sm:text-sm font-semibold text-slate-800">
-                      Drag & drop property media here, or{" "}
-                      <span className="text-blue-600 underline cursor-pointer">
-                        browse
-                      </span>
-                    </p>
-                    <p className="text-xs text-slate-400 mt-1">
-                      Supports JPG, PNG, MP4, MOV up to 100MB
+                  {/* 2. Upload Dashed Dropzone Card */}
+                  <div
+                    onClick={() => fileInputRef.current?.click()}
+                    className="relative rounded-3xl border border-dashed border-slate-300/80 hover:border-blue-400 py-10 sm:py-12 px-4 flex flex-col items-center justify-center text-center bg-white transition-all cursor-pointer group"
+                  >
+                    <Upload className="h-10 w-10 text-slate-300 group-hover:text-blue-500 transition-colors stroke-[1.5]" />
+
+                    <p className="text-xs sm:text-sm font-semibold text-slate-700 mt-3">
+                      Drop files here or click to upload
                     </p>
 
-                    <button
-                      type="button"
-                      onClick={() => handleSimulateExtract("AI Extraction")}
-                      className="mt-5 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold shadow-xs flex items-center gap-1.5 transition-all cursor-pointer active:scale-95"
+                    <p className="text-[11px] sm:text-xs text-slate-400 mt-1">
+                      Supports JPG, PNG, MP4 · Max 50MB per file
+                    </p>
+
+                    {/* Source Pill with Dropdown */}
+                    <div
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setMediaSourceDropdownOpen(!mediaSourceDropdownOpen);
+                      }}
+                      className="relative mt-4"
                     >
-                      <Sparkles className="h-3.5 w-3.5" />
-                      <span>Extract from Sample Media</span>
-                    </button>
+                      <button
+                        type="button"
+                        className="px-4 py-2 rounded-full border border-slate-200/90 bg-white hover:bg-slate-50 text-[11px] sm:text-xs text-slate-600 flex items-center gap-2 shadow-2xs transition-colors cursor-pointer"
+                      >
+                        <span>listing_input_source: {mediaInputSource}</span>
+                        <ChevronDown className="h-3.5 w-3.5 text-slate-400" />
+                      </button>
+
+                      {mediaSourceDropdownOpen && (
+                        <div className="absolute left-1/2 -translate-x-1/2 top-full mt-1.5 w-64 bg-white border border-slate-200 rounded-xl shadow-xl z-30 py-1 text-xs animate-in fade-in duration-150">
+                          {[
+                            "photo_video_ai_enhanced",
+                            "raw_media_uncompressed",
+                            "drone_aerial_footage",
+                            "3d_matterport_scan",
+                          ].map((option) => (
+                            <div
+                              key={option}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setMediaInputSource(option);
+                                setMediaSourceDropdownOpen(false);
+                              }}
+                              className={cn(
+                                "px-3.5 py-2 hover:bg-blue-50 hover:text-blue-600 cursor-pointer text-left transition-colors",
+                                mediaInputSource === option
+                                  ? "font-bold text-blue-600 bg-blue-50/60"
+                                  : "text-slate-700"
+                              )}
+                            >
+                              {option}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* 3. AI Enhancement Queue Bottom Card */}
+                  <div className="rounded-2xl border border-slate-100 bg-[#f8fafc] p-4 flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="h-9 w-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                        <Sparkles className="h-4.5 w-4.5 text-[#2563eb]" />
+                      </div>
+                      <div className="text-left">
+                        <h4 className="text-xs font-bold text-slate-800 leading-tight">
+                          AI Enhancement Queue
+                        </h4>
+                        <p className="text-[11px] text-slate-400 font-normal leading-tight mt-0.5">
+                          {uploadedFiles.length > 0
+                            ? `${uploadedFiles.length} file(s) selected: ${uploadedFiles.slice(0, 2).join(", ")}${uploadedFiles.length > 2 ? "..." : ""}`
+                            : "Images will be processed after upload"}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      {isProcessingMedia ? (
+                        <span className="px-3 py-1 rounded-full bg-blue-100 text-[11px] font-semibold text-blue-700 flex items-center gap-1.5">
+                          <Loader2 className="h-3 w-3 animate-spin" />
+                          <span>Processing...</span>
+                        </span>
+                      ) : (
+                        <span className="px-3 py-1 rounded-full bg-slate-200/70 text-[11px] font-semibold text-slate-600">
+                          Ready
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
               )}
