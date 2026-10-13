@@ -1,160 +1,220 @@
 "use client";
 
 import React, { useState } from "react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
-  CheckCheck,
-  TrendingDown,
+  MapPin,
   Calendar,
   MessageSquare,
-  ShieldAlert,
-  ArrowRight,
+  Shield,
+  Wrench,
+  Star,
+  Info,
+  CheckCircle2,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
-interface NotificationItem {
+export interface NotificationItem {
   id: string;
-  type: "price" | "visit" | "message" | "security";
   title: string;
-  message: string;
+  description: string;
   time: string;
   unread: boolean;
-  actionUrl?: string;
+  icon: React.ElementType;
+  iconBoxBg: string;
+  iconColor: string;
+  targetUrl?: string;
 }
 
-export default function NotificationsView() {
-  const [notifications, setNotifications] = useState<NotificationItem[]>([
-    {
-      id: "n-1",
-      type: "price",
-      title: "Price drop alert: Modern Villa with Ocean View",
-      message: "The seller reduced the listing price by IDR 200,000,000. Now priced at IDR 4,500,000,000.",
-      time: "15 minutes ago",
-      unread: true,
-      actionUrl: "/dashboard/customer",
-    },
-    {
-      id: "n-2",
-      type: "visit",
-      title: "Site visit confirmed for tomorrow",
-      message: "Agent Budi Santoso confirmed meeting you at Jimbaran, Bali at 10:00 AM.",
-      time: "2 hours ago",
-      unread: true,
-      actionUrl: "/dashboard/customer/site-visits",
-    },
-    {
-      id: "n-3",
-      type: "message",
-      title: "New message from Agent Siti Rahayu",
-      message: "Siti sent you updated furnishing options for the SCBD Business District Apartment.",
-      time: "Yesterday at 4:20 PM",
-      unread: false,
-      actionUrl: "/dashboard/customer/messages",
-    },
-    {
-      id: "n-4",
-      type: "security",
-      title: "Title verification complete",
-      message: "Cadastral check for Modern Villa completed with no legal encumbrances detected.",
-      time: "Oct 10, 2026",
-      unread: false,
-      actionUrl: "/dashboard/customer/transactions",
-    },
-  ]);
+const INITIAL_NOTIFICATIONS: NotificationItem[] = [
+  {
+    id: "notif-1",
+    title: "New property match",
+    description: "4 new villas in Bali match your saved search.",
+    time: "2 hours ago",
+    unread: true,
+    icon: MapPin,
+    iconBoxBg: "bg-[#eff6ff]",
+    iconColor: "text-[#2563eb]",
+    targetUrl: "/dashboard/customer/saved",
+  },
+  {
+    id: "notif-2",
+    title: "Visit confirmed",
+    description: "Your site visit for Modern Villa on Oct 5 has been confirmed by Budi Santoso.",
+    time: "5 hours ago",
+    unread: true,
+    icon: Calendar,
+    iconBoxBg: "bg-[#f0fdf4]",
+    iconColor: "text-[#16a34a]",
+    targetUrl: "/dashboard/customer/site-visits",
+  },
+  {
+    id: "notif-3",
+    title: "New message from Sari Dewi",
+    description: "Please let me know if you need more photos of the SCBD apartment.",
+    time: "Yesterday",
+    unread: false,
+    icon: MessageSquare,
+    iconBoxBg: "bg-[#eff6ff]",
+    iconColor: "text-[#2563eb]",
+    targetUrl: "/dashboard/customer/messages",
+  },
+  {
+    id: "notif-4",
+    title: "Payment received",
+    description: "Your annual rent payment of IDR 144M has been confirmed.",
+    time: "2 days ago",
+    unread: false,
+    icon: Shield,
+    iconBoxBg: "bg-[#f0fdf4]",
+    iconColor: "text-[#16a34a]",
+    targetUrl: "/dashboard/customer/transactions",
+  },
+  {
+    id: "notif-5",
+    title: "Service assigned",
+    description: "CleanPro Services has been assigned to your cleaning request.",
+    time: "3 days ago",
+    unread: false,
+    icon: Wrench,
+    iconBoxBg: "bg-[#eff6ff]",
+    iconColor: "text-[#2563eb]",
+    targetUrl: "/dashboard/customer/services",
+  },
+  {
+    id: "notif-6",
+    title: "Review reminder",
+    description: "Share your experience with CoolTech HVAC after your AC service.",
+    time: "4 days ago",
+    unread: false,
+    icon: Star,
+    iconBoxBg: "bg-[#fffbeb]",
+    iconColor: "text-[#d97706]",
+  },
+  {
+    id: "notif-7",
+    title: "Profile updated",
+    description: "Your property preferences have been saved successfully.",
+    time: "1 week ago",
+    unread: false,
+    icon: Info,
+    iconBoxBg: "bg-[#f8fafc] border border-slate-100",
+    iconColor: "text-slate-400",
+    targetUrl: "/dashboard/customer/settings",
+  },
+];
 
-  const markAllRead = () => {
-    setNotifications((prev) => prev.map((n) => ({ ...n, unread: false })));
+export default function NotificationsView() {
+  const router = useRouter();
+  const [notifications, setNotifications] = useState<NotificationItem[]>(INITIAL_NOTIFICATIONS);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  const unreadCount = notifications.filter((n) => n.unread).length;
+
+  const showToast = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => {
+      setToastMessage(null);
+    }, 3000);
   };
 
-  const iconMap = {
-    price: TrendingDown,
-    visit: Calendar,
-    message: MessageSquare,
-    security: ShieldAlert,
+  const handleMarkAllAsRead = () => {
+    setNotifications((prev) => prev.map((n) => ({ ...n, unread: false })));
+    showToast("All notifications marked as read.");
+  };
+
+  const handleNotificationClick = (item: NotificationItem) => {
+    // Mark clicked notification as read
+    if (item.unread) {
+      setNotifications((prev) =>
+        prev.map((n) => (n.id === item.id ? { ...n, unread: false } : n))
+      );
+    }
+    if (item.targetUrl) {
+      router.push(item.targetUrl);
+    }
   };
 
   return (
     <div className="w-full max-w-full overflow-x-hidden min-w-0 py-6 sm:py-8 px-4 sm:px-6 lg:px-[32px]">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+      {/* 1. Header matching screenshot */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 sm:mb-8">
         <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
-              Notification Center
-            </h1>
-            <Badge variant="blue" className="bg-blue-100 text-blue-700">
-              {notifications.filter((n) => n.unread).length} Unread
-            </Badge>
-          </div>
-          <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            Real-time updates regarding your property inquiries, visits, and market alerts
+          <h1 className="text-2xl sm:text-[28px] font-bold text-slate-900 tracking-tight">
+            Notifications
+          </h1>
+          <p className="text-sm text-slate-500 mt-1">
+            {unreadCount > 0 ? `${unreadCount} unread notifications` : "0 unread notifications"}
           </p>
         </div>
 
-        <Button
-          onClick={markAllRead}
-          variant="outline"
-          size="sm"
-          className="text-xs font-semibold flex items-center gap-1.5"
-        >
-          <CheckCheck className="h-4 w-4 text-blue-600" />
-          Mark all as read
-        </Button>
+        {unreadCount > 0 && (
+          <button
+            type="button"
+            onClick={handleMarkAllAsRead}
+            className="text-xs sm:text-sm font-semibold text-[#2563eb] hover:underline self-start sm:self-auto cursor-pointer transition-colors"
+          >
+            Mark all as read
+          </button>
+        )}
       </div>
 
-      {/* List */}
-      <div className="rounded-3xl border border-slate-100 bg-white shadow-xs overflow-hidden divide-y divide-slate-100">
-        {notifications.map((n) => {
-          const Icon = iconMap[n.type];
+      {/* 2. Notifications List */}
+      <div className="space-y-3 sm:space-y-3.5">
+        {notifications.map((item) => {
+          const Icon = item.icon;
+
           return (
             <div
-              key={n.id}
-              className={`p-4 sm:p-5 flex items-start gap-4 transition-colors ${
-                n.unread ? "bg-blue-50/40" : "hover:bg-slate-50/70"
-              }`}
+              key={item.id}
+              onClick={() => handleNotificationClick(item)}
+              className="bg-white rounded-2xl sm:rounded-3xl border border-slate-100 shadow-[0_2px_12px_rgba(0,0,0,0.03)] p-4 sm:p-5 flex items-start sm:items-center justify-between gap-3 sm:gap-4 transition-all hover:shadow-md hover:border-blue-100 cursor-pointer group"
             >
-              <div
-                className={`h-10 w-10 rounded-2xl flex items-center justify-center shrink-0 ${
-                  n.type === "price"
-                    ? "bg-emerald-50 text-emerald-600"
-                    : n.type === "visit"
-                    ? "bg-blue-50 text-blue-600"
-                    : n.type === "message"
-                    ? "bg-indigo-50 text-indigo-600"
-                    : "bg-amber-50 text-amber-600"
-                }`}
-              >
-                <Icon className="h-5 w-5" />
+              {/* Left Side: Icon Box + Title + Description */}
+              <div className="flex items-center gap-3.5 sm:gap-4 min-w-0 flex-1">
+                <div
+                  className={cn(
+                    "h-10 w-10 sm:h-11 sm:w-11 rounded-xl sm:rounded-2xl flex items-center justify-center shrink-0",
+                    item.iconBoxBg,
+                    item.iconColor
+                  )}
+                >
+                  <Icon className="h-5 w-5 stroke-[1.8]" />
+                </div>
+
+                <div className="min-w-0 flex-1">
+                  <h3 className="text-sm sm:text-[15px] font-bold text-slate-900 group-hover:text-[#2563eb] transition-colors leading-snug truncate">
+                    {item.title}
+                  </h3>
+                  <p className="text-xs text-slate-400 mt-0.5 leading-relaxed truncate">
+                    {item.description}
+                  </p>
+                </div>
               </div>
 
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center justify-between gap-2">
-                  <h4 className="text-sm font-bold text-slate-900 leading-snug">
-                    {n.title}
-                  </h4>
-                  {n.unread && (
-                    <span className="h-2 w-2 rounded-full bg-blue-600 shrink-0" />
-                  )}
-                </div>
-                <p className="text-xs text-slate-600 mt-1 leading-relaxed">{n.message}</p>
-                <div className="flex items-center justify-between mt-2 pt-1">
-                  <span className="text-[11px] text-slate-400 font-medium">{n.time}</span>
-                  {n.actionUrl && (
-                    <Link
-                      href={n.actionUrl}
-                      className="text-xs font-semibold text-blue-600 hover:underline inline-flex items-center gap-1"
-                    >
-                      View Details
-                      <ArrowRight className="h-3 w-3" />
-                    </Link>
-                  )}
-                </div>
+              {/* Right Side: Timestamp + Unread Dot */}
+              <div className="flex items-center gap-2 sm:gap-2.5 shrink-0 self-start sm:self-auto mt-0.5 sm:mt-0">
+                <span className="text-xs text-slate-400 font-medium">
+                  {item.time}
+                </span>
+
+                {item.unread && (
+                  <span className="h-2 w-2 rounded-full bg-[#2563eb] shrink-0" />
+                )}
               </div>
             </div>
           );
         })}
       </div>
+
+      {/* 3. Toast Feedback */}
+      {toastMessage && (
+        <div className="fixed bottom-6 right-6 z-50 bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-xl flex items-center gap-3 text-xs sm:text-sm animate-in slide-in-from-bottom-3 duration-200">
+          <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
+          <span>{toastMessage}</span>
+        </div>
+      )}
     </div>
   );
 }
