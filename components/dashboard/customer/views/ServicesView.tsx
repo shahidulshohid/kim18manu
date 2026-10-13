@@ -12,6 +12,7 @@ import {
   CheckCircle2,
   X,
   AlertCircle,
+  ChevronDown,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -78,7 +79,7 @@ export default function ServicesView() {
   const [selectedCategory, setSelectedCategory] = useState<ServiceCategory | null>(null);
 
   // Form states for new service modal
-  const [selectedProperty, setSelectedProperty] = useState("Modern Villa with Ocean View");
+  const [selectedProperty, setSelectedProperty] = useState("");
   const [reqDate, setReqDate] = useState("");
   const [notes, setNotes] = useState("");
 
@@ -95,6 +96,13 @@ export default function ServicesView() {
     }, 3000);
   };
 
+  const handleOpenCategory = (cat: ServiceCategory) => {
+    setSelectedCategory(cat);
+    setSelectedProperty("");
+    setReqDate("");
+    setNotes("");
+  };
+
   const handleCreateRequest = (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedCategory) return;
@@ -104,7 +112,7 @@ export default function ServicesView() {
       category: selectedCategory.name,
       status: "Submitted",
       vendorName: `${selectedCategory.name} Partner`,
-      property: selectedProperty,
+      property: selectedProperty || "Modern Villa with Ocean View",
       date: reqDate || new Date().toISOString().split("T")[0],
       price: "Estimate upon review",
     };
@@ -112,6 +120,7 @@ export default function ServicesView() {
     setRequests((prev) => [newReq, ...prev]);
     showToast(`Service request for ${selectedCategory.name} submitted successfully!`);
     setSelectedCategory(null);
+    setSelectedProperty("");
     setReqDate("");
     setNotes("");
   };
@@ -149,7 +158,7 @@ export default function ServicesView() {
             return (
               <div
                 key={cat.id}
-                onClick={() => setSelectedCategory(cat)}
+                onClick={() => handleOpenCategory(cat)}
                 className="bg-white rounded-2xl sm:rounded-3xl border border-slate-100 shadow-[0_2px_12px_rgba(0,0,0,0.03)] p-4 sm:p-5 flex flex-col items-center justify-center text-center cursor-pointer hover:shadow-md hover:border-blue-100 transition-all group active:scale-95 min-h-[105px]"
               >
                 <div className="h-10 w-10 sm:h-11 sm:w-11 rounded-xl sm:rounded-2xl bg-[#eff6ff] text-[#2563eb] flex items-center justify-center mb-2 sm:mb-2.5 group-hover:bg-[#2563eb] group-hover:text-white transition-colors shrink-0">
@@ -246,7 +255,7 @@ export default function ServicesView() {
         </div>
       )}
 
-      {/* 5. Request New Service Modal */}
+      {/* 5. Request New Service Modal Strictly Matching Screenshot media_1791871448349.png */}
       {selectedCategory && (
         <div
           onClick={() => setSelectedCategory(null)}
@@ -254,83 +263,104 @@ export default function ServicesView() {
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-[460px] bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-slate-100 p-6 sm:p-7 animate-in zoom-in-95 duration-200"
+            className="relative w-full max-w-[440px] bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-slate-100 p-6 sm:p-7 animate-in zoom-in-95 duration-200"
           >
-            {/* Close Button */}
-            <button
-              type="button"
-              onClick={() => setSelectedCategory(null)}
-              className="absolute top-5 right-5 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer p-1"
-            >
-              <X className="h-4 w-4" />
-            </button>
-
-            <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-tight">
-              Request {selectedCategory.name}
-            </h3>
-            <p className="text-xs text-slate-400 mt-1">
-              Select your property and schedule a certified service partner.
-            </p>
-
-            <form onSubmit={handleCreateRequest} className="space-y-4 mt-5">
-              <div>
-                <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
-                  Select Property
-                </label>
-                <select
-                  value={selectedProperty}
-                  onChange={(e) => setSelectedProperty(e.target.value)}
-                  className="w-full h-10 px-3.5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 bg-white"
-                >
-                  <option value="Modern Villa with Ocean View">
-                    Modern Villa with Ocean View (Jimbaran)
-                  </option>
-                  <option value="Spacious Family House">
-                    Spacious Family House (Dago, Bandung)
-                  </option>
-                  <option value="Cozy Apartment in SCBD">
-                    Cozy Apartment in SCBD (Jakarta)
-                  </option>
-                </select>
+            {/* Header with Icon, Title, Subtitle & Clean X Icon */}
+            <div className="flex items-center justify-between pb-5 border-b border-slate-100 mb-5">
+              <div className="flex items-center gap-3.5">
+                <div className="h-11 w-11 rounded-2xl bg-[#eff6ff] text-[#2563eb] flex items-center justify-center shrink-0">
+                  <selectedCategory.icon className="h-5 w-5 stroke-[1.8]" />
+                </div>
+                <div>
+                  <h3 className="text-base sm:text-[17px] font-bold text-slate-900 leading-tight">
+                    Request Service
+                  </h3>
+                  <p className="text-xs text-slate-400 mt-0.5">
+                    {selectedCategory.name}
+                  </p>
+                </div>
               </div>
 
+              <button
+                type="button"
+                onClick={() => setSelectedCategory(null)}
+                className="text-slate-300 hover:text-slate-600 transition-colors p-1 cursor-pointer"
+                aria-label="Close modal"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            <form onSubmit={handleCreateRequest} className="space-y-4">
+              {/* PROPERTY Field */}
               <div>
                 <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
-                  Preferred Date
+                  PROPERTY
+                </label>
+                <div className="relative">
+                  <select
+                    required
+                    value={selectedProperty}
+                    onChange={(e) => setSelectedProperty(e.target.value)}
+                    className="w-full h-11 px-3.5 pr-9 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 bg-white appearance-none cursor-pointer"
+                  >
+                    <option value="" disabled className="text-slate-400">
+                      Select a property
+                    </option>
+                    <option value="Modern Villa with Ocean View">
+                      Modern Villa with Ocean View
+                    </option>
+                    <option value="Spacious Family House">
+                      Spacious Family House
+                    </option>
+                    <option value="Cozy Apartment SCBD">
+                      Cozy Apartment SCBD
+                    </option>
+                  </select>
+                  <ChevronDown className="h-4 w-4 text-slate-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                </div>
+              </div>
+
+              {/* PREFERRED DATE Field */}
+              <div>
+                <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
+                  PREFERRED DATE
                 </label>
                 <input
                   type="date"
                   required
                   value={reqDate}
                   onChange={(e) => setReqDate(e.target.value)}
-                  className="w-full h-10 px-3.5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 bg-white"
+                  className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 bg-white"
                 />
               </div>
 
+              {/* NOTES (optional) Field */}
               <div>
                 <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
-                  Notes / Requirements
+                  NOTES <span className="font-normal text-slate-400 lowercase">(optional)</span>
                 </label>
                 <textarea
-                  rows={3}
+                  rows={4}
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
-                  placeholder="Detail any specific requirements or instructions..."
-                  className="w-full p-3 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 bg-white resize-none"
+                  placeholder={`Describe what you need for ${selectedCategory.name}...`}
+                  className="w-full p-3.5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 bg-white resize-none"
                 />
               </div>
 
+              {/* Bottom Action Buttons: Cancel & Submit Request */}
               <div className="pt-2 flex items-center gap-3">
                 <button
                   type="button"
                   onClick={() => setSelectedCategory(null)}
-                  className="flex-1 h-10 rounded-xl border border-slate-200 text-xs sm:text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-colors cursor-pointer"
+                  className="flex-1 h-11 rounded-xl border border-slate-200 text-xs sm:text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 h-10 rounded-xl bg-[#2563eb] hover:bg-blue-700 text-xs sm:text-sm font-semibold text-white shadow-sm transition-all cursor-pointer active:scale-95"
+                  className="flex-1 h-11 rounded-xl bg-[#2563eb] hover:bg-blue-700 text-xs sm:text-sm font-semibold text-white shadow-sm transition-all cursor-pointer active:scale-95"
                 >
                   Submit Request
                 </button>
