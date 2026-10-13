@@ -54,6 +54,12 @@ export default function AgentSidebar({
         pathname === "/dashboard/super-admin"
       );
     }
+    if (href === "/dashboard/agent/properties") {
+      return (
+        pathname === "/dashboard/agent/properties" ||
+        pathname === "/dashboard/agent/property-management"
+      );
+    }
     return pathname.startsWith(href);
   };
 
