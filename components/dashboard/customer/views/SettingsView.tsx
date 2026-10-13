@@ -471,50 +471,86 @@ export default function SettingsView() {
             </form>
           )}
 
-          {/* Tab 3: UI Display Language */}
+          {/* Tab 3: UI Display Language strictly matching screenshot */}
           {activeTab === "language" && (
-            <form onSubmit={handleSaveLanguage}>
-              <h2 className="text-base sm:text-lg font-bold text-slate-900 mb-6">
-                UI Display Language & Locale
+            <div>
+              <h2 className="text-base sm:text-lg font-bold text-slate-900 leading-tight">
+                UI Display Language
               </h2>
+              <p className="text-xs text-slate-400 mt-1 mb-6 font-normal">
+                Choose the language for the platform interface. This does not affect your AI Assistant language settings.
+              </p>
 
-              <div className="space-y-4 mb-6">
-                <div>
-                  <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
-                    Portal Interface Language
-                  </label>
-                  <select
-                    value={language}
-                    onChange={(e) => setLanguage(e.target.value)}
-                    className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 bg-white focus:outline-none focus:border-blue-600 cursor-pointer"
-                  >
-                    <option value="en">English (United States)</option>
-                    <option value="id">Bahasa Indonesia</option>
-                  </select>
+              <div className="space-y-3">
+                {/* Option 1: English */}
+                <div
+                  onClick={() => {
+                    setLanguage("en");
+                    showToast("Interface language set to English");
+                  }}
+                  className={cn(
+                    "rounded-2xl border p-4 sm:p-5 flex items-center gap-3.5 cursor-pointer transition-all",
+                    language === "en"
+                      ? "border-slate-200/90 bg-white shadow-[0_2px_12px_rgba(0,0,0,0.02)]"
+                      : "border-slate-100 hover:border-slate-200 bg-white"
+                  )}
+                >
+                  <input
+                    type="radio"
+                    name="uiLanguage"
+                    value="en"
+                    checked={language === "en"}
+                    onChange={() => {
+                      setLanguage("en");
+                      showToast("Interface language set to English");
+                    }}
+                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 accent-blue-600 cursor-pointer"
+                  />
+                  <div>
+                    <h3 className="text-sm font-bold text-slate-900 leading-tight">
+                      English
+                    </h3>
+                    <p className="text-xs text-slate-400 mt-0.5">
+                      English
+                    </p>
+                  </div>
                 </div>
 
-                <div>
-                  <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
-                    Currency Notation
-                  </label>
-                  <select
-                    value={currency}
-                    onChange={(e) => setCurrency(e.target.value)}
-                    className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 bg-white focus:outline-none focus:border-blue-600 cursor-pointer"
-                  >
-                    <option value="IDR">IDR (Indonesian Rupiah)</option>
-                    <option value="USD">USD ($ United States Dollar)</option>
-                  </select>
+                {/* Option 2: Indonesian */}
+                <div
+                  onClick={() => {
+                    setLanguage("id");
+                    showToast("Bahasa antarmuka diubah ke Bahasa Indonesia");
+                  }}
+                  className={cn(
+                    "rounded-2xl border p-4 sm:p-5 flex items-center gap-3.5 cursor-pointer transition-all",
+                    language === "id"
+                      ? "border-slate-200/90 bg-white shadow-[0_2px_12px_rgba(0,0,0,0.02)]"
+                      : "border-slate-100 hover:border-slate-200 bg-white"
+                  )}
+                >
+                  <input
+                    type="radio"
+                    name="uiLanguage"
+                    value="id"
+                    checked={language === "id"}
+                    onChange={() => {
+                      setLanguage("id");
+                      showToast("Bahasa antarmuka diubah ke Bahasa Indonesia");
+                    }}
+                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 accent-blue-600 cursor-pointer"
+                  />
+                  <div>
+                    <h3 className="text-sm font-bold text-slate-900 leading-tight">
+                      Indonesian
+                    </h3>
+                    <p className="text-xs text-slate-400 mt-0.5">
+                      Bahasa Indonesia
+                    </p>
+                  </div>
                 </div>
               </div>
-
-              <button
-                type="submit"
-                className="h-11 px-6 rounded-xl bg-[#2563eb] hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm shadow-sm transition-all cursor-pointer active:scale-95"
-              >
-                Save Language Settings
-              </button>
-            </form>
+            </div>
           )}
 
           {/* Tab 4: Notification Settings */}
