@@ -61,8 +61,10 @@ export default function SettingsView() {
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
-    twoFactor: true,
   });
+  const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   // Logout confirmation modal state
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -99,13 +101,18 @@ export default function SettingsView() {
 
   const handleSaveSecurity = (e: React.FormEvent) => {
     e.preventDefault();
-    showToast("Security settings updated!");
+    showToast("Password updated successfully!");
+    setShowPasswordModal(false);
     setSecurityData({
       currentPassword: "",
       newPassword: "",
       confirmPassword: "",
-      twoFactor: securityData.twoFactor,
     });
+  };
+
+  const handleDeleteAccount = () => {
+    setShowDeleteModal(false);
+    showToast("Account deletion request submitted. An email confirmation has been sent.");
   };
 
   const handleChangePhoto = () => {
@@ -653,80 +660,92 @@ export default function SettingsView() {
             </div>
           )}
 
-          {/* Tab 5: Privacy & Security */}
+          {/* Tab 5: Privacy & Security strictly matching screenshot */}
           {activeTab === "security" && (
-            <form onSubmit={handleSaveSecurity}>
-              <h2 className="text-base sm:text-lg font-bold text-slate-900 mb-6">
+            <div>
+              <h2 className="text-base sm:text-lg font-bold text-slate-900 leading-tight mb-5">
                 Privacy & Security
               </h2>
 
-              <div className="space-y-4 mb-6">
-                <div>
-                  <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
-                    Current Password
-                  </label>
-                  <input
-                    type="password"
-                    placeholder="••••••••••••"
-                    value={securityData.currentPassword}
-                    onChange={(e) =>
-                      setSecurityData({
-                        ...securityData,
-                        currentPassword: e.target.value,
-                      })
-                    }
-                    className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 bg-white focus:outline-none focus:border-blue-600"
-                  />
+              <div className="space-y-3.5">
+                {/* Card 1: Change Password */}
+                <div className="rounded-2xl border border-slate-200/90 bg-white p-4 sm:p-5">
+                  <h3 className="text-sm font-bold text-slate-900 leading-tight">
+                    Change Password
+                  </h3>
+                  <p className="text-xs text-slate-400 mt-1 leading-normal">
+                    Last changed 3 months ago
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => setShowPasswordModal(true)}
+                    className="mt-3 text-xs sm:text-sm font-semibold text-[#2563eb] hover:text-blue-700 hover:underline inline-block cursor-pointer"
+                  >
+                    Update password
+                  </button>
                 </div>
 
-                <div>
-                  <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
-                    New Password
-                  </label>
-                  <input
-                    type="password"
-                    placeholder="••••••••••••"
-                    value={securityData.newPassword}
-                    onChange={(e) =>
-                      setSecurityData({
-                        ...securityData,
-                        newPassword: e.target.value,
-                      })
-                    }
-                    className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 bg-white focus:outline-none focus:border-blue-600"
-                  />
+                {/* Card 2: Two-Factor Authentication */}
+                <div className="rounded-2xl border border-slate-200/90 bg-white p-4 sm:p-5">
+                  <h3 className="text-sm font-bold text-slate-900 leading-tight">
+                    Two-Factor Authentication
+                  </h3>
+                  <p className="text-xs text-slate-400 mt-1 leading-normal">
+                    Add an extra layer of security to your account
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setTwoFactorEnabled(!twoFactorEnabled);
+                      showToast(
+                        twoFactorEnabled
+                          ? "Two-Factor Authentication disabled"
+                          : "Two-Factor Authentication enabled"
+                      );
+                    }}
+                    className="mt-3 text-xs sm:text-sm font-semibold text-[#2563eb] hover:text-blue-700 hover:underline inline-block cursor-pointer"
+                  >
+                    {twoFactorEnabled ? "Disable 2FA" : "Enable 2FA"}
+                  </button>
                 </div>
 
-                <label className="flex items-center justify-between p-3.5 rounded-xl border border-slate-100 hover:bg-slate-50 cursor-pointer transition-colors mt-4">
-                  <div>
-                    <span className="text-xs sm:text-sm font-bold text-slate-800 block">
-                      Two-Factor Authentication (2FA)
-                    </span>
-                    <span className="text-xs text-slate-400">
-                      Require OTP verification code when logging in from new devices.
-                    </span>
-                  </div>
-                  <input
-                    type="checkbox"
-                    checked={securityData.twoFactor}
-                    onChange={(e) =>
-                      setSecurityData({
-                        ...securityData,
-                        twoFactor: e.target.checked,
-                      })
+                {/* Card 3: Data & Privacy */}
+                <div className="rounded-2xl border border-slate-200/90 bg-white p-4 sm:p-5">
+                  <h3 className="text-sm font-bold text-slate-900 leading-tight">
+                    Data & Privacy
+                  </h3>
+                  <p className="text-xs text-slate-400 mt-1 leading-normal">
+                    Control how your data is used on this platform
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      showToast("Your data privacy settings are up to date.")
                     }
-                    className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 accent-blue-600 cursor-pointer"
-                  />
-                </label>
+                    className="mt-3 text-xs sm:text-sm font-semibold text-[#2563eb] hover:text-blue-700 hover:underline inline-block cursor-pointer"
+                  >
+                    Manage privacy settings
+                  </button>
+                </div>
+
+                {/* Card 4: Delete Account */}
+                <div className="rounded-2xl border border-rose-200/70 bg-white p-4 sm:p-5">
+                  <h3 className="text-sm font-bold text-red-500 leading-tight">
+                    Delete Account
+                  </h3>
+                  <p className="text-xs text-slate-400 mt-1 leading-normal">
+                    This action is permanent and cannot be undone
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => setShowDeleteModal(true)}
+                    className="mt-3 text-xs sm:text-sm font-semibold text-red-500 hover:text-red-600 hover:underline inline-block cursor-pointer"
+                  >
+                    Request account deletion
+                  </button>
+                </div>
               </div>
-
-              <button
-                type="submit"
-                className="h-11 px-6 rounded-xl bg-[#2563eb] hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm shadow-sm transition-all cursor-pointer active:scale-95"
-              >
-                Update Security Settings
-              </button>
-            </form>
+            </div>
           )}
         </div>
       </div>
@@ -774,6 +793,142 @@ export default function SettingsView() {
                 className="flex-1 h-10 rounded-xl bg-red-600 hover:bg-red-700 text-xs font-semibold text-white shadow-sm transition-colors cursor-pointer active:scale-95"
               >
                 Log Out
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 5. Password Modal */}
+      {showPasswordModal && (
+        <div
+          onClick={() => setShowPasswordModal(false)}
+          className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-200"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-full max-w-md bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-slate-100 p-6 animate-in zoom-in-95 duration-200"
+          >
+            <h3 className="text-base font-bold text-slate-900 mb-1">
+              Update Password
+            </h3>
+            <p className="text-xs text-slate-500 mb-5">
+              Enter your current password and choose a strong new password.
+            </p>
+
+            <form onSubmit={handleSaveSecurity} className="space-y-4">
+              <div>
+                <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
+                  Current Password
+                </label>
+                <input
+                  type="password"
+                  placeholder="••••••••••••"
+                  value={securityData.currentPassword}
+                  onChange={(e) =>
+                    setSecurityData({
+                      ...securityData,
+                      currentPassword: e.target.value,
+                    })
+                  }
+                  required
+                  className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 bg-white focus:outline-none focus:border-blue-600"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
+                  New Password
+                </label>
+                <input
+                  type="password"
+                  placeholder="••••••••••••"
+                  value={securityData.newPassword}
+                  onChange={(e) =>
+                    setSecurityData({
+                      ...securityData,
+                      newPassword: e.target.value,
+                    })
+                  }
+                  required
+                  className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 bg-white focus:outline-none focus:border-blue-600"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
+                  Confirm New Password
+                </label>
+                <input
+                  type="password"
+                  placeholder="••••••••••••"
+                  value={securityData.confirmPassword}
+                  onChange={(e) =>
+                    setSecurityData({
+                      ...securityData,
+                      confirmPassword: e.target.value,
+                    })
+                  }
+                  required
+                  className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 bg-white focus:outline-none focus:border-blue-600"
+                />
+              </div>
+
+              <div className="flex items-center justify-end gap-2.5 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowPasswordModal(false)}
+                  className="h-10 px-4 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-colors cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="h-10 px-5 rounded-xl bg-[#2563eb] hover:bg-blue-700 text-xs font-semibold text-white shadow-sm transition-colors cursor-pointer active:scale-95"
+                >
+                  Update Password
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* 6. Delete Account Modal */}
+      {showDeleteModal && (
+        <div
+          onClick={() => setShowDeleteModal(false)}
+          className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-200"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-full max-w-sm bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-slate-100 p-6 text-center animate-in zoom-in-95 duration-200"
+          >
+            <div className="h-12 w-12 rounded-full bg-red-50 text-red-600 flex items-center justify-center mx-auto mb-3">
+              <AlertCircle className="h-6 w-6" />
+            </div>
+
+            <h3 className="text-base font-bold text-slate-900 mb-1">
+              Delete Account?
+            </h3>
+            <p className="text-xs text-slate-500 mb-5 leading-relaxed">
+              This action is permanent and cannot be undone. All your saved searches, transaction records, and inquiries will be permanently removed.
+            </p>
+
+            <div className="flex items-center justify-center gap-2.5">
+              <button
+                type="button"
+                onClick={() => setShowDeleteModal(false)}
+                className="flex-1 h-10 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-colors cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleDeleteAccount}
+                className="flex-1 h-10 rounded-xl bg-red-600 hover:bg-red-700 text-xs font-semibold text-white shadow-sm transition-colors cursor-pointer active:scale-95"
+              >
+                Delete Account
               </button>
             </div>
           </div>
