@@ -4,7 +4,17 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { Mail, Lock, Eye, EyeOff, CheckCircle2 } from "lucide-react";
+import {
+  Mail,
+  Lock,
+  Eye,
+  EyeOff,
+  CheckCircle2,
+  User,
+  Building2,
+  ShieldCheck,
+  ArrowRight,
+} from "lucide-react";
 import AuthHero from "./AuthHero";
 
 export interface SignInFormValues {
@@ -226,6 +236,68 @@ export default function SignIn() {
                 Create Account
               </Link>
             </p>
+
+            {/* 3 Portal Navigation Buttons (Customer, Agent, Super Admin) */}
+            <div className="pt-4 mt-2 border-t border-slate-100">
+              <div className="flex items-center justify-between mb-2.5">
+                <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                  Direct Portal Access
+                </span>
+                <span className="text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
+                  1-Click Demo
+                </span>
+              </div>
+
+              <div className="grid grid-cols-3 gap-2">
+                {/* 1. Customer Dashboard */}
+                <Link
+                  href="/dashboard/customer"
+                  className="group flex flex-col items-center justify-center p-2.5 rounded-xl border border-slate-200/90 hover:border-blue-500 hover:bg-blue-50/50 transition-all text-center shadow-2xs hover:shadow-xs active:scale-95"
+                >
+                  <div className="h-8 w-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center mb-1.5 group-hover:scale-105 transition-transform">
+                    <User className="h-4 w-4" />
+                  </div>
+                  <span className="text-xs font-bold text-slate-800 group-hover:text-blue-600 leading-tight">
+                    Customer
+                  </span>
+                  <span className="text-[10px] text-slate-400 mt-0.5">
+                    Dashboard
+                  </span>
+                </Link>
+
+                {/* 2. Agent Dashboard */}
+                <Link
+                  href="/dashboard/agent"
+                  className="group flex flex-col items-center justify-center p-2.5 rounded-xl border border-blue-200/90 bg-blue-50/20 hover:border-blue-600 hover:bg-blue-50/60 transition-all text-center shadow-2xs hover:shadow-xs active:scale-95"
+                >
+                  <div className="h-8 w-8 rounded-lg bg-blue-600 text-white flex items-center justify-center mb-1.5 group-hover:scale-105 transition-transform shadow-xs">
+                    <Building2 className="h-4 w-4" />
+                  </div>
+                  <span className="text-xs font-bold text-slate-900 group-hover:text-blue-600 leading-tight">
+                    Agent
+                  </span>
+                  <span className="text-[10px] text-blue-600 font-medium mt-0.5">
+                    Dashboard
+                  </span>
+                </Link>
+
+                {/* 3. Super Admin Dashboard */}
+                <Link
+                  href="/dashboard/super-admin"
+                  className="group flex flex-col items-center justify-center p-2.5 rounded-xl border border-slate-200/90 hover:border-amber-500 hover:bg-amber-50/50 transition-all text-center shadow-2xs hover:shadow-xs active:scale-95"
+                >
+                  <div className="h-8 w-8 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center mb-1.5 group-hover:scale-105 transition-transform">
+                    <ShieldCheck className="h-4 w-4" />
+                  </div>
+                  <span className="text-xs font-bold text-slate-800 group-hover:text-amber-700 leading-tight">
+                    Super Admin
+                  </span>
+                  <span className="text-[10px] text-slate-400 mt-0.5">
+                    Dashboard
+                  </span>
+                </Link>
+              </div>
+            </div>
           </form>
         </div>
       </section>
