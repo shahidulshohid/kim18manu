@@ -1,185 +1,350 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   Search,
-  Send,
-  Phone,
-  Video,
   Paperclip,
-  CheckCheck,
+  Mic,
+  Send,
   ArrowLeft,
+  Sparkles,
+  CheckCheck,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-interface Conversation {
+export interface ConversationItem {
   id: string;
   name: string;
+  subtitle: string;
   role: string;
-  property: string;
-  lastMessage: string;
+  avatarText?: string;
+  isAi?: boolean;
   time: string;
-  unread: number;
-  avatar: string;
-  online: boolean;
+  lastMessage: string;
+  unreadCount?: number;
 }
 
-export default function MessagesView() {
-  const [conversations] = useState<Conversation[]>([
+export interface ChatMessage {
+  id: string;
+  sender: "them" | "me";
+  text: string;
+  time: string;
+}
+
+const INITIAL_CONVERSATIONS: ConversationItem[] = [
+  {
+    id: "conv-1",
+    name: "AI Assistant",
+    subtitle: "Ai",
+    role: "AI Real Estate Assistant",
+    isAi: true,
+    time: "10:42",
+    lastMessage: "I found 4 villas matching your...",
+    unreadCount: 2,
+  },
+  {
+    id: "conv-2",
+    name: "Budi Santoso",
+    subtitle: "Property Specialist",
+    role: "Senior Broker",
+    avatarText: "BS",
+    time: "09:15",
+    lastMessage: "The visit is confirmed for Oct 5 at...",
+  },
+  {
+    id: "conv-3",
+    name: "Sari Dewi",
+    subtitle: "Luxury Condo Advisor",
+    role: "SCBD Advisor",
+    avatarText: "SD",
+    time: "Yesterday",
+    lastMessage: "Please let me know if you nee...",
+    unreadCount: 1,
+  },
+  {
+    id: "conv-4",
+    name: "CleanPro Services",
+    subtitle: "Service Partner",
+    role: "Home Maintenance",
+    avatarText: "CP",
+    time: "Mon",
+    lastMessage: "Your cleaning service is schedule...",
+  },
+];
+
+const INITIAL_MESSAGES: Record<string, ChatMessage[]> = {
+  "conv-1": [
+    {
+      id: "msg-1",
+      sender: "them",
+      text: "Good morning! I wanted to confirm your site visit for the Jimbaran villa on October 5th at 10:00 AM. Does that still work for you?",
+      time: "09:10",
+    },
+    {
+      id: "msg-2",
+      sender: "me",
+      text: "Yes, that works perfectly. Should I bring any documents?",
+      time: "09:12",
+    },
+    {
+      id: "msg-3",
+      sender: "them",
+      text: "Just a valid ID. I'll send you the exact address and parking details shortly. Looking forward to seeing you!",
+      time: "09:15",
+    },
+  ],
+  "conv-2": [
+    {
+      id: "b-1",
+      sender: "them",
+      text: "Hello Anisa, Budi Santoso here. The visit is confirmed for Oct 5 at 10:00 WIB for Modern Villa with Ocean View.",
+      time: "09:15",
+    },
+    {
+      id: "b-2",
+      sender: "me",
+      text: "Thank you Budi! Is there private parking available at the property?",
+      time: "09:18",
+    },
+    {
+      id: "b-3",
+      sender: "them",
+      text: "Yes, there is an enclosed 2-car garage plus ample guest driveway parking.",
+      time: "09:20",
+    },
+  ],
+  "conv-3": [
+    {
+      id: "s-1",
+      sender: "them",
+      text: "Hi Anisa, following up on your SCBD apartment tour.",
+      time: "Yesterday",
+    },
+    {
+      id: "s-2",
+      sender: "them",
+      text: "Please let me know if you need floorplans or building amenity brochures.",
+      time: "Yesterday",
+    },
+  ],
+  "conv-4": [
     {
       id: "c-1",
-      name: "Budi Santoso",
-      role: "Property Specialist",
-      property: "Modern Villa with Ocean View, Jimbaran",
-      lastMessage: "I prepared the cadastral certificate and video walkthrough for tomorrow's tour.",
-      time: "10:15 AM",
-      unread: 1,
-      avatar: "B",
-      online: true,
+      sender: "them",
+      text: "Good day! Your cleaning service is scheduled for next Monday at 09:00 WIB.",
+      time: "Mon",
     },
     {
       id: "c-2",
-      name: "Siti Rahayu",
-      role: "Luxury Condo Advisor",
-      property: "Cozy Apartment in Business District, SCBD",
-      lastMessage: "The owner accepted your inquiry and agreed to negotiate on the furnishing package.",
-      time: "Yesterday",
-      unread: 2,
-      avatar: "S",
-      online: false,
+      sender: "me",
+      text: "Confirmed, thank you CleanPro team!",
+      time: "Mon",
     },
-    {
-      id: "c-3",
-      name: "Dimas Pratama",
-      role: "Residential Consultant",
-      property: "Spacious Family House with Garden, Bandung",
-      lastMessage: "The owner confirmed Monday at 11 AM works perfectly for your site visit.",
-      time: "Oct 11",
-      unread: 1,
-      avatar: "D",
-      online: true,
-    },
-    {
-      id: "c-4",
-      name: "Hendra Wijaya, S.H.",
-      role: "PPAT / Notary Partner",
-      property: "Legal Title Verification",
-      lastMessage: "Draft Akta Jual Beli (AJB) has been uploaded to your Transactions portal.",
-      time: "Oct 10",
-      unread: 1,
-      avatar: "H",
-      online: false,
-    },
-  ]);
+  ],
+};
 
-  const [selectedId, setSelectedId] = useState("c-1");
-  const [messages, setMessages] = useState<
-    Record<string, { id: string; sender: "them" | "me"; text: string; time: string }[]>
-  >({
-    "c-1": [
-      {
-        id: "m1",
-        sender: "them",
-        text: "Hi Anisa! Good morning. Thank you for booking the visit for the Modern Villa in Jimbaran.",
-        time: "10:00 AM",
-      },
-      {
-        id: "m2",
-        sender: "me",
-        text: "Hi Budi! Can you confirm if the road access from the main highway is wide enough for large SUVs?",
-        time: "10:08 AM",
-      },
-      {
-        id: "m3",
-        sender: "them",
-        text: "Yes, absolutely! The access road is a paved 6-meter two-lane road. I prepared the cadastral certificate and video walkthrough for tomorrow's tour.",
-        time: "10:15 AM",
-      },
-    ],
-  });
+// Cute AI Avatar matching the screenshot dark-blue circle with white sparkles/smile icon
+function AiAvatar({ className }: { className?: string }) {
+  return (
+    <div
+      className={cn(
+        "h-10 w-10 sm:h-11 sm:w-11 rounded-full bg-[#1e3a8a] text-white flex items-center justify-center shrink-0 shadow-xs",
+        className
+      )}
+    >
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="h-5 w-5 text-white"
+      >
+        <path d="M8 9h.01" />
+        <path d="M16 9h.01" />
+        <path d="M9 14.5c1.8 1.8 4.2 1.8 6 0" />
+        <path d="M12 3v1.5" />
+      </svg>
+    </div>
+  );
+}
 
-  const [inputMsg, setInputMsg] = useState("");
-  const activeConversation = conversations.find((c) => c.id === selectedId) || conversations[0];
-  const msgIdCounter = useRef(100);
+export default function MessagesView() {
+  const [conversations, setConversations] = useState<ConversationItem[]>(INITIAL_CONVERSATIONS);
+  const [activeId, setActiveId] = useState<string>("conv-1");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [messages, setMessages] = useState<Record<string, ChatMessage[]>>(INITIAL_MESSAGES);
+  const [inputText, setInputText] = useState("");
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const handleSend = () => {
-    if (!inputMsg.trim()) return;
-    msgIdCounter.current += 1;
-    const newMsg = {
-      id: `msg-${msgIdCounter.current}`,
-      sender: "me" as const,
-      text: inputMsg,
-      time: "Just now",
+  const activeConversation =
+    conversations.find((c) => c.id === activeId) || conversations[0];
+
+  const currentChatMessages = messages[activeId] || [];
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [activeId, currentChatMessages.length]);
+
+  const handleSelectConversation = (id: string) => {
+    setActiveId(id);
+    // Mark as read
+    setConversations((prev) =>
+      prev.map((c) => (c.id === id ? { ...c, unreadCount: undefined } : c))
+    );
+  };
+
+  const handleSendMessage = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!inputText.trim()) return;
+
+    const now = new Date();
+    const timeStr = `${String(now.getHours()).padStart(2, "0")}:${String(
+      now.getMinutes()
+    ).padStart(2, "0")}`;
+
+    const newMsg: ChatMessage = {
+      id: `msg-${Date.now()}`,
+      sender: "me",
+      text: inputText.trim(),
+      time: timeStr,
     };
 
     setMessages((prev) => ({
       ...prev,
-      [selectedId]: [...(prev[selectedId] || []), newMsg],
+      [activeId]: [...(prev[activeId] || []), newMsg],
     }));
-    setInputMsg("");
+
+    // Update snippet in conversation list
+    setConversations((prev) =>
+      prev.map((c) =>
+        c.id === activeId
+          ? {
+              ...c,
+              lastMessage: inputText.trim(),
+              time: timeStr,
+            }
+          : c
+      )
+    );
+
+    const sentText = inputText.trim();
+    setInputText("");
+
+    // If chatting with AI, provide a smart quick response
+    if (activeConversation.isAi) {
+      setTimeout(() => {
+        const replyMsg: ChatMessage = {
+          id: `reply-${Date.now()}`,
+          sender: "them",
+          text: `Got it! I've noted that down: "${sentText}". I'm here to help coordinate your visits and property searches.`,
+          time: timeStr,
+        };
+        setMessages((prev) => ({
+          ...prev,
+          [activeId]: [...(prev[activeId] || []), replyMsg],
+        }));
+      }, 1000);
+    }
   };
 
+  const filteredConversations = conversations.filter(
+    (c) =>
+      c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      c.lastMessage.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
-    <div className="w-full max-w-full overflow-x-hidden min-w-0 py-4 sm:py-6 px-3 sm:px-6 lg:px-[32px] h-[calc(100vh-80px)] flex flex-col">
-      <div className="rounded-2xl sm:rounded-3xl border border-slate-100 bg-white shadow-sm flex-1 flex overflow-hidden min-w-0">
-        {/* Left: Conversations List */}
+    <div className="w-full max-w-full overflow-x-hidden min-w-0 py-6 sm:py-8 px-4 sm:px-6 lg:px-[32px]">
+      {/* 1. Header */}
+      <div className="mb-6 sm:mb-8">
+        <h1 className="text-2xl sm:text-[28px] font-bold text-slate-900 tracking-tight">
+          Messages
+        </h1>
+        <p className="text-sm text-slate-500 mt-1">
+          Conversations with your AI assistant, agents, and service partners.
+        </p>
+      </div>
+
+      {/* 2. Main Two-Panel Layout */}
+      <div className="flex flex-col lg:flex-row gap-5 sm:gap-6 items-start">
+        {/* Left Panel: Conversations List */}
         <div
           className={cn(
-            "w-full md:w-80 lg:w-96 border-r border-slate-100 flex flex-col bg-white min-w-0",
-            selectedId ? "hidden md:flex" : "flex"
+            "w-full lg:w-[350px] shrink-0 bg-white rounded-2xl sm:rounded-3xl border border-slate-100 shadow-[0_2px_12px_rgba(0,0,0,0.03)] p-4 sm:p-5 flex flex-col",
+            activeId ? "block" : "block"
           )}
         >
-          {/* Header */}
-          <div className="p-4 border-b border-slate-100">
-            <h2 className="text-lg font-bold text-slate-900 mb-3">Messages</h2>
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-              <input
-                type="text"
-                placeholder="Search conversations..."
-                className="w-full h-9 pl-9 pr-3 rounded-xl border border-slate-200 bg-slate-50 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-blue-500"
-              />
-            </div>
+          {/* Search Box */}
+          <div className="relative mb-3">
+            <Search className="h-4 w-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search messages..."
+              className="w-full h-10 pl-9 pr-3.5 rounded-xl border-none bg-[#f8fafc] text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all"
+            />
           </div>
 
-          {/* List */}
-          <div className="flex-1 overflow-y-auto divide-y divide-slate-50">
-            {conversations.map((conv) => {
-              const isSelected = conv.id === selectedId;
+          {/* Conversations Items */}
+          <div className="space-y-1">
+            {filteredConversations.map((conv) => {
+              const isSelected = conv.id === activeId;
+
               return (
                 <div
                   key={conv.id}
-                  onClick={() => setSelectedId(conv.id)}
+                  onClick={() => handleSelectConversation(conv.id)}
                   className={cn(
-                    "p-3.5 flex items-start gap-3 cursor-pointer transition-colors",
-                    isSelected ? "bg-blue-50/70" : "hover:bg-slate-50"
+                    "relative flex items-center gap-3 p-3 rounded-2xl cursor-pointer transition-all select-none",
+                    isSelected
+                      ? "bg-transparent"
+                      : "hover:bg-slate-50/80"
                   )}
                 >
-                  <div className="relative shrink-0">
-                    <div className="h-10 w-10 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-sm">
-                      {conv.avatar}
-                    </div>
-                    {conv.online && (
-                      <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-emerald-500 ring-2 ring-white" />
-                    )}
-                  </div>
+                  {/* Blue Left Indicator for Active Conversation */}
+                  {isSelected && (
+                    <span className="absolute left-0 top-2 bottom-2 w-1 bg-[#2563eb] rounded-r-full" />
+                  )}
 
+                  {/* Avatar */}
+                  {conv.isAi ? (
+                    <AiAvatar />
+                  ) : (
+                    <div className="h-10 w-10 sm:h-11 sm:w-11 rounded-full bg-slate-300/80 text-slate-600 font-bold flex items-center justify-center text-xs sm:text-sm shrink-0">
+                      {conv.avatarText}
+                    </div>
+                  )}
+
+                  {/* Content */}
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between">
-                      <span className="font-bold text-xs sm:text-sm text-slate-900 truncate">
+                    <div className="flex items-center justify-between gap-1">
+                      <span className="text-xs sm:text-sm font-bold text-slate-900 truncate">
                         {conv.name}
                       </span>
-                      <span className="text-[10px] text-slate-400 shrink-0">{conv.time}</span>
+                      <span className="text-[11px] text-slate-400 shrink-0">
+                        {conv.time}
+                      </span>
                     </div>
 
-                    <p className="text-[11px] text-blue-600 font-medium truncate mt-0.5">
-                      {conv.property}
-                    </p>
+                    <div className="flex items-center justify-between gap-2 mt-0.5">
+                      <p className="text-xs text-slate-400 truncate">
+                        {conv.lastMessage}
+                      </p>
 
-                    <p className="text-xs text-slate-500 truncate mt-0.5 font-normal">
-                      {conv.lastMessage}
-                    </p>
+                      {/* Unread badge */}
+                      {conv.unreadCount !== undefined && conv.unreadCount > 0 && (
+                        <span className="flex h-4.5 min-w-4.5 items-center justify-center rounded-full bg-[#2563eb] text-white text-[10.5px] font-bold px-1 shrink-0">
+                          {conv.unreadCount}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
               );
@@ -187,107 +352,106 @@ export default function MessagesView() {
           </div>
         </div>
 
-        {/* Right: Active Chat Window */}
-        <div
-          className={cn(
-            "flex-1 flex flex-col bg-slate-50/50",
-            !selectedId ? "hidden md:flex" : "flex"
-          )}
-        >
-          {/* Active Chat Header */}
-          <div className="h-16 px-4 bg-white border-b border-slate-100 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => setSelectedId("")}
-                className="md:hidden p-1.5 rounded-lg text-slate-500 hover:bg-slate-100"
-              >
-                <ArrowLeft className="h-5 w-5" />
-              </button>
+        {/* Right Panel: Active Chat Window */}
+        <div className="flex-1 w-full bg-white rounded-2xl sm:rounded-3xl border border-slate-100 shadow-[0_2px_12px_rgba(0,0,0,0.03)] flex flex-col h-[640px] sm:h-[680px] overflow-hidden min-w-0">
+          {/* Chat Header */}
+          <div className="px-5 sm:px-6 py-4 border-b border-slate-100 flex items-center justify-between gap-3 shrink-0">
+            <div className="flex items-center gap-3 min-w-0">
+              {activeConversation.isAi ? (
+                <AiAvatar />
+              ) : (
+                <div className="h-10 w-10 rounded-full bg-slate-300/80 text-slate-600 font-bold flex items-center justify-center text-sm shrink-0">
+                  {activeConversation.avatarText}
+                </div>
+              )}
 
-              <div className="h-10 w-10 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-sm shrink-0">
-                {activeConversation.avatar}
-              </div>
-
-              <div className="min-w-0 flex-1">
-                <h3 className="font-bold text-sm text-slate-900 leading-snug truncate">
+              <div className="min-w-0">
+                <h3 className="text-sm sm:text-base font-bold text-slate-900 leading-tight truncate">
                   {activeConversation.name}
                 </h3>
-                <p className="text-[11px] text-slate-400 font-medium truncate">
-                  {activeConversation.property}
+                <p className="text-xs text-slate-400 mt-0.5 font-normal">
+                  {activeConversation.subtitle}
                 </p>
               </div>
             </div>
-
-            <div className="flex items-center gap-1 sm:gap-2 shrink-0">
-              <button className="p-2 rounded-xl text-slate-500 hover:text-blue-600 hover:bg-slate-50 cursor-pointer">
-                <Phone className="h-4 w-4" />
-              </button>
-              <button className="p-2 rounded-xl text-slate-500 hover:text-blue-600 hover:bg-slate-50 cursor-pointer">
-                <Video className="h-4 w-4" />
-              </button>
-            </div>
           </div>
 
-          {/* Messages Scroll Area */}
-          <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-3">
-            {(messages[selectedId] || []).map((m) => (
-              <div
-                key={m.id}
-                className={cn("flex flex-col", m.sender === "me" ? "items-end" : "items-start")}
-              >
+          {/* Chat Messages Body */}
+          <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-4">
+            {currentChatMessages.map((msg) => {
+              const isMe = msg.sender === "me";
+
+              return (
                 <div
-                  className={cn(
-                    "max-w-[85%] sm:max-w-[80%] rounded-2xl px-4 py-2.5 text-xs sm:text-sm leading-relaxed shadow-2xs break-words",
-                    m.sender === "me"
-                      ? "bg-blue-600 text-white rounded-br-xs"
-                      : "bg-white border border-slate-100 text-slate-800 rounded-bl-xs"
-                  )}
+                  key={msg.id}
+                  className={cn("flex flex-col", isMe ? "items-end" : "items-start")}
                 >
-                  <p>{m.text}</p>
                   <div
                     className={cn(
-                      "flex items-center justify-end gap-1 text-[10px] mt-1",
-                      m.sender === "me" ? "text-blue-100" : "text-slate-400"
+                      "rounded-2xl p-4 sm:p-5 max-w-[85%] sm:max-w-[78%] text-xs sm:text-sm leading-relaxed break-words",
+                      isMe
+                        ? "bg-[#2563eb] text-white"
+                        : "bg-[#f8fafc] text-slate-800"
                     )}
                   >
-                    <span>{m.time}</span>
-                    {m.sender === "me" && <CheckCheck className="h-3 w-3" />}
+                    <p>{msg.text}</p>
+                    <div
+                      className={cn(
+                        "text-[11px] mt-1.5 flex items-center gap-1",
+                        isMe ? "text-blue-100 justify-end" : "text-slate-400 justify-start"
+                      )}
+                    >
+                      <span>{msg.time}</span>
+                      {isMe && <CheckCheck className="h-3.5 w-3.5" />}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
+            <div ref={messagesEndRef} />
           </div>
 
-          {/* Chat Input */}
-          <div className="p-3 bg-white border-t border-slate-100">
+          {/* Chat Input Bar matching screenshot */}
+          <div className="px-4 sm:px-5 py-3 border-t border-slate-100 bg-white">
             <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleSend();
-              }}
-              className="flex items-center gap-2"
+              onSubmit={handleSendMessage}
+              className="flex items-center gap-2 sm:gap-3"
             >
+              {/* Attachment Icon */}
               <button
                 type="button"
-                className="p-2 text-slate-400 hover:text-slate-600 rounded-xl hover:bg-slate-100 transition-colors shrink-0 cursor-pointer"
+                className="p-1.5 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer shrink-0"
+                aria-label="Attach file"
               >
-                <Paperclip className="h-4 w-4" />
+                <Paperclip className="h-4.5 w-4.5" />
               </button>
 
+              {/* Text Input */}
               <input
                 type="text"
-                value={inputMsg}
-                onChange={(e) => setInputMsg(e.target.value)}
-                placeholder="Type your message to the agent..."
-                className="flex-1 min-w-0 h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-blue-500"
+                value={inputText}
+                onChange={(e) => setInputText(e.target.value)}
+                placeholder="Type a message..."
+                className="flex-1 min-w-0 text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 bg-transparent focus:outline-none"
               />
 
-              <Button
+              {/* Microphone Icon */}
+              <button
+                type="button"
+                className="p-1.5 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer shrink-0"
+                aria-label="Voice input"
+              >
+                <Mic className="h-4.5 w-4.5" />
+              </button>
+
+              {/* Send Button */}
+              <button
                 type="submit"
-                className="h-10 px-3.5 sm:px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white shrink-0 cursor-pointer"
+                className="h-9 w-9 rounded-xl bg-[#2563eb] hover:bg-blue-700 text-white flex items-center justify-center shrink-0 shadow-xs transition-all active:scale-95 cursor-pointer"
+                aria-label="Send message"
               >
                 <Send className="h-4 w-4" />
-              </Button>
+              </button>
             </form>
           </div>
         </div>
