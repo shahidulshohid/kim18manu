@@ -23,6 +23,7 @@ import {
   FileText,
   DollarSign,
   ChevronDown,
+  Check,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -121,12 +122,58 @@ const initialLeads: LeadItem[] = [
   },
 ];
 
+export interface FollowUpItem {
+  id: string;
+  lead: string;
+  task: string;
+  dueTime: string;
+  agent: string;
+  isDone: boolean;
+}
+
+const initialFollowups: FollowUpItem[] = [
+  {
+    id: "FU-01",
+    lead: "Ahmad Fauzi",
+    task: "Call back about Jimbaran villa pricing",
+    dueTime: "2026-10-03 10:00",
+    agent: "Budi Santoso",
+    isDone: false,
+  },
+  {
+    id: "FU-02",
+    lead: "Lina Kusuma",
+    task: "Send additional photos of SCBD apartment",
+    dueTime: "2026-10-04 14:00",
+    agent: "Sari Dewi",
+    isDone: false,
+  },
+  {
+    id: "FU-03",
+    lead: "David Tan",
+    task: "Confirm site visit rescheduling",
+    dueTime: "2026-10-02 09:00",
+    agent: "Budi Santoso",
+    isDone: true,
+  },
+];
+
 export default function LeadManagementView() {
   const [leads, setListings] = useState<LeadItem[]>(initialLeads);
   const [activeTab, setActiveTab] = useState<"all" | "pipeline" | "calls" | "followups">("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [sourceFilter, setSourceFilter] = useState("All");
+
+  // Follow-ups state strictly matching screenshot
+  const [followups, setFollowups] = useState<FollowUpItem[]>(initialFollowups);
+  const [showAddFollowupModal, setShowAddFollowupModal] = useState(false);
+  const [newFollowup, setNewFollowup] = useState({
+    lead: "",
+    task: "",
+    dueTime: "2026-10-05 10:00",
+    agent: "Budi Santoso",
+  });
 
   // Modals & toast
   const [viewingLead, setViewingLead] = useState<LeadItem | null>(null);
@@ -139,6 +186,40 @@ export default function LeadManagementView() {
     setTimeout(() => {
       setToastMessage(null);
     }, 3000);
+  };
+
+  const handleToggleFollowup = (id: string) => {
+    setFollowups((prev) =>
+      prev.map((item) =>
+        item.id === id ? { ...item, isDone: !item.isDone } : item
+      )
+    );
+    const target = followups.find((f) => f.id === id);
+    if (target && !target.isDone) {
+      showToast(`Follow-up for ${target.lead} marked as done!`);
+    }
+  };
+
+  const handleAddFollowup = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newFollowup.lead || !newFollowup.task) return;
+    const newItem: FollowUpItem = {
+      id: `FU-0${followups.length + 1}`,
+      lead: newFollowup.lead,
+      task: newFollowup.task,
+      dueTime: newFollowup.dueTime || "2026-10-05 10:00",
+      agent: newFollowup.agent || "Budi Santoso",
+      isDone: false,
+    };
+    setFollowups([...followups, newItem]);
+    setShowAddFollowupModal(false);
+    setNewFollowup({
+      lead: "",
+      task: "",
+      dueTime: "2026-10-05 10:00",
+      agent: "Budi Santoso",
+    });
+    showToast(`New follow-up for ${newItem.lead} added successfully!`);
   };
 
   // Filtered Leads
@@ -681,49 +762,181 @@ export default function LeadManagementView() {
         </div>
       )}
 
-      {/* TAB 4: FOLLOW-UPS */}
+      {/* TAB 4: FOLLOW-UPS strictly matching screenshot */}
       {activeTab === "followups" && (
-        <div className="bg-white rounded-2xl border border-slate-100 p-5 space-y-4 animate-in fade-in duration-150">
-          <h3 className="text-sm font-bold text-slate-800">Scheduled Follow-up Reminders</h3>
-          <div className="space-y-3">
-            {[
-              {
-                title: "Site Visit — Modern Villa Jimbaran",
-                lead: "David Tan",
-                due: "Saturday, 10:30 AM",
-                agent: "Budi Santoso",
-                priority: "High",
-              },
-              {
-                title: "Send contract documents for Dago House",
-                lead: "Rina Wulandari",
-                due: "Tomorrow, 14:00 PM",
-                agent: "Rizki Pratama",
-                priority: "Urgent",
-              },
-            ].map((item, idx) => (
-              <div
-                key={idx}
-                className="p-3.5 rounded-xl border border-slate-200/80 bg-slate-50/50 flex items-center justify-between text-xs"
-              >
+        <div className="space-y-3.5 pt-1 animate-in fade-in duration-150">
+          {followups.map((item) => (
+            <div
+              key={item.id}
+              className="bg-white rounded-2xl border border-slate-100 shadow-2xs p-4 sm:p-5 flex items-center justify-between hover:border-slate-200 transition-colors"
+            >
+              {/* Left side: Checkbox + Content */}
+              <div className="flex items-start sm:items-center gap-3.5">
+                {/* Circle status toggle */}
+                <button
+                  type="button"
+                  onClick={() => handleToggleFollowup(item.id)}
+                  className="mt-0.5 sm:mt-0 transition-transform active:scale-95 cursor-pointer shrink-0"
+                  aria-label={item.isDone ? "Mark as pending" : "Mark as done"}
+                >
+                  {item.isDone ? (
+                    <div className="h-5 w-5 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-xs">
+                      <Check className="h-3 w-3 stroke-[3]" />
+                    </div>
+                  ) : (
+                    <div className="h-5 w-5 rounded-full border-2 border-slate-300 hover:border-slate-400 bg-white" />
+                  )}
+                </button>
+
+                {/* Details */}
                 <div>
-                  <h4 className="font-bold text-slate-800">{item.title}</h4>
-                  <p className="text-slate-500 mt-0.5">
-                    Lead: <span className="font-medium text-slate-700">{item.lead}</span> · Assigned Agent: {item.agent}
-                  </p>
-                </div>
-                <div className="flex items-center gap-3">
-                  <span className="text-blue-600 font-semibold">{item.due}</span>
-                  <button
-                    type="button"
-                    onClick={() => showToast("Task marked completed!")}
-                    className="px-3 py-1 bg-white border border-slate-200 rounded-lg text-slate-700 hover:bg-slate-50 font-medium cursor-pointer"
+                  <h4
+                    className={cn(
+                      "font-bold text-xs sm:text-[13px] leading-tight",
+                      item.isDone ? "text-slate-700" : "text-slate-900"
+                    )}
                   >
-                    Done
-                  </button>
+                    {item.lead}
+                  </h4>
+                  <p className="text-xs text-slate-500 mt-1 leading-normal font-normal">
+                    {item.task}
+                  </p>
+                  <div className="mt-1 flex items-center gap-2 text-[11px] text-slate-400 font-normal">
+                    <span className="flex items-center gap-1">
+                      <Clock className="h-3 w-3 text-slate-400" />
+                      <span>{item.dueTime}</span>
+                    </span>
+                    <span>{item.agent}</span>
+                  </div>
                 </div>
               </div>
-            ))}
+
+              {/* Right side: Mark Done button (only if not completed) */}
+              {!item.isDone && (
+                <button
+                  type="button"
+                  onClick={() => handleToggleFollowup(item.id)}
+                  className="px-3.5 py-1.5 rounded-xl border border-emerald-300 text-emerald-600 hover:bg-emerald-50 text-xs font-semibold transition-colors cursor-pointer active:scale-95 shrink-0"
+                >
+                  Mark Done
+                </button>
+              )}
+            </div>
+          ))}
+
+          {/* + Add Follow-up button matching screenshot */}
+          <button
+            type="button"
+            onClick={() => setShowAddFollowupModal(true)}
+            className="w-full py-4 rounded-2xl border border-dashed border-slate-200 hover:border-slate-300 text-slate-400 hover:text-slate-600 text-xs sm:text-[13px] font-medium flex items-center justify-center gap-1.5 transition-all cursor-pointer bg-white/40 hover:bg-white"
+          >
+            <Plus className="h-4 w-4" />
+            <span>Add Follow-up</span>
+          </button>
+        </div>
+      )}
+
+      {/* MODAL: ADD FOLLOW-UP */}
+      {showAddFollowupModal && (
+        <div
+          onClick={() => setShowAddFollowupModal(false)}
+          className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-150"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-md bg-white rounded-3xl shadow-2xl border border-slate-100 p-6 sm:p-7 animate-in zoom-in-95 duration-150"
+          >
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+              <h3 className="text-base font-bold text-slate-900">Add New Follow-up</h3>
+              <button
+                type="button"
+                onClick={() => setShowAddFollowupModal(false)}
+                className="p-1 text-slate-400 hover:text-slate-700 cursor-pointer"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            <form onSubmit={handleAddFollowup} className="py-4 space-y-3.5 text-xs">
+              <div>
+                <label className="block text-slate-500 font-bold uppercase text-[10px] mb-1">
+                  Lead Name <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Ahmad Fauzi"
+                  value={newFollowup.lead}
+                  onChange={(e) =>
+                    setNewFollowup({ ...newFollowup, lead: e.target.value })
+                  }
+                  className="w-full h-10 px-3 rounded-xl border border-slate-200 text-slate-800 focus:outline-none focus:border-blue-600"
+                />
+              </div>
+
+              <div>
+                <label className="block text-slate-500 font-bold uppercase text-[10px] mb-1">
+                  Task / Follow-up Note <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Call back about property pricing"
+                  value={newFollowup.task}
+                  onChange={(e) =>
+                    setNewFollowup({ ...newFollowup, task: e.target.value })
+                  }
+                  className="w-full h-10 px-3 rounded-xl border border-slate-200 text-slate-800 focus:outline-none focus:border-blue-600"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-slate-500 font-bold uppercase text-[10px] mb-1">
+                    Due Date & Time
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="2026-10-05 10:00"
+                    value={newFollowup.dueTime}
+                    onChange={(e) =>
+                      setNewFollowup({ ...newFollowup, dueTime: e.target.value })
+                    }
+                    className="w-full h-10 px-3 rounded-xl border border-slate-200 text-slate-800 focus:outline-none focus:border-blue-600"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-slate-500 font-bold uppercase text-[10px] mb-1">
+                    Assigned Agent
+                  </label>
+                  <input
+                    type="text"
+                    value={newFollowup.agent}
+                    onChange={(e) =>
+                      setNewFollowup({ ...newFollowup, agent: e.target.value })
+                    }
+                    className="w-full h-10 px-3 rounded-xl border border-slate-200 text-slate-800 focus:outline-none focus:border-blue-600"
+                  />
+                </div>
+              </div>
+
+              <div className="pt-4 border-t border-slate-100 flex items-center justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowAddFollowupModal(false)}
+                  className="px-4 py-2 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 text-xs font-semibold cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs cursor-pointer"
+                >
+                  Save Follow-up
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
