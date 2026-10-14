@@ -599,17 +599,6 @@ export default function SuperAdminTransactionsView({
         </div>
       </div>
 
-      {/* FLOATING ACTION: Back to Portal Select */}
-      <div className="flex justify-center pt-2">
-        <Link
-          href="/login"
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/95 backdrop-blur border border-slate-200 text-xs font-semibold text-slate-700 hover:text-slate-900 hover:bg-slate-50 shadow-md hover:shadow-lg transition-all active:scale-95"
-        >
-          <ArrowLeft className="w-3.5 h-3.5 text-slate-500" />
-          <span>Back to Portal Select</span>
-        </Link>
-      </div>
-
       {/* RECEIPT / INVOICE PREVIEW MODAL */}
       {selectedReceipt && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-200">

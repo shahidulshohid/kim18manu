@@ -663,17 +663,6 @@ export default function SuperAdminLeadsView() {
         </div>
       )}
 
-      {/* 5. Floating 'Back to Portal Select' Button matching screenshot */}
-      <div className="flex justify-center pt-2 pb-6">
-        <Link
-          href="/login"
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-xs font-semibold text-slate-700 shadow-sm hover:shadow hover:text-blue-600 hover:border-blue-200 transition-all active:scale-95 cursor-pointer"
-        >
-          <ArrowLeft className="h-3.5 w-3.5" />
-          <span>Back to Portal Select</span>
-        </Link>
-      </div>
-
       {/* Modal 1: Lead Details & Stage Mover */}
       {selectedLead && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">

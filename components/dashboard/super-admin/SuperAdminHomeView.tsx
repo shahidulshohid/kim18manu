@@ -480,17 +480,6 @@ export default function SuperAdminHomeView() {
               ))}
             </div>
           </div>
-
-          {/* Floating 'Back to Portal Select' Button matching screenshot */}
-          <div className="flex justify-center mt-2">
-            <Link
-              href="/login"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-xs font-semibold text-slate-700 shadow-sm hover:shadow hover:text-blue-600 hover:border-blue-200 transition-all active:scale-95 cursor-pointer"
-            >
-              <ArrowLeft className="h-3.5 w-3.5" />
-              <span>Back to Portal Select</span>
-            </Link>
-          </div>
         </div>
 
         {/* Right: Hot Leads & Pending Approvals stacked (lg:col-span-4) */}
