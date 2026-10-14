@@ -164,6 +164,14 @@ export interface SuperAdminNotificationItem {
   };
 }
 
+export interface LeadSourceDistributionItem {
+  id: string;
+  label: string;
+  percentage: number;
+  color: string;
+  count?: number;
+}
+
 
 
 

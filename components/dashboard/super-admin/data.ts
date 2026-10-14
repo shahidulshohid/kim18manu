@@ -13,6 +13,7 @@ import {
   SuperAdminPartnerApplicant,
   SuperAdminTransaction,
   SuperAdminNotificationItem,
+  LeadSourceDistributionItem,
 } from "./types";
 
 export const superAdminMainNav: SuperAdminNavItem[] = [
@@ -787,6 +788,24 @@ export const superAdminNotificationsList: SuperAdminNotificationItem[] = [
     },
   },
 ];
+
+export const reportsRevenueTrendData: RevenueMonthPoint[] = [
+  { month: "May", revenue: 300, transactions: 15 },
+  { month: "Jun", revenue: 480, transactions: 24 },
+  { month: "Jul", revenue: 440, transactions: 21 },
+  { month: "Aug", revenue: 620, transactions: 31 },
+  { month: "Sep", revenue: 720, transactions: 38 },
+  { month: "Oct", revenue: 320, transactions: 16 },
+];
+
+export const reportsLeadSourceData: LeadSourceDistributionItem[] = [
+  { id: "voice-inbound", label: "Voice Inbound", percentage: 38, color: "#2563eb", count: 457 },
+  { id: "whatsapp", label: "WhatsApp", percentage: 28, color: "#1e40af", count: 337 },
+  { id: "web-chat", label: "Web Chat", percentage: 20, color: "#60a5fa", count: 241 },
+  { id: "direct", label: "Direct", percentage: 9, color: "#c59b27", count: 108 },
+  { id: "voice-out", label: "Voice Out", percentage: 5, color: "#cbd5e1", count: 61 },
+];
+
 
 
 

@@ -1,5 +1,5 @@
 import React from "react";
-import ReportsAnalyticsView from "@/components/dashboard/agent/views/ReportsAnalyticsView";
+import SuperAdminReportsView from "@/components/dashboard/super-admin/SuperAdminReportsView";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -8,5 +8,6 @@ export const metadata: Metadata = {
 };
 
 export default function SuperAdminReportsPage() {
-  return <ReportsAnalyticsView />;
+  return <SuperAdminReportsView />;
 }
+
