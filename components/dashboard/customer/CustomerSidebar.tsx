@@ -16,6 +16,7 @@ import {
   Bell,
   UserCog,
   Settings,
+  LogOut,
   X,
   Building,
 } from "lucide-react";
@@ -159,14 +160,24 @@ export default function CustomerSidebar({
             </div>
           </Link>
 
-          <Link
-            href="/dashboard/customer/settings"
-            onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 transition-colors"
-            title="Settings"
-          >
-            <Settings className="h-4 w-4" />
-          </Link>
+          <div className="flex items-center gap-1">
+            <Link
+              href="/dashboard/customer/settings"
+              onClick={onClose}
+              className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 transition-colors"
+              title="Settings"
+            >
+              <Settings className="h-4 w-4" />
+            </Link>
+            <Link
+              href="/"
+              onClick={onClose}
+              className="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+              title="Log Out"
+            >
+              <LogOut className="h-4 w-4" />
+            </Link>
+          </div>
         </div>
       </div>
     </div>

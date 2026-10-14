@@ -17,6 +17,7 @@ import {
   UserCog,
   ChevronRight,
   Settings,
+  LogOut,
   X,
   Building,
 } from "lucide-react";
@@ -222,13 +223,22 @@ export default function AgentSidebar({
               </span>
             </div>
           </div>
-          <button
-            type="button"
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer"
-            title="Settings"
-          >
-            <Settings className="h-4 w-4" />
-          </button>
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer"
+              title="Settings"
+            >
+              <Settings className="h-4 w-4" />
+            </button>
+            <Link
+              href="/"
+              className="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
+              title="Log Out"
+            >
+              <LogOut className="h-4 w-4" />
+            </Link>
+          </div>
         </div>
       </div>
     </div>

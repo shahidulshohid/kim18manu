@@ -121,10 +121,7 @@ export default function SettingsView() {
 
   const handleLogout = () => {
     setShowLogoutModal(false);
-    showToast("Logging out of Customer Portal...");
-    setTimeout(() => {
-      window.location.href = "/";
-    }, 1200);
+    window.location.href = "/";
   };
 
   return (

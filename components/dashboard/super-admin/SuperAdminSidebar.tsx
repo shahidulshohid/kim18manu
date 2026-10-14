@@ -57,19 +57,19 @@ export default function SuperAdminSidebar({
   };
 
   const navContent = (
-    <div className="flex h-full flex-col bg-white px-3.5 py-4 select-none overflow-hidden border-r border-slate-100">
-      {/* Top Header / Brand Logo */}
-      <div className="flex items-center justify-between pb-4 px-2 shrink-0">
+    <div className="flex h-full flex-col bg-white px-3.5 py-3 select-none overflow-hidden">
+      {/* Top Header / Brand Logo (Mobile only, on desktop it is placed in the top header) */}
+      <div className="lg:hidden flex items-center justify-between pb-3 px-2 shrink-0 border-b border-slate-100 mb-2">
         <Link
           href="/dashboard/super-admin"
           className="flex items-center gap-3 group transition-transform active:scale-95"
           onClick={onClose}
         >
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-600 text-white shadow-md shadow-blue-500/20 group-hover:bg-blue-700 transition-colors shrink-0">
-            <Building className="h-4.5 w-4.5 fill-white/20 stroke-white stroke-[2.2]" />
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-600 text-white shadow-xs group-hover:bg-blue-700 transition-colors shrink-0">
+            <Home className="h-4.5 w-4.5 stroke-[2.2]" />
           </div>
           <div className="flex flex-col">
-            <span className="text-[16px] font-bold tracking-tight text-slate-900 group-hover:text-blue-600 transition-colors leading-tight">
+            <span className="text-[15px] font-bold tracking-tight text-slate-900 group-hover:text-blue-600 transition-colors leading-tight">
               PropertyAI
             </span>
             <span className="text-[11px] text-slate-400 font-medium">
@@ -82,7 +82,7 @@ export default function SuperAdminSidebar({
         {onClose && (
           <button
             onClick={onClose}
-            className="lg:hidden p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
             aria-label="Close sidebar"
           >
             <X className="h-5 w-5" />
@@ -91,7 +91,7 @@ export default function SuperAdminSidebar({
       </div>
 
       {/* Navigation List */}
-      <div className="flex-1 min-h-0 overflow-y-auto pr-0.5 space-y-4 custom-scrollbar mt-1">
+      <div className="flex-1 min-h-0 overflow-y-auto pr-0.5 space-y-4 custom-scrollbar">
         {/* MAIN SECTION */}
         <div>
           <p className="px-3 text-[11px] font-bold text-slate-400 tracking-wider uppercase mb-1.5">
@@ -220,7 +220,7 @@ export default function SuperAdminSidebar({
             </div>
           </div>
           <Link
-            href="/login"
+            href="/"
             className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
             title="Log Out"
           >
@@ -233,8 +233,8 @@ export default function SuperAdminSidebar({
 
   return (
     <>
-      {/* Desktop Sticky Sidebar */}
-      <aside className="hidden lg:flex fixed top-0 left-0 z-30 h-screen w-64 flex-col bg-white shadow-[1px_0_10px_rgba(0,0,0,0.02)]">
+      {/* Desktop Sticky Sidebar under 68px header */}
+      <aside className="hidden lg:flex fixed top-[68px] left-0 z-20 h-[calc(100vh-68px)] w-64 flex-col bg-white border-r border-slate-200/90 select-none shadow-[1px_0_10px_rgba(0,0,0,0.01)]">
         {navContent}
       </aside>
 

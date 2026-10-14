@@ -12,22 +12,23 @@ export default function SuperAdminLayout({ children }: SuperAdminLayoutProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] text-slate-800 antialiased selection:bg-blue-100 selection:text-blue-900">
-      {/* Super Admin Sidebar (Desktop & Mobile Drawer) */}
-      <SuperAdminSidebar
-        isOpen={isSidebarOpen}
-        onClose={() => setIsSidebarOpen(false)}
-      />
+    <div className="min-h-screen bg-[#f8fafc] text-slate-800 antialiased selection:bg-blue-100 selection:text-blue-900 flex flex-col">
+      {/* Sticky Full-Width Super Admin Header matching user screenshot */}
+      <SuperAdminHeader onMenuClick={() => setIsSidebarOpen(true)} />
 
-      {/* Main Wrapper shifted on desktop by sidebar width (w-64) */}
-      <div className="lg:pl-64 flex flex-col min-h-screen">
-        {/* Sticky Super Admin Header */}
-        <SuperAdminHeader onMenuClick={() => setIsSidebarOpen(true)} />
+      <div className="flex-1 flex w-full">
+        {/* Super Admin Sidebar (Desktop & Mobile Drawer) */}
+        <SuperAdminSidebar
+          isOpen={isSidebarOpen}
+          onClose={() => setIsSidebarOpen(false)}
+        />
 
-        {/* Page Content */}
-        <main className="flex-1 w-full max-w-full overflow-x-hidden">
-          {children}
-        </main>
+        {/* Main Page Content shifted on desktop by sidebar width (w-64) */}
+        <div className="flex-1 min-w-0 lg:pl-64 flex flex-col">
+          <main className="flex-1 w-full max-w-full overflow-x-hidden">
+            {children}
+          </main>
+        </div>
       </div>
     </div>
   );

@@ -241,7 +241,7 @@ export default function CustomerHeader({ onMenuClick }: CustomerHeaderProps) {
 
               <div className="pt-1 border-t border-slate-100">
                 <Link
-                  href="/signin"
+                  href="/"
                   onClick={() => setProfileOpen(false)}
                   className="flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                 >

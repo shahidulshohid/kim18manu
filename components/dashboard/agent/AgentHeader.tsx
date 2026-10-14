@@ -170,7 +170,7 @@ export default function AgentHeader({ onMenuClick }: AgentHeaderProps) {
 
               {/* Log Out */}
               <Link
-                href="/login"
+                href="/"
                 onClick={() => setIsProfileOpen(false)}
                 className="flex items-center gap-2.5 px-3 py-2 text-xs sm:text-sm font-medium text-red-600 hover:bg-red-50 hover:text-red-700 rounded-xl transition-colors cursor-pointer"
               >
