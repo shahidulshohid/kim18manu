@@ -162,7 +162,13 @@ export const SelectContent = React.forwardRef<HTMLDivElement, SelectContentProps
       };
     }, [open, setOpen]);
 
-    if (!open) return null;
+    if (!open) {
+      return (
+        <div className="hidden" aria-hidden="true">
+          {children}
+        </div>
+      );
+    }
 
     return (
       <div

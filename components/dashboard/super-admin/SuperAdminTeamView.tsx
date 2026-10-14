@@ -18,6 +18,13 @@ import {
   Check,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 import { superAdminStaffList } from "./data";
 import { SuperAdminStaffMember } from "./types";
 
@@ -447,16 +454,16 @@ export default function SuperAdminTeamView({
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-200">
           <form
             onSubmit={handleAddStaff}
-            className="relative w-full max-w-md bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden"
+            className="relative w-full max-w-md bg-white rounded-2xl shadow-2xl border border-slate-100"
           >
-            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/50">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/50 rounded-t-2xl">
               <h3 className="text-sm font-bold text-slate-900">
                 Add New Staff Member
               </h3>
               <button
                 type="button"
                 onClick={() => setIsAddModalOpen(false)}
-                className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100"
+                className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -464,7 +471,7 @@ export default function SuperAdminTeamView({
 
             <div className="p-6 space-y-4 text-xs">
               <div>
-                <label className="block text-slate-600 font-semibold mb-1">
+                <label className="block text-slate-700 font-semibold mb-1.5">
                   Full Name
                 </label>
                 <input
@@ -473,12 +480,12 @@ export default function SuperAdminTeamView({
                   placeholder="e.g. Maya Putri"
                   value={newName}
                   onChange={(e) => setNewName(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-200 rounded-lg text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                  className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition-all text-xs sm:text-sm"
                 />
               </div>
 
               <div>
-                <label className="block text-slate-600 font-semibold mb-1">
+                <label className="block text-slate-700 font-semibold mb-1.5">
                   Email Address
                 </label>
                 <input
@@ -487,39 +494,58 @@ export default function SuperAdminTeamView({
                   placeholder="e.g. maya@propertyai.id"
                   value={newEmail}
                   onChange={(e) => setNewEmail(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-200 rounded-lg text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                  className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition-all text-xs sm:text-sm"
                 />
               </div>
 
               <div>
-                <label className="block text-slate-600 font-semibold mb-1">
+                <label className="block text-slate-700 font-semibold mb-1.5">
                   Administrative Role
                 </label>
-                <select
+                <Select
                   value={newRole}
-                  onChange={(e) =>
-                    setNewRole(e.target.value as SuperAdminStaffMember["role"])
+                  onValueChange={(val) =>
+                    setNewRole(val as SuperAdminStaffMember["role"])
                   }
-                  className="w-full px-3 py-2 border border-slate-200 rounded-lg text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                 >
-                  <option value="admin">Admin</option>
-                  <option value="agent">Agent</option>
-                  <option value="support">Support</option>
-                </select>
+                  <SelectTrigger className="w-full h-11 px-3.5 rounded-xl border border-slate-200 bg-white text-xs sm:text-sm font-normal focus:border-blue-600 focus:ring-1 focus:ring-blue-600 shadow-2xs">
+                    <SelectValue placeholder="Select a role" />
+                  </SelectTrigger>
+                  <SelectContent className="z-[80] shadow-xl border border-slate-200/90 rounded-2xl bg-white p-1">
+                    <SelectItem value="admin">
+                      <div className="flex items-center gap-2 py-0.5">
+                        <span className="w-2 h-2 rounded-full bg-blue-600 shrink-0" />
+                        <span className="font-semibold text-slate-800">Admin</span>
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="agent">
+                      <div className="flex items-center gap-2 py-0.5">
+                        <span className="w-2 h-2 rounded-full bg-indigo-600 shrink-0" />
+                        <span className="font-semibold text-slate-800">Agent</span>
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="support">
+                      <div className="flex items-center gap-2 py-0.5">
+                        <span className="w-2 h-2 rounded-full bg-slate-500 shrink-0" />
+                        <span className="font-semibold text-slate-800">Support</span>
+                      </div>
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
 
-            <div className="flex items-center justify-end gap-2 px-6 py-4 border-t border-slate-100 bg-slate-50/50">
+            <div className="flex items-center justify-end gap-2 px-6 py-4 border-t border-slate-100 bg-slate-50/50 rounded-b-2xl">
               <button
                 type="button"
                 onClick={() => setIsAddModalOpen(false)}
-                className="px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg"
+                className="px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="px-4 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm"
+                className="px-4 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm cursor-pointer"
               >
                 Create Staff Account
               </button>
@@ -533,16 +559,16 @@ export default function SuperAdminTeamView({
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-200">
           <form
             onSubmit={handleSaveEdit}
-            className="relative w-full max-w-md bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden"
+            className="relative w-full max-w-md bg-white rounded-2xl shadow-2xl border border-slate-100"
           >
-            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/50">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/50 rounded-t-2xl">
               <h3 className="text-sm font-bold text-slate-900">
                 Edit Staff: {editingStaff.name}
               </h3>
               <button
                 type="button"
                 onClick={() => setEditingStaff(null)}
-                className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100"
+                className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -550,7 +576,7 @@ export default function SuperAdminTeamView({
 
             <div className="p-6 space-y-4 text-xs">
               <div>
-                <label className="block text-slate-600 font-semibold mb-1">
+                <label className="block text-slate-700 font-semibold mb-1.5">
                   Full Name
                 </label>
                 <input
@@ -559,62 +585,100 @@ export default function SuperAdminTeamView({
                   onChange={(e) =>
                     setEditingStaff({ ...editingStaff, name: e.target.value })
                   }
-                  className="w-full px-3 py-2 border border-slate-200 rounded-lg text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                  className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition-all text-xs sm:text-sm"
                 />
               </div>
 
               <div>
-                <label className="block text-slate-600 font-semibold mb-1">
+                <label className="block text-slate-700 font-semibold mb-1.5">
                   Role
                 </label>
-                <select
+                <Select
                   value={editingStaff.role}
-                  onChange={(e) =>
+                  onValueChange={(val) =>
                     setEditingStaff({
                       ...editingStaff,
-                      role: e.target.value as SuperAdminStaffMember["role"],
+                      role: val as SuperAdminStaffMember["role"],
                     })
                   }
-                  className="w-full px-3 py-2 border border-slate-200 rounded-lg text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                 >
-                  <option value="admin">Admin</option>
-                  <option value="agent">Agent</option>
-                  <option value="support">Support</option>
-                </select>
+                  <SelectTrigger className="w-full h-11 px-3.5 rounded-xl border border-slate-200 bg-white text-xs sm:text-sm font-normal focus:border-blue-600 focus:ring-1 focus:ring-blue-600 shadow-2xs">
+                    <SelectValue placeholder="Select role" />
+                  </SelectTrigger>
+                  <SelectContent className="z-[80] shadow-xl border border-slate-200/90 rounded-2xl bg-white p-1">
+                    <SelectItem value="admin">
+                      <div className="flex items-center gap-2 py-0.5">
+                        <span className="w-2 h-2 rounded-full bg-blue-600 shrink-0" />
+                        <span className="font-semibold text-slate-800">Admin</span>
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="agent">
+                      <div className="flex items-center gap-2 py-0.5">
+                        <span className="w-2 h-2 rounded-full bg-indigo-600 shrink-0" />
+                        <span className="font-semibold text-slate-800">Agent</span>
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="support">
+                      <div className="flex items-center gap-2 py-0.5">
+                        <span className="w-2 h-2 rounded-full bg-slate-500 shrink-0" />
+                        <span className="font-semibold text-slate-800">Support</span>
+                      </div>
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
               <div>
-                <label className="block text-slate-600 font-semibold mb-1">
+                <label className="block text-slate-700 font-semibold mb-1.5">
                   Status
                 </label>
-                <select
+                <Select
                   value={editingStaff.status}
-                  onChange={(e) =>
+                  onValueChange={(val) =>
                     setEditingStaff({
                       ...editingStaff,
-                      status: e.target.value as SuperAdminStaffMember["status"],
+                      status: val as SuperAdminStaffMember["status"],
                     })
                   }
-                  className="w-full px-3 py-2 border border-slate-200 rounded-lg text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                 >
-                  <option value="Active">Active</option>
-                  <option value="Approved">Approved</option>
-                  <option value="Suspended">Suspended</option>
-                </select>
+                  <SelectTrigger className="w-full h-11 px-3.5 rounded-xl border border-slate-200 bg-white text-xs sm:text-sm font-normal focus:border-blue-600 focus:ring-1 focus:ring-blue-600 shadow-2xs">
+                    <SelectValue placeholder="Select status" />
+                  </SelectTrigger>
+                  <SelectContent className="z-[80] shadow-xl border border-slate-200/90 rounded-2xl bg-white p-1">
+                    <SelectItem value="Active">
+                      <div className="flex items-center gap-2 py-0.5">
+                        <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
+                        <span className="font-semibold text-slate-800">Active</span>
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="Approved">
+                      <div className="flex items-center gap-2 py-0.5">
+                        <span className="w-2 h-2 rounded-full bg-emerald-600 shrink-0" />
+                        <span className="font-semibold text-slate-800">Approved</span>
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="Suspended">
+                      <div className="flex items-center gap-2 py-0.5">
+                        <span className="w-2 h-2 rounded-full bg-amber-500 shrink-0" />
+                        <span className="font-semibold text-slate-800">Suspended</span>
+                      </div>
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
 
-            <div className="flex items-center justify-end gap-2 px-6 py-4 border-t border-slate-100 bg-slate-50/50">
+            <div className="flex items-center justify-end gap-2 px-6 py-4 border-t border-slate-100 bg-slate-50/50 rounded-b-2xl">
               <button
                 type="button"
                 onClick={() => setEditingStaff(null)}
-                className="px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg"
+                className="px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="px-4 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm"
+                className="px-4 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm cursor-pointer"
               >
                 Save Changes
               </button>
