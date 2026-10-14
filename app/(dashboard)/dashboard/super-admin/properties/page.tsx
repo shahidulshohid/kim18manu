@@ -1,5 +1,5 @@
 import React from "react";
-import PropertyManagementView from "@/components/dashboard/agent/views/PropertyManagementView";
+import SuperAdminPropertiesView from "@/components/dashboard/super-admin/SuperAdminPropertiesView";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function SuperAdminPropertiesPage() {
-  return <PropertyManagementView />;
+  return <SuperAdminPropertiesView />;
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import LeadManagementView from "@/components/dashboard/agent/views/LeadManagementView";
+import SuperAdminLeadsView from "@/components/dashboard/super-admin/SuperAdminLeadsView";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function SuperAdminLeadsPage() {
-  return <LeadManagementView />;
+  return <SuperAdminLeadsView />;
 }

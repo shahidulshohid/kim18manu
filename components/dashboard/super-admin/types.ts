@@ -80,4 +80,39 @@ export interface SuperAdminUser {
   phone?: string;
 }
 
+export interface SuperAdminProperty {
+  id: string; // e.g. "L001"
+  title: string;
+  type: string; // "Villa", "Apartment", "House", "Ruko", "Warehouse"
+  category: "Residential" | "Commercial" | "Industrial";
+  listingType: "Sale" | "Rent";
+  location: string;
+  price: string;
+  priceRaw: number;
+  agent: string;
+  status: "Active" | "Pending Review" | "Under Offer" | "Draft" | "Closed" | "Archived";
+  date: string;
+  image?: string;
+  bedrooms?: number;
+  bathrooms?: number;
+  area?: string;
+}
+
+export interface SuperAdminCrmLead {
+  id: string;
+  name: string;
+  isHot?: boolean;
+  property: string;
+  channel: "Direct" | "WhatsApp" | "Voice" | "Web";
+  agent: string;
+  stage: "NEW" | "CONTACTED" | "QUALIFIED" | "SITE VISIT SCHEDULED" | "CLOSED" | "LOST";
+  email?: string;
+  phone?: string;
+  budget?: string;
+  createdDate?: string;
+  notes?: string;
+}
+
+
+
 
