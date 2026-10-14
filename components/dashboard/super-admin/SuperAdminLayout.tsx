@@ -12,11 +12,11 @@ export default function SuperAdminLayout({ children }: SuperAdminLayoutProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] text-slate-800 antialiased selection:bg-blue-100 selection:text-blue-900 flex flex-col">
+    <div className="min-h-screen bg-[#f8fafc] text-slate-800 antialiased selection:bg-blue-100 selection:text-blue-900 flex flex-col w-full max-w-full overflow-x-hidden">
       {/* Sticky Full-Width Super Admin Header matching user screenshot */}
       <SuperAdminHeader onMenuClick={() => setIsSidebarOpen(true)} />
 
-      <div className="flex-1 flex w-full">
+      <div className="flex-1 flex w-full max-w-full min-w-0">
         {/* Super Admin Sidebar (Desktop & Mobile Drawer) */}
         <SuperAdminSidebar
           isOpen={isSidebarOpen}
@@ -24,8 +24,8 @@ export default function SuperAdminLayout({ children }: SuperAdminLayoutProps) {
         />
 
         {/* Main Page Content shifted on desktop by sidebar width (w-64) */}
-        <div className="flex-1 min-w-0 lg:pl-64 flex flex-col">
-          <main className="flex-1 w-full max-w-full overflow-x-hidden">
+        <div className="flex-1 min-w-0 w-full lg:pl-64 flex flex-col overflow-x-hidden transition-all duration-200">
+          <main className="flex-1 w-full max-w-full min-w-0 pb-10 overflow-x-hidden">
             {children}
           </main>
         </div>

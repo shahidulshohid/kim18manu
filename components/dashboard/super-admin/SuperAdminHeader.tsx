@@ -89,40 +89,40 @@ export default function SuperAdminHeader({
 
   return (
     <>
-      <header className="sticky top-0 z-30 flex h-[68px] w-full items-center justify-between border-b border-slate-200/90 bg-white select-none transition-all">
-        {/* Left: Brand / Logo block with vertical border matching screenshot */}
-        <div className="flex items-center justify-between w-64 shrink-0 px-5 lg:border-r lg:border-slate-200/90 h-full bg-white">
-          <Link
-            href="/dashboard/super-admin"
-            className="flex items-center gap-3 group transition-transform active:scale-95"
-          >
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-600 text-white shadow-xs group-hover:bg-blue-700 transition-colors shrink-0">
-              <Home className="h-4.5 w-4.5 stroke-[2.2]" />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-[15px] font-bold tracking-tight text-slate-900 group-hover:text-blue-600 transition-colors leading-tight">
-                PropertyAI
-              </span>
-              <span className="text-[11px] text-slate-400 font-normal leading-tight">
-                Super Admin
-              </span>
-            </div>
-          </Link>
-
+      <header className="sticky top-0 z-30 flex h-14 sm:h-16 lg:h-[68px] w-full items-center justify-between border-b border-slate-200/90 bg-white select-none transition-all">
+        {/* Left: Brand / Logo block with vertical border on desktop matching screenshot */}
+        <div className="flex items-center gap-1.5 sm:gap-2.5 lg:justify-between w-auto lg:w-64 shrink-0 px-2.5 sm:px-4 lg:px-5 lg:border-r lg:border-slate-200/90 h-full bg-white">
           {/* Mobile hamburger menu toggle */}
           <button
             onClick={onMenuClick}
-            className="lg:hidden p-1.5 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors cursor-pointer"
+            className="lg:hidden p-1.5 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
             aria-label="Open mobile menu"
           >
             <Menu className="h-5 w-5" />
           </button>
+
+          <Link
+            href="/dashboard/super-admin"
+            className="flex items-center gap-2 sm:gap-2.5 group transition-transform active:scale-95"
+          >
+            <div className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-xl bg-blue-600 text-white shadow-xs group-hover:bg-blue-700 transition-colors shrink-0">
+              <Home className="h-4 w-4 sm:h-4.5 sm:w-4.5 stroke-[2.2]" />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-sm sm:text-[15px] font-bold tracking-tight text-slate-900 group-hover:text-blue-600 transition-colors leading-tight">
+                PropertyAI
+              </span>
+              <span className="hidden sm:inline text-[11px] text-slate-400 font-normal leading-tight">
+                Super Admin
+              </span>
+            </div>
+          </Link>
         </div>
 
         {/* Right Section: Title, Search, Quick Add, Bell, Status pill & Avatar */}
-        <div className="flex-1 h-full px-5 sm:px-6 flex items-center justify-between min-w-0">
-          {/* Page Title & Subtitle matching screenshot */}
-          <div className="flex flex-col justify-center min-w-0 pr-4">
+        <div className="flex-1 h-full px-2 sm:px-4 lg:px-6 flex items-center justify-between min-w-0">
+          {/* Page Title & Subtitle matching screenshot (visible on tablet and desktop) */}
+          <div className="hidden sm:flex flex-col justify-center min-w-0 pr-3 lg:pr-4">
             <h1 className="text-sm sm:text-base font-bold text-slate-900 tracking-tight leading-tight truncate">
               {getPageTitle()}
             </h1>
@@ -132,18 +132,18 @@ export default function SuperAdminHeader({
           </div>
 
           {/* Right Action Items matching screenshot */}
-          <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
+          <div className="flex items-center gap-1.5 sm:gap-2.5 lg:gap-3 shrink-0 ml-auto pr-1 sm:pr-0">
             {/* Search Input with ⌘K matching screenshot */}
-            <div className="relative hidden md:block w-52 lg:w-64 xl:w-72">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400 pointer-events-none" />
+            <div className="relative hidden md:block w-48 lg:w-60 xl:w-72">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
               <input
                 type="text"
                 placeholder="Search anything..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full h-9 pl-9 pr-9 rounded-xl bg-slate-50/70 hover:bg-slate-50 focus:bg-white border border-slate-200/90 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-all shadow-2xs"
+                className="w-full h-10 pl-10 pr-10 rounded-xl bg-slate-50/70 hover:bg-slate-50 focus:bg-white border border-slate-200/90 text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-all shadow-2xs"
               />
-              <div className="absolute right-2.5 top-1/2 -translate-y-1/2 flex items-center px-1.5 py-0.5 rounded border border-slate-200 bg-white text-[10px] text-slate-400 font-semibold leading-none shadow-2xs pointer-events-none">
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center px-1.5 py-0.5 rounded border border-slate-200 bg-white text-[10px] text-slate-400 font-semibold leading-none shadow-2xs pointer-events-none">
                 ⌘K
               </div>
             </div>
@@ -152,10 +152,11 @@ export default function SuperAdminHeader({
             <button
               type="button"
               onClick={handleOpenQuickAdd}
-              className="h-9 px-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-semibold text-xs shadow-xs transition-all flex items-center gap-1.5 cursor-pointer shrink-0"
+              className="h-8.5 sm:h-9.5 lg:h-10 px-2.5 sm:px-3.5 lg:px-4 rounded-xl bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-semibold text-xs sm:text-sm shadow-xs transition-all flex items-center gap-1 sm:gap-1.5 cursor-pointer shrink-0"
             >
-              <Plus className="h-3.5 w-3.5 stroke-[2.5]" />
-              <span className="hidden xs:inline">Quick Add</span>
+              <Plus className="h-3.5 w-3.5 sm:h-4 sm:w-4 stroke-[2.5]" />
+              <span className="hidden sm:inline">Quick Add</span>
+              <span className="sm:hidden text-xs font-semibold">Add</span>
             </button>
 
             {/* Notification Bell with blue indicator dot matching screenshot */}
@@ -166,16 +167,16 @@ export default function SuperAdminHeader({
                   setShowNotifications(!showNotifications);
                   setIsProfileOpen(false);
                 }}
-                className="relative p-2 rounded-xl text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors cursor-pointer"
+                className="p-1.5 sm:p-2 rounded-xl text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors cursor-pointer shrink-0 relative"
                 aria-label="Notifications"
               >
                 <Bell className="h-4.5 w-4.5 text-slate-600" />
-                <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-blue-600 ring-2 ring-white" />
+                <span className="absolute top-1 sm:top-1.5 right-1 sm:right-1.5 h-2 w-2 rounded-full bg-blue-600 ring-2 ring-white" />
               </button>
 
               {/* Notification Dropdown */}
               {showNotifications && (
-                <div className="absolute right-0 mt-2 w-80 rounded-2xl bg-white shadow-2xl border border-slate-100 p-4 z-50 animate-in fade-in zoom-in-95 duration-150">
+                <div className="absolute right-0 mt-2 w-[calc(100vw-1.5rem)] sm:w-80 max-w-sm rounded-2xl bg-white shadow-2xl border border-slate-100 p-4 z-50 animate-in fade-in zoom-in-95 duration-150">
                   <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-100">
                     <span className="text-xs font-bold text-slate-900">
                       System Alerts & Approvals (2)
@@ -211,7 +212,7 @@ export default function SuperAdminHeader({
             </div>
 
             {/* Super Admin Status Pill matching screenshot */}
-            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-slate-200 text-slate-700 text-xs font-medium shadow-2xs">
+            <div className="hidden xl:flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-slate-200 text-slate-700 text-xs font-medium shadow-2xs">
               <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
               <span>Super Admin</span>
             </div>
@@ -224,7 +225,7 @@ export default function SuperAdminHeader({
                   setIsProfileOpen(!isProfileOpen);
                   setShowNotifications(false);
                 }}
-                className="h-8.5 w-8.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center justify-center shadow-xs transition-all cursor-pointer ring-2 ring-transparent hover:ring-blue-100 active:scale-95 select-none"
+                className="h-8 w-8 sm:h-8.5 sm:w-8.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center justify-center shadow-xs transition-all cursor-pointer ring-2 ring-transparent hover:ring-blue-100 active:scale-95 select-none shrink-0"
                 aria-label="User profile menu"
               >
                 SA
@@ -232,7 +233,7 @@ export default function SuperAdminHeader({
 
               {/* Profile Dropdown Card */}
               {isProfileOpen && (
-                <div className="absolute right-0 mt-2.5 w-64 rounded-2xl bg-white p-3 shadow-xl border border-slate-100 z-50 animate-in fade-in zoom-in-95 duration-150">
+                <div className="absolute right-0 mt-2.5 w-[calc(100vw-1.5rem)] sm:w-64 max-w-xs rounded-2xl bg-white p-3 shadow-xl border border-slate-100 z-50 animate-in fade-in zoom-in-95 duration-150">
                   <div className="px-2 py-1.5">
                     <div className="flex items-center gap-2">
                       <span className="text-sm font-bold text-slate-900 leading-tight">

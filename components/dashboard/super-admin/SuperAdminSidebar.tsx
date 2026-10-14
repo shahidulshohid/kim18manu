@@ -247,7 +247,7 @@ export default function SuperAdminSidebar({
             onClick={onClose}
           />
           {/* Drawer content */}
-          <div className="relative z-10 flex w-72 max-w-[85vw] flex-col bg-white shadow-2xl animate-in slide-in-from-left duration-200">
+          <div className="relative z-10 flex h-full w-72 max-w-[85vw] flex-col bg-white shadow-2xl animate-in slide-in-from-left duration-200">
             {navContent}
           </div>
         </div>
