@@ -10,6 +10,7 @@ import {
   SuperAdminUser,
   SuperAdminProperty,
   SuperAdminCrmLead,
+  SuperAdminPartnerApplicant,
 } from "./types";
 
 export const superAdminMainNav: SuperAdminNavItem[] = [
@@ -551,6 +552,70 @@ export const superAdminCrmLeadsList: SuperAdminCrmLead[] = [
     notes: "Lead decided to postpone property acquisition until next fiscal year.",
   },
 ];
+
+export const superAdminPartnerApplicantsList: SuperAdminPartnerApplicant[] = [
+  {
+    id: "app-1",
+    initials: "HW",
+    name: "Hendra Wijaya",
+    email: "hendra@email.com",
+    applied: "2026-10-01",
+    experience: "5 years",
+    area: "Bali",
+    docs: "3 files",
+    status: "Pending Review",
+    phone: "+62 812-3456-7890",
+    agency: "Apex Realty Bali",
+    licenseNumber: "AREBI-BALI-2021-9982",
+    files: ["AREBI_License_2026.pdf", "Tax_NPWP_Hendra.pdf", "Broker_ID_Card.png"],
+  },
+  {
+    id: "app-2",
+    initials: "MP",
+    name: "Maya Putri",
+    email: "maya@email.com",
+    applied: "2026-09-28",
+    experience: "8 years",
+    area: "Jakarta",
+    docs: "3 files",
+    status: "Approved",
+    phone: "+62 811-2345-6789",
+    agency: "Metro Capital Properties",
+    licenseNumber: "AREBI-DKI-2018-4421",
+    files: ["AREBI_Certification.pdf", "ID_KTP.pdf", "Listing_Portfolio.pdf"],
+  },
+  {
+    id: "app-3",
+    initials: "TS",
+    name: "Tono Susanto",
+    email: "tono@email.com",
+    applied: "2026-09-25",
+    experience: "3 years",
+    area: "Bandung",
+    docs: "2 files",
+    status: "Pending Review",
+    phone: "+62 813-9876-5432",
+    agency: "Bandung Prime Realty",
+    licenseNumber: "AREBI-JBR-2023-1088",
+    files: ["AREBI_Associate_Cert.pdf", "ID_Card.png"],
+  },
+  {
+    id: "app-4",
+    initials: "DP",
+    name: "Diah Permata",
+    email: "diah@email.com",
+    applied: "2026-09-20",
+    experience: "1 year",
+    area: "Surabaya",
+    docs: "1 files",
+    status: "Rejected",
+    phone: "+62 819-8765-4321",
+    agency: "Surabaya Horizon Living",
+    licenseNumber: "PENDING-SUR-2026",
+    files: ["Application_Letter.pdf"],
+  },
+];
+
 
 
 

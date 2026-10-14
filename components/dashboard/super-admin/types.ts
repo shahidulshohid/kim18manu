@@ -113,6 +113,23 @@ export interface SuperAdminCrmLead {
   notes?: string;
 }
 
+export interface SuperAdminPartnerApplicant {
+  id: string;
+  initials: string;
+  name: string;
+  email: string;
+  applied: string;
+  experience: string;
+  area: string;
+  docs: string;
+  status: "Pending Review" | "Approved" | "Rejected" | "Suspended";
+  phone?: string;
+  agency?: string;
+  licenseNumber?: string;
+  files?: string[];
+}
+
+
 
 
 
