@@ -172,6 +172,33 @@ export interface LeadSourceDistributionItem {
   count?: number;
 }
 
+export interface SuperAdminServiceRequest {
+  id: string;
+  customer: string;
+  customerPhone?: string;
+  customerEmail?: string;
+  property?: string;
+  serviceType: "Notary / Legal" | "Cleaning" | "AC Service" | "Bank / Mortgage" | "Interior & Staging" | "Moving & Relocation";
+  assignedPartner: string;
+  partnerContact?: string;
+  status: "In Progress" | "Assigned" | "Completed" | "Pending" | "Cancelled";
+  submitted: string;
+  completion: string;
+  priceQuote?: string;
+  notes?: string;
+}
+
+export interface SuperAdminServiceCategory {
+  id: string;
+  name: string;
+  description: string;
+  activePartners: number;
+  totalRequests: number;
+  avgTurnaround: string;
+  pricingModel: string;
+  iconName?: string;
+}
+
 
 
 
