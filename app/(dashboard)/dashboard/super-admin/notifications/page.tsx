@@ -1,12 +1,14 @@
 import React from "react";
-import NotificationsView from "@/components/dashboard/agent/views/NotificationsView";
+import SuperAdminNotificationsView from "@/components/dashboard/super-admin/SuperAdminNotificationsView";
+import { superAdminNotificationsList } from "@/components/dashboard/super-admin/data";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Notifications & System Alerts | Super Admin | PropertyAI",
+  title: "Notifications | Super Admin | PropertyAI",
   description: "Global system alerts, audit notifications, and pending approvals.",
 };
 
 export default function SuperAdminNotificationsPage() {
-  return <NotificationsView />;
+  return <SuperAdminNotificationsView notifications={superAdminNotificationsList} />;
 }
+

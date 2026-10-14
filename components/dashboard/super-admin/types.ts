@@ -145,6 +145,26 @@ export interface SuperAdminTransaction {
   invoiceNumber?: string;
 }
 
+export interface SuperAdminNotificationItem {
+  id: string;
+  title: string;
+  description: string;
+  timeAgo: string;
+  timestamp?: string;
+  category: "lead assigned" | "new partner application" | "transaction" | "listing status change" | "system";
+  borderVariant: "blue" | "amber" | "gray";
+  isUnread: boolean;
+  linkHref: string;
+  details?: {
+    entityId?: string;
+    entityName?: string;
+    actor?: string;
+    metrics?: string;
+    actionLabel?: string;
+  };
+}
+
+
 
 
 

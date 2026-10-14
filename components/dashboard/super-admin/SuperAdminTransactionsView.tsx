@@ -212,7 +212,7 @@ export default function SuperAdminTransactionsView({
   }, [safeTransactions]);
 
   return (
-    <div className="relative space-y-6 pb-20 text-slate-800">
+    <div className="w-full px-4 sm:px-6 lg:px-8 py-6 space-y-6 pb-24 text-slate-800 relative">
       {/* Toast Notification */}
       {toastMessage && (
         <div className="fixed top-20 right-6 z-50 flex items-center gap-2.5 rounded-xl bg-slate-900/95 backdrop-blur px-4 py-3 text-xs font-medium text-white shadow-xl border border-slate-700 animate-in fade-in slide-in-from-top-3">

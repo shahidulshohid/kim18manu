@@ -12,6 +12,7 @@ import {
   SuperAdminCrmLead,
   SuperAdminPartnerApplicant,
   SuperAdminTransaction,
+  SuperAdminNotificationItem,
 } from "./types";
 
 export const superAdminMainNav: SuperAdminNavItem[] = [
@@ -675,6 +676,118 @@ export const superAdminTransactionsList: SuperAdminTransaction[] = [
     invoiceNumber: "INV-2026-09-015",
   },
 ];
+
+export const superAdminNotificationsList: SuperAdminNotificationItem[] = [
+  {
+    id: "notif-1",
+    title: "🔥 Hot Lead — Ahmad Fauzi",
+    description: "Voice inbound inquiry for Jimbaran villa. Assigned to Budi Santoso.",
+    timeAgo: "2 min ago",
+    timestamp: "2026-10-01 12:45 WIB",
+    category: "lead assigned",
+    borderVariant: "blue",
+    isUnread: true,
+    linkHref: "/dashboard/super-admin/leads",
+    details: {
+      entityId: "lead-2",
+      entityName: "Ahmad Fauzi",
+      actor: "Inbound Voice AI",
+      metrics: "Budget IDR 4.5B • High Intent",
+      actionLabel: "View in CRM Pipeline",
+    },
+  },
+  {
+    id: "notif-2",
+    title: "New Agent Application",
+    description: "Hendra Wijaya submitted an application. Experience: 5 years, Area: Bali.",
+    timeAgo: "3 hr ago",
+    timestamp: "2026-10-01 09:30 WIB",
+    category: "new partner application",
+    borderVariant: "amber",
+    isUnread: true,
+    linkHref: "/dashboard/super-admin/partners",
+    details: {
+      entityId: "app-1",
+      entityName: "Hendra Wijaya",
+      actor: "AREBI Portal Submission",
+      metrics: "3 Verified Documents Attached",
+      actionLabel: "Review Partner Application",
+    },
+  },
+  {
+    id: "notif-3",
+    title: "Transaction Completed",
+    description: "TRX-001 — IDR 144M confirmed. Commission IDR 7.2M processed.",
+    timeAgo: "5 hr ago",
+    timestamp: "2026-10-01 07:15 WIB",
+    category: "transaction",
+    borderVariant: "gray",
+    isUnread: false,
+    linkHref: "/dashboard/super-admin/transactions",
+    details: {
+      entityId: "TRX-001",
+      entityName: "Family House — Kemang",
+      actor: "BCA Escrow Settlement",
+      metrics: "IDR 144M Gross • IDR 7.2M Commission Disbursed",
+      actionLabel: "View Settlement Receipt",
+    },
+  },
+  {
+    id: "notif-4",
+    title: "Listing Pending Review",
+    description: "Seminyak Shophouse (L004) submitted by Budi Santoso awaits review.",
+    timeAgo: "1 day ago",
+    timestamp: "2026-09-30 14:20 WIB",
+    category: "listing status change",
+    borderVariant: "amber",
+    isUnread: false,
+    linkHref: "/dashboard/super-admin/properties",
+    details: {
+      entityId: "prop-4",
+      entityName: "Seminyak Shophouse (L004)",
+      actor: "Budi Santoso (Broker)",
+      metrics: "Commercial • IDR 18.0B Asking",
+      actionLabel: "Review Property Listing",
+    },
+  },
+  {
+    id: "notif-5",
+    title: "AI Voice: 3 leads captured",
+    description: "Inbound Voice AI processed 3 new leads between 08:00–12:00 WIB.",
+    timeAgo: "1 day ago",
+    timestamp: "2026-09-30 12:00 WIB",
+    category: "system",
+    borderVariant: "gray",
+    isUnread: false,
+    linkHref: "/dashboard/super-admin/leads",
+    details: {
+      entityId: "voice-ai-batch-202",
+      entityName: "Voice Pipeline Autonomous Ingestion",
+      actor: "Twilio / Deepgram Speech Engine",
+      metrics: "3 Leads Qualified • 98.4% Audio Transcription Score",
+      actionLabel: "Inspect Ingested Leads",
+    },
+  },
+  {
+    id: "notif-6",
+    title: "AI Model Response Latency Alert",
+    description: "web_chatbot average latency exceeded 3s for 12 minutes at 22:15 WIB.",
+    timeAgo: "2 days ago",
+    timestamp: "2026-09-29 22:15 WIB",
+    category: "system",
+    borderVariant: "blue",
+    isUnread: false,
+    linkHref: "/dashboard/super-admin/ai-system",
+    details: {
+      entityId: "alert-lat-9902",
+      entityName: "Gemini 2.5 Inference Endpoint",
+      actor: "Prometheus Monitoring Service",
+      metrics: "Peak Latency: 3.42s • Recovered to 0.48s",
+      actionLabel: "Inspect AI System Diagnostics",
+    },
+  },
+];
+
 
 
 
