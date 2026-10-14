@@ -129,6 +129,23 @@ export interface SuperAdminPartnerApplicant {
   files?: string[];
 }
 
+export interface SuperAdminTransaction {
+  id: string;
+  property: string;
+  propertyFull?: string;
+  customer: string;
+  agent: string;
+  amount: string;
+  amountRaw?: number;
+  method: "Bank Transfer" | "Credit Card" | "Virtual Account" | "Escrow";
+  commission: string;
+  date: string;
+  status: "Completed" | "Active" | "Pending Payment" | "Cancelled";
+  receiptUrl?: string;
+  invoiceNumber?: string;
+}
+
+
 
 
 

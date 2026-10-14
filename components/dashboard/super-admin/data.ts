@@ -11,6 +11,7 @@ import {
   SuperAdminProperty,
   SuperAdminCrmLead,
   SuperAdminPartnerApplicant,
+  SuperAdminTransaction,
 } from "./types";
 
 export const superAdminMainNav: SuperAdminNavItem[] = [
@@ -613,6 +614,65 @@ export const superAdminPartnerApplicantsList: SuperAdminPartnerApplicant[] = [
     agency: "Surabaya Horizon Living",
     licenseNumber: "PENDING-SUR-2026",
     files: ["Application_Letter.pdf"],
+  },
+];
+
+export const superAdminTransactionsList: SuperAdminTransaction[] = [
+  {
+    id: "TRX-001",
+    property: "Family House — Kemang",
+    propertyFull: "Family House — Kemang, South Jakarta",
+    customer: "Bimo Santoso",
+    agent: "Rizki Pratama",
+    amount: "IDR 144M",
+    amountRaw: 144000000,
+    method: "Bank Transfer",
+    commission: "IDR 7.2M",
+    date: "2026-10-01",
+    status: "Completed",
+    invoiceNumber: "INV-2026-10-001",
+  },
+  {
+    id: "TRX-002",
+    property: "Modern Villa — Jimbaran",
+    propertyFull: "Modern Villa — Jimbaran, Bali",
+    customer: "Ahmad Fauzi",
+    agent: "Budi Santoso",
+    amount: "IDR 4.5B",
+    amountRaw: 4500000000,
+    method: "Bank Transfer",
+    commission: "IDR 225M",
+    date: "2026-09-28",
+    status: "Active",
+    invoiceNumber: "INV-2026-09-042",
+  },
+  {
+    id: "TRX-003",
+    property: "SCBD Apartment Tower 2",
+    propertyFull: "SCBD Apartment Tower 2 — Sudirman, South Jakarta",
+    customer: "Lina Kusuma",
+    agent: "Sari Dewi",
+    amount: "IDR 850M",
+    amountRaw: 850000000,
+    method: "Credit Card",
+    commission: "IDR 42.5M",
+    date: "2026-09-20",
+    status: "Pending Payment",
+    invoiceNumber: "INV-2026-09-031",
+  },
+  {
+    id: "TRX-004",
+    property: "MM2100 Warehouse Hub",
+    propertyFull: "MM2100 Warehouse Logistics Hub — Cikarang",
+    customer: "PT Logistik Jaya",
+    agent: "Rizki Pratama",
+    amount: "IDR 7.2B",
+    amountRaw: 7200000000,
+    method: "Bank Transfer",
+    commission: "IDR 360M",
+    date: "2026-09-10",
+    status: "Completed",
+    invoiceNumber: "INV-2026-09-015",
   },
 ];
 

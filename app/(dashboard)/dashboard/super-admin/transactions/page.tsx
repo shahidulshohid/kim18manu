@@ -1,5 +1,6 @@
 import React from "react";
-import TransactionsView from "@/components/dashboard/agent/views/TransactionsView";
+import SuperAdminTransactionsView from "@/components/dashboard/super-admin/SuperAdminTransactionsView";
+import { superAdminTransactionsList } from "@/components/dashboard/super-admin/data";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -8,5 +9,6 @@ export const metadata: Metadata = {
 };
 
 export default function SuperAdminTransactionsPage() {
-  return <TransactionsView />;
+  return <SuperAdminTransactionsView transactions={superAdminTransactionsList} />;
 }
+
