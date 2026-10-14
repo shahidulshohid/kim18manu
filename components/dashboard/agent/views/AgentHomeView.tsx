@@ -20,8 +20,18 @@ import {
   Phone,
   Mail,
   MapPin,
+  Building,
+  Building2,
+  Briefcase,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 import {
   agentMetrics,
   hotLeadsData,
@@ -35,6 +45,7 @@ export default function AgentHomeView() {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [showAddListingModal, setShowAddListingModal] = useState(false);
   const [selectedLead, setSelectedLead] = useState<HotLeadItem | null>(null);
+  const [propertyType, setPropertyType] = useState("Villa");
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -412,12 +423,37 @@ export default function AgentHomeView() {
                   <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">
                     Property Type
                   </label>
-                  <select className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 bg-white focus:outline-none focus:border-blue-600">
-                    <option value="Villa">Villa</option>
-                    <option value="House">House</option>
-                    <option value="Apartment">Apartment</option>
-                    <option value="Commercial">Commercial</option>
-                  </select>
+                  <Select value={propertyType} onValueChange={setPropertyType}>
+                    <SelectTrigger className="w-full h-11 px-3.5 rounded-xl border border-slate-200 bg-white text-xs sm:text-sm text-slate-800 font-normal focus:border-blue-600 focus:ring-1 focus:ring-blue-600 shadow-2xs">
+                      <SelectValue placeholder="Select type" />
+                    </SelectTrigger>
+                    <SelectContent className="z-[80] shadow-xl border border-slate-200/90 rounded-2xl bg-white p-1">
+                      <SelectItem value="Villa">
+                        <div className="flex items-center gap-2 py-0.5">
+                          <Home className="w-4 h-4 text-blue-600 shrink-0" />
+                          <span className="font-semibold text-slate-800">Villa</span>
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="House">
+                        <div className="flex items-center gap-2 py-0.5">
+                          <Building className="w-4 h-4 text-emerald-600 shrink-0" />
+                          <span className="font-semibold text-slate-800">House</span>
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="Apartment">
+                        <div className="flex items-center gap-2 py-0.5">
+                          <Building2 className="w-4 h-4 text-indigo-600 shrink-0" />
+                          <span className="font-semibold text-slate-800">Apartment</span>
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="Commercial">
+                        <div className="flex items-center gap-2 py-0.5">
+                          <Briefcase className="w-4 h-4 text-amber-600 shrink-0" />
+                          <span className="font-semibold text-slate-800">Commercial</span>
+                        </div>
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
 
