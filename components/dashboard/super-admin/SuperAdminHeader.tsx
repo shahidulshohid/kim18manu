@@ -19,6 +19,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 interface SuperAdminHeaderProps {
   onMenuClick?: () => void;
@@ -29,10 +30,27 @@ export default function SuperAdminHeader({
   onMenuClick,
   onQuickAdd,
 }: SuperAdminHeaderProps) {
+  const pathname = usePathname();
   const [searchQuery, setSearchQuery] = useState("");
   const [showNotifications, setShowNotifications] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [showQuickAddModal, setShowQuickAddModal] = useState(false);
+
+  const getPageTitle = () => {
+    if (pathname.includes("/users")) return "User Management";
+    if (pathname.includes("/properties")) return "Property Management";
+    if (pathname.includes("/leads")) return "Lead & CRM";
+    if (pathname.includes("/partners")) return "Partner Management";
+    if (pathname.includes("/transactions")) return "Transactions";
+    if (pathname.includes("/ai-system")) return "AI System";
+    if (pathname.includes("/notifications")) return "Notifications";
+    if (pathname.includes("/reports")) return "Reports & Analytics";
+    if (pathname.includes("/services")) return "Services";
+    if (pathname.includes("/team")) return "Team & Access";
+    if (pathname.includes("/settings")) return "Settings";
+    if (pathname.includes("/help")) return "Help / Support";
+    return "Dashboard";
+  };
 
   const notifRef = useRef<HTMLDivElement>(null);
   const profileRef = useRef<HTMLDivElement>(null);
@@ -83,7 +101,7 @@ export default function SuperAdminHeader({
 
           <div>
             <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight leading-none">
-              Dashboard
+              {getPageTitle()}
             </h1>
             <p className="text-xs text-slate-400 font-medium mt-1">
               PropertyAI Platform

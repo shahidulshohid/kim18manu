@@ -66,3 +66,18 @@ export interface SuperAdminActivityItem {
   timestamp: string;
   module: string;
 }
+
+export interface SuperAdminUser {
+  id: string;
+  name: string;
+  initials: string;
+  role: "customer" | "agent";
+  email: string;
+  status: "Active" | "Approved" | "Pending Review" | "Suspended";
+  activity: string;
+  joined: string;
+  lastActive: string;
+  phone?: string;
+}
+
+

@@ -1,5 +1,5 @@
 import React from "react";
-import TeamManagementView from "@/components/dashboard/agent/views/TeamManagementView";
+import SuperAdminUsersView from "@/components/dashboard/super-admin/SuperAdminUsersView";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function SuperAdminUsersPage() {
-  return <TeamManagementView />;
+  return <SuperAdminUsersView />;
 }
