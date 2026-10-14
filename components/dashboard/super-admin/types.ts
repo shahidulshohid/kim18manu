@@ -1,0 +1,68 @@
+export interface SuperAdminNavItem {
+  id: string;
+  label: string;
+  href: string;
+  iconName: string;
+  badge?: number;
+  section?: "main" | "analytics" | "system";
+}
+
+export interface SuperAdminMetric {
+  id: string;
+  title: string;
+  value: string;
+  change?: string;
+  changePositive?: boolean;
+  subtext?: string;
+  icon: string;
+  color: "blue" | "purple" | "amber" | "emerald" | "sky" | "slate";
+}
+
+export interface RevenueMonthPoint {
+  month: string;
+  revenue: number; // in Millions IDR
+  transactions: number;
+}
+
+export interface PropertyStatusItem {
+  id: string;
+  label: string;
+  count: number;
+  color: string;
+  hex: string;
+}
+
+export interface LeadVolumeMonthPoint {
+  month: string;
+  newLeads: number;
+  closedLeads: number;
+}
+
+export interface HotLeadItem {
+  id: string;
+  name: string;
+  initials: string;
+  property: string;
+  location: string;
+  channel: "Voice" | "Direct" | "WhatsApp" | "Web";
+}
+
+export interface PendingAgentApproval {
+  id: string;
+  name: string;
+  initials: string;
+  city: string;
+  experience: string;
+  phone?: string;
+  email?: string;
+  appliedDate?: string;
+}
+
+export interface SuperAdminActivityItem {
+  id: string;
+  actor: string;
+  action: string;
+  target: string;
+  timestamp: string;
+  module: string;
+}

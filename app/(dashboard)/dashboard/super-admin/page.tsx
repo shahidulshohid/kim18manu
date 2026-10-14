@@ -1,6 +1,6 @@
 import React from "react";
-import AgentHomeView from "@/components/dashboard/agent/views/AgentHomeView";
+import SuperAdminHomeView from "@/components/dashboard/super-admin/SuperAdminHomeView";
 
 export default function SuperAdminDashboardPage() {
-  return <AgentHomeView />;
+  return <SuperAdminHomeView />;
 }

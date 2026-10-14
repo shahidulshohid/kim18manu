@@ -1,0 +1,265 @@
+import {
+  SuperAdminNavItem,
+  SuperAdminMetric,
+  RevenueMonthPoint,
+  PropertyStatusItem,
+  LeadVolumeMonthPoint,
+  HotLeadItem,
+  PendingAgentApproval,
+  SuperAdminActivityItem,
+} from "./types";
+
+export const superAdminMainNav: SuperAdminNavItem[] = [
+  {
+    id: "dashboard",
+    label: "Dashboard",
+    href: "/dashboard/super-admin",
+    iconName: "LayoutGrid",
+    section: "main",
+  },
+  {
+    id: "users",
+    label: "User Management",
+    href: "/dashboard/super-admin/users",
+    iconName: "Users",
+    section: "main",
+  },
+  {
+    id: "properties",
+    label: "Property Management",
+    href: "/dashboard/super-admin/properties",
+    iconName: "Home",
+    section: "main",
+  },
+  {
+    id: "leads",
+    label: "Lead & CRM",
+    href: "/dashboard/super-admin/leads",
+    iconName: "UserSquare",
+    badge: 2,
+    section: "main",
+  },
+  {
+    id: "partners",
+    label: "Partner Management",
+    href: "/dashboard/super-admin/partners",
+    iconName: "Handshake",
+    section: "main",
+  },
+  {
+    id: "transactions",
+    label: "Transactions",
+    href: "/dashboard/super-admin/transactions",
+    iconName: "Shield",
+    section: "main",
+  },
+  {
+    id: "ai-system",
+    label: "AI System",
+    href: "/dashboard/super-admin/ai-system",
+    iconName: "Sparkles",
+    section: "main",
+  },
+];
+
+export const superAdminAnalyticsNav: SuperAdminNavItem[] = [
+  {
+    id: "notifications",
+    label: "Notifications",
+    href: "/dashboard/super-admin/notifications",
+    iconName: "Bell",
+    badge: 2,
+    section: "analytics",
+  },
+  {
+    id: "reports",
+    label: "Reports & Analytics",
+    href: "/dashboard/super-admin/reports",
+    iconName: "BarChart3",
+    section: "analytics",
+  },
+  {
+    id: "services",
+    label: "Services",
+    href: "/dashboard/super-admin/services",
+    iconName: "Wrench",
+    section: "analytics",
+  },
+  {
+    id: "team",
+    label: "Team & Access",
+    href: "/dashboard/super-admin/team",
+    iconName: "UserCog",
+    section: "analytics",
+  },
+];
+
+export const superAdminMetrics: SuperAdminMetric[] = [
+  {
+    id: "total-users",
+    title: "Total Users",
+    value: "3,842",
+    change: "+124",
+    changePositive: true,
+    icon: "Users",
+    color: "blue",
+  },
+  {
+    id: "total-properties",
+    title: "Total Properties",
+    value: "62",
+    change: "+4",
+    changePositive: true,
+    icon: "Home",
+    color: "blue",
+  },
+  {
+    id: "active-agents",
+    title: "Active Agents",
+    value: "18",
+    change: "+2",
+    changePositive: true,
+    subtext: "3 pending",
+    icon: "User",
+    color: "purple",
+  },
+  {
+    id: "total-leads",
+    title: "Total Leads",
+    value: "1,204",
+    change: "+74",
+    changePositive: true,
+    subtext: "This month",
+    icon: "Flag",
+    color: "blue",
+  },
+  {
+    id: "revenue",
+    title: "Revenue (Oct)",
+    value: "310M",
+    change: "+8%",
+    changePositive: true,
+    subtext: "IDR",
+    icon: "Wallet",
+    color: "amber",
+  },
+  {
+    id: "pending-approvals",
+    title: "Pending Approvals",
+    value: "2",
+    subtext: "Agents",
+    icon: "Shield",
+    color: "amber",
+  },
+];
+
+export const revenueChartData: RevenueMonthPoint[] = [
+  { month: "May", revenue: 280, transactions: 14 },
+  { month: "Jun", revenue: 450, transactions: 22 },
+  { month: "Jul", revenue: 420, transactions: 19 },
+  { month: "Aug", revenue: 620, transactions: 31 },
+  { month: "Sep", revenue: 780, transactions: 42 },
+  { month: "Oct", revenue: 460, transactions: 24 },
+];
+
+export const propertyStatusData: PropertyStatusItem[] = [
+  { id: "active", label: "Active", count: 38, color: "text-emerald-500", hex: "#10b981" },
+  { id: "pending", label: "Pending", count: 9, color: "text-amber-500", hex: "#f59e0b" },
+  { id: "under-offer", label: "Under Offer", count: 5, color: "text-blue-500", hex: "#3b82f6" },
+  { id: "draft", label: "Draft", count: 7, color: "text-slate-300", hex: "#cbd5e1" },
+  { id: "closed", label: "Closed", count: 3, color: "text-slate-500", hex: "#64748b" },
+];
+
+export const leadVolumeData: LeadVolumeMonthPoint[] = [
+  { month: "May", newLeads: 45, closedLeads: 12 },
+  { month: "Jun", newLeads: 60, closedLeads: 15 },
+  { month: "Jul", newLeads: 50, closedLeads: 12 },
+  { month: "Aug", newLeads: 68, closedLeads: 18 },
+  { month: "Sep", newLeads: 72, closedLeads: 20 },
+  { month: "Oct", newLeads: 38, closedLeads: 10 },
+];
+
+export const hotLeadsData: HotLeadItem[] = [
+  {
+    id: "lead-1",
+    name: "Ahmad Fauzi",
+    initials: "AF",
+    property: "Modern Villa",
+    location: "Jimbaran",
+    channel: "Voice",
+  },
+  {
+    id: "lead-2",
+    name: "Rina Wulandari",
+    initials: "RW",
+    property: "Family House",
+    location: "Dago",
+    channel: "Direct",
+  },
+];
+
+export const pendingAgentApprovals: PendingAgentApproval[] = [
+  {
+    id: "agent-1",
+    name: "Hendra Wijaya",
+    initials: "HW",
+    city: "Bali",
+    experience: "5 years",
+    phone: "+62 812-3456-7890",
+    email: "hendra.w@broker.id",
+    appliedDate: "2026-10-12",
+  },
+  {
+    id: "agent-2",
+    name: "Tono Susanto",
+    initials: "TS",
+    city: "Bandung",
+    experience: "3 years",
+    phone: "+62 813-9876-5432",
+    email: "tono.s@realty.co.id",
+    appliedDate: "2026-10-11",
+  },
+];
+
+export const superAdminActivities: SuperAdminActivityItem[] = [
+  {
+    id: "act-1",
+    actor: "Super Admin",
+    action: "Approved agent application",
+    target: "Maya Putri",
+    timestamp: "2026-10-01 11:30",
+    module: "Partners",
+  },
+  {
+    id: "act-2",
+    actor: "Budi Santoso",
+    action: "Created listing",
+    target: "L004 — Seminyak Shophouse",
+    timestamp: "2026-09-30 09:15",
+    module: "Properties",
+  },
+  {
+    id: "act-3",
+    actor: "Super Admin",
+    action: "Updated lead status",
+    target: "LD001 → qualified",
+    timestamp: "2026-09-30 08:00",
+    module: "CRM",
+  },
+  {
+    id: "act-4",
+    actor: "Sari Dewi",
+    action: "Scheduled site visit",
+    target: "SCBD Apt — Lina Kusuma",
+    timestamp: "2026-09-29 16:45",
+    module: "Site Visits",
+  },
+  {
+    id: "act-5",
+    actor: "Super Admin",
+    action: "Rejected application",
+    target: "Diah Permata",
+    timestamp: "2026-09-28 14:20",
+    module: "Partners",
+  },
+];

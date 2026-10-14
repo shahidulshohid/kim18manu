@@ -1,5 +1,5 @@
 import React from "react";
-import AgentLayout from "@/components/dashboard/agent/AgentLayout";
+import SuperAdminLayout from "@/components/dashboard/super-admin/SuperAdminLayout";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -12,5 +12,5 @@ export default function SuperAdminDashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <AgentLayout>{children}</AgentLayout>;
+  return <SuperAdminLayout>{children}</SuperAdminLayout>;
 }
