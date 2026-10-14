@@ -199,6 +199,19 @@ export interface SuperAdminServiceCategory {
   iconName?: string;
 }
 
+export interface SuperAdminStaffMember {
+  id: string;
+  initials: string;
+  name: string;
+  role: "admin" | "agent" | "support" | "manager" | "auditor";
+  email: string;
+  status: "Active" | "Approved" | "Suspended" | "Pending";
+  joined: string;
+  phone?: string;
+  lastLogin?: string;
+}
+
+
 
 
 

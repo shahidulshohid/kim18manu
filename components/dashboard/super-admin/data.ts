@@ -16,6 +16,7 @@ import {
   LeadSourceDistributionItem,
   SuperAdminServiceRequest,
   SuperAdminServiceCategory,
+  SuperAdminStaffMember,
 } from "./types";
 
 export const superAdminMainNav: SuperAdminNavItem[] = [
@@ -923,6 +924,65 @@ export const superAdminServiceCategoriesList: SuperAdminServiceCategory[] = [
     iconName: "Palette",
   },
 ];
+
+export const superAdminStaffList: SuperAdminStaffMember[] = [
+  {
+    id: "staff-1",
+    initials: "SA",
+    name: "Super Admin",
+    role: "admin",
+    email: "superadmin@propertyai.id",
+    status: "Active",
+    joined: "2025-01-01",
+    phone: "+62 811-0000-1111",
+    lastLogin: "2026-10-14 09:15 WIB",
+  },
+  {
+    id: "staff-2",
+    initials: "BS",
+    name: "Budi Santoso",
+    role: "agent",
+    email: "budi@propertyai.id",
+    status: "Approved",
+    joined: "2025-03-15",
+    phone: "+62 812-3344-5566",
+    lastLogin: "2026-10-14 08:40 WIB",
+  },
+  {
+    id: "staff-3",
+    initials: "SD",
+    name: "Sari Dewi",
+    role: "agent",
+    email: "sari@propertyai.id",
+    status: "Approved",
+    joined: "2025-05-01",
+    phone: "+62 813-7788-9900",
+    lastLogin: "2026-10-13 17:25 WIB",
+  },
+  {
+    id: "staff-4",
+    initials: "CS",
+    name: "CS Support",
+    role: "support",
+    email: "support@propertyai.id",
+    status: "Active",
+    joined: "2025-04-01",
+    phone: "+62 814-1122-3344",
+    lastLogin: "2026-10-14 09:00 WIB",
+  },
+  {
+    id: "staff-5",
+    initials: "RP",
+    name: "Rizki Pratama",
+    role: "agent",
+    email: "rizki@propertyai.id",
+    status: "Approved",
+    joined: "2025-07-20",
+    phone: "+62 815-5566-7788",
+    lastLogin: "2026-10-13 14:10 WIB",
+  },
+];
+
 
 
 
