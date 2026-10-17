@@ -1,0 +1,26 @@
+[
+  {
+    "id": "1",
+    "name": "Customer User",
+    "email": "customer@gmail.com",
+    "password": "password123",
+    "role": "customer",
+    "dashboardUrl": "/dashboard/customer"
+  },
+  {
+    "id": "2",
+    "name": "Agent User",
+    "email": "agent@gmail.com",
+    "password": "password123",
+    "role": "agent",
+    "dashboardUrl": "/dashboard/agent"
+  },
+  {
+    "id": "3",
+    "name": "Super Admin User",
+    "email": "superAdmin@gmail.com",
+    "password": "password123",
+    "role": "super-admin",
+    "dashboardUrl": "/dashboard/super-admin"
+  }
+]

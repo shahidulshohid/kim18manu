@@ -10,12 +10,13 @@ import {
   Eye,
   EyeOff,
   CheckCircle2,
+  AlertCircle,
   User,
   Building2,
   ShieldCheck,
-  ArrowRight,
 } from "lucide-react";
 import AuthHero from "./AuthHero";
+import usersData from "@/data/users.json";
 
 export interface SignInFormValues {
   email: string;
@@ -26,6 +27,7 @@ export default function SignIn() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const {
     register,
@@ -41,15 +43,33 @@ export default function SignIn() {
   });
 
   const onSubmit: SubmitHandler<SignInFormValues> = async (data) => {
-    // Simulated sign-in submission
+    setErrorMessage(null);
+
+    // Simulated sign-in delay
     await new Promise((resolve) => setTimeout(resolve, 800));
-    console.log("Signed in with:", data);
+
+    const enteredEmail = data.email.trim().toLowerCase();
+    const enteredPassword = data.password.trim();
+
+    // Match credentials from users.json
+    const matchedUser = usersData.find(
+      (user) =>
+        user.email.toLowerCase() === enteredEmail &&
+        user.password === enteredPassword
+    );
+
+    if (!matchedUser) {
+      setErrorMessage("Invalid email or password. Please try again.");
+      return;
+    }
+
     setIsSuccess(true);
     reset();
+
     setTimeout(() => {
       setIsSuccess(false);
-      router.push("/dashboard/customer");
-    }, 1200);
+      router.push(matchedUser.dashboardUrl);
+    }, 1000);
   };
 
   return (
@@ -168,6 +188,14 @@ export default function SignIn() {
                 </p>
               )}
             </div>
+
+            {/* Error Banner */}
+            {errorMessage && (
+              <div className="p-3 bg-red-50 border border-red-200 text-red-700 rounded-xl text-xs flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />
+                <span>{errorMessage}</span>
+              </div>
+            )}
 
             {/* Success Banner */}
             {isSuccess && (
